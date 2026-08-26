@@ -1,6 +1,7 @@
 import { router } from "expo-router";
 import { useState } from "react";
 import {
+  Image,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -11,11 +12,39 @@ import {
 
 import { useGame } from "@/context/GameContext";
 
+/*
+ * ============================================================
+ * CORES DA IDENTIDADE VISUAL
+ * ============================================================
+ *
+ * Centralizadas aqui para facilitar qualquer ajuste futuro.
+ *
+ * TURQUESA  -> fundo da tela e botão
+ * AZUL      -> painel principal e textos
+ * AMARELO   -> detalhes da identidade
+ * BRANCO    -> cards e textos sobre fundo colorido
+ */
+
+const COLORS = {
+  turquoise: "#16B8B0",
+  navy: "#123B5D",
+  yellow: "#FFD447",
+  white: "#FFFFFF",
+  inputBorder: "#D7DDE2",
+  placeholder: "#929292",
+};
+
 export default function WelcomeScreen() {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
 
   const { updateGameState, resetGame } = useGame();
+
+  /*
+   * ============================================================
+   * LÓGICA ORIGINAL — NÃO ALTERADA
+   * ============================================================
+   */
 
   const handleStart = () => {
     if (!name || !age || parseInt(age) < 6 || parseInt(age) > 17) {
@@ -48,20 +77,26 @@ export default function WelcomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* ELEMENTO DECORATIVO SUPERIOR */}
-      <View style={styles.sun}>
-        <View style={styles.sunCore} />
-        <View style={[styles.sunRay, styles.rayTop]} />
-        <View style={[styles.sunRay, styles.rayRight]} />
-        <View style={[styles.sunRay, styles.rayBottom]} />
-        <View style={[styles.sunRay, styles.rayLeft]} />
-      </View>
 
-      {/* CABEÇALHO */}
-      <View style={styles.topArea}>
-        <Text style={styles.logo}>
-          Cooper<Text style={styles.logoAccent}>A</Text>ção
-        </Text>
+      {/* ======================================================
+          SOL OFICIAL
+          ====================================================== */}
+
+      <Image
+        source={require("@/assets/images/sun.png")}
+        style={styles.sun}
+      />
+
+      {/* ======================================================
+          CABEÇALHO
+          ====================================================== */}
+
+      <View style={styles.header}>
+
+        <Image
+          source={require("@/assets/images/game-logo.png")}
+          style={styles.gameLogo}
+        />
 
         <Text style={styles.subtitle}>
           APRENDA A CUIDAR DO DINHEIRO
@@ -70,33 +105,63 @@ export default function WelcomeScreen() {
         <Text style={styles.subtitle}>
           DE FORMA DIVERTIDA
         </Text>
+
       </View>
 
-      {/* PAINEL PRINCIPAL */}
+      {/* ======================================================
+          PAINEL PRINCIPAL
+          ====================================================== */}
+
       <View style={styles.mainPanel}>
+
         <View style={styles.formCard}>
-          <Text style={styles.label}>Qual é o seu apelido?</Text>
 
-          <TextInput
-            value={name}
-            onChangeText={setName}
-            placeholder="Digite seu apelido"
-            placeholderTextColor="#9AA3AD"
-            style={styles.input}
-            autoCapitalize="words"
-          />
+          {/* ==================================================
+              APELIDO
+              ================================================== */}
 
-          <Text style={styles.label}>Quantos anos você tem?</Text>
+          <View style={styles.fieldContainer}>
 
-          <TextInput
-            value={age}
-            onChangeText={setAge}
-            keyboardType="numeric"
-            placeholder="Digite sua idade"
-            placeholderTextColor="#9AA3AD"
-            style={styles.input}
-            maxLength={2}
-          />
+            <Text style={styles.label}>
+              Qual é o seu apelido?
+            </Text>
+
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              placeholder="Digite seu apelido"
+              placeholderTextColor={COLORS.placeholder}
+              style={styles.input}
+              autoCapitalize="words"
+            />
+
+          </View>
+
+          {/* ==================================================
+              IDADE
+              ================================================== */}
+
+          <View style={styles.fieldContainer}>
+
+            <Text style={styles.label}>
+              Quantos anos você tem?
+            </Text>
+
+            <TextInput
+              value={age}
+              onChangeText={setAge}
+              keyboardType="numeric"
+              placeholder="Digite sua idade"
+              placeholderTextColor={COLORS.placeholder}
+              style={styles.input}
+              maxLength={2}
+            />
+
+          </View>
+
+          {/* ==================================================
+              BOTÃO
+              ================================================== */}
 
           <TouchableOpacity
             onPress={handleStart}
@@ -111,297 +176,271 @@ export default function WelcomeScreen() {
               COMEÇAR AVENTURA!
             </Text>
           </TouchableOpacity>
+
         </View>
+
       </View>
 
-      {/* RODAPÉ */}
+      {/* ======================================================
+          RODAPÉ
+          ====================================================== */}
+
       <View style={styles.footer}>
-        <Text style={styles.footerSmall}>UM JOGO DO</Text>
 
-        <Text style={styles.sicoob}>
-          SICOOB
+        <Text style={styles.footerText}>
+          UM JOGO DO
         </Text>
 
-        <Text style={styles.footerPartner}>
-          Credial
-        </Text>
+        <Image
+          source={require("@/assets/images/sicoob-logo.png")}
+          style={styles.sicoobLogo}
+        />
+
       </View>
 
-      {/* ELEMENTO DECORATIVO */}
-      <View style={styles.piggyBank}>
-        <View style={styles.piggyBody}>
-          <View style={styles.piggyEar} />
-          <View style={styles.piggyEye} />
-          <View style={styles.piggyNose} />
-        </View>
+      {/* ======================================================
+          PORQUINHO OFICIAL
+          ====================================================== */}
 
-        <View style={styles.piggyLegOne} />
-        <View style={styles.piggyLegTwo} />
-      </View>
+      <Image
+        source={require("@/assets/images/pig.png")}
+        style={styles.pig}
+      />
+
     </SafeAreaView>
   );
 }
 
+/*
+ * ============================================================
+ * ESTILOS
+ * ============================================================
+ */
+
 const styles = StyleSheet.create({
+
+  /*
+   * ------------------------------------------------------------
+   * TELA
+   * ------------------------------------------------------------
+   */
+
   container: {
     flex: 1,
-    backgroundColor: "#18B8B0",
+    backgroundColor: COLORS.turquoise,
     alignItems: "center",
     overflow: "hidden",
   },
 
-  /* =========================
-     SOL
-     ========================= */
+  /*
+   * ------------------------------------------------------------
+   * SOL
+   * ------------------------------------------------------------
+   */
 
   sun: {
     position: "absolute",
-    top: -42,
-    left: -42,
-    width: 130,
-    height: 130,
-    alignItems: "center",
-    justifyContent: "center",
+    width: 125,
+    height: 125,
+    top: -25,
+    left: -22,
+    resizeMode: "contain",
   },
 
-  sunCore: {
-    width: 62,
-    height: 62,
-    borderRadius: 31,
-    backgroundColor: "#FFD447",
-  },
+  /*
+   * ------------------------------------------------------------
+   * CABEÇALHO
+   * ------------------------------------------------------------
+   */
 
-  sunRay: {
-    position: "absolute",
-    width: 15,
-    height: 5,
-    borderRadius: 5,
-    backgroundColor: "#FFD447",
-  },
-
-  rayTop: {
-    top: 12,
-    transform: [{ rotate: "0deg" }],
-  },
-
-  rayRight: {
-    right: 12,
-    transform: [{ rotate: "90deg" }],
-  },
-
-  rayBottom: {
-    bottom: 12,
-    transform: [{ rotate: "0deg" }],
-  },
-
-  rayLeft: {
-    left: 12,
-    transform: [{ rotate: "90deg" }],
-  },
-
-  /* =========================
-     CABEÇALHO
-     ========================= */
-
-  topArea: {
+  header: {
     width: "100%",
     alignItems: "center",
-    paddingTop: 48,
+    paddingTop: 38,
     paddingHorizontal: 20,
   },
 
-  logo: {
-    color: "#FFFFFF",
-    fontSize: 42,
-    fontWeight: "900",
-    letterSpacing: -1.5,
-  },
-
-  logoAccent: {
-    color: "#FFD447",
+  gameLogo: {
+    width: 230,
+    height: 82,
+    resizeMode: "contain",
+    marginBottom: 4,
   },
 
   subtitle: {
-    color: "#FFFFFF",
-    fontSize: 12,
+    color: COLORS.white,
+    fontSize: 11,
+    lineHeight: 14,
     fontWeight: "800",
-    letterSpacing: 1.2,
+    letterSpacing: 0.9,
     textAlign: "center",
-    marginTop: 3,
   },
 
-  /* =========================
-     PAINEL AZUL
-     ========================= */
+  /*
+   * ------------------------------------------------------------
+   * PAINEL AZUL
+   * ------------------------------------------------------------
+   */
 
   mainPanel: {
-    width: "91%",
+    width: "90%",
     flex: 1,
-    backgroundColor: "#123B62",
-    borderRadius: 32,
-    marginTop: 28,
-    marginBottom: 18,
-    paddingHorizontal: 18,
-    paddingVertical: 20,
+    maxHeight: 455,
+    marginTop: 26,
+    marginBottom: 8,
+
+    backgroundColor: COLORS.navy,
+
+    borderRadius: 30,
+
+    padding: 17,
+
     justifyContent: "center",
-    maxHeight: 470,
   },
 
-  /* =========================
-     CARD DO FORMULÁRIO
-     ========================= */
+  /*
+   * ------------------------------------------------------------
+   * CARD BRANCO
+   * ------------------------------------------------------------
+   */
 
   formCard: {
     width: "100%",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 24,
+
+    backgroundColor: COLORS.white,
+
+    borderRadius: 21,
+
     paddingHorizontal: 22,
-    paddingVertical: 28,
+    paddingTop: 25,
+    paddingBottom: 25,
+  },
+
+  /*
+   * ------------------------------------------------------------
+   * CAMPOS
+   * ------------------------------------------------------------
+   */
+
+  fieldContainer: {
+    marginBottom: 18,
   },
 
   label: {
-    color: "#123B62",
+    color: COLORS.navy,
+
     fontSize: 17,
+    lineHeight: 21,
+
     fontWeight: "800",
+
     marginBottom: 8,
   },
 
   input: {
+    width: "100%",
     height: 54,
+
+    backgroundColor: COLORS.white,
+
     borderWidth: 2,
-    borderColor: "#D7DEE5",
-    backgroundColor: "#F8FAFB",
-    borderRadius: 13,
-    paddingHorizontal: 16,
+    borderColor: COLORS.inputBorder,
+
+    borderRadius: 12,
+
+    paddingHorizontal: 15,
+
+    color: COLORS.navy,
+
     fontSize: 16,
-    color: "#123B62",
-    marginBottom: 22,
   },
 
+  /*
+   * ------------------------------------------------------------
+   * BOTÃO
+   * ------------------------------------------------------------
+   */
+
   button: {
-    height: 58,
-    backgroundColor: "#18B8B0",
-    borderRadius: 14,
+    width: "100%",
+    height: 56,
+
+    backgroundColor: COLORS.turquoise,
+
+    borderRadius: 13,
+
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 2,
+
+    marginTop: 1,
   },
 
   buttonDisabled: {
-    opacity: 0.45,
+    opacity: 0.5,
   },
 
   buttonText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
+
     fontSize: 17,
+
     fontWeight: "900",
-    letterSpacing: 0.4,
+
+    letterSpacing: 0.3,
   },
 
-  /* =========================
-     RODAPÉ
-     ========================= */
+  /*
+   * ------------------------------------------------------------
+   * RODAPÉ
+   * ------------------------------------------------------------
+   */
 
   footer: {
-    height: 66,
     width: "100%",
+
+    height: 70,
+
     alignItems: "center",
     justifyContent: "center",
-    paddingBottom: 8,
+
+    paddingBottom: 4,
   },
 
-  footerSmall: {
-    color: "#FFFFFF",
-    fontSize: 9,
+  footerText: {
+    color: COLORS.white,
+
+    fontSize: 8,
+
     fontWeight: "700",
+
     letterSpacing: 1,
+
+    marginBottom: 2,
   },
 
-  sicoob: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "900",
-    marginTop: 2,
+  sicoobLogo: {
+    width: 145,
+    height: 42,
+
+    resizeMode: "contain",
   },
 
-  footerPartner: {
-    color: "#FFFFFF",
-    fontSize: 9,
-    fontWeight: "600",
-    marginTop: -2,
-  },
+  /*
+   * ------------------------------------------------------------
+   * PORQUINHO
+   * ------------------------------------------------------------
+   */
 
-  /* =========================
-     PORQUINHO DECORATIVO
-     ========================= */
-
-  piggyBank: {
+  pig: {
     position: "absolute",
-    right: -8,
-    bottom: 8,
-    width: 92,
-    height: 82,
+
+    width: 120,
+    height: 120,
+
+    right: -4,
+    bottom: 0,
+
+    resizeMode: "contain",
   },
 
-  piggyBody: {
-    position: "absolute",
-    right: 5,
-    bottom: 13,
-    width: 72,
-    height: 52,
-    borderRadius: 35,
-    backgroundColor: "#F58A91",
-    transform: [{ rotate: "-5deg" }],
-  },
-
-  piggyEar: {
-    position: "absolute",
-    top: -7,
-    left: 13,
-    width: 19,
-    height: 17,
-    borderRadius: 10,
-    backgroundColor: "#F58A91",
-    transform: [{ rotate: "25deg" }],
-  },
-
-  piggyEye: {
-    position: "absolute",
-    right: 16,
-    top: 14,
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "#123B62",
-  },
-
-  piggyNose: {
-    position: "absolute",
-    right: -5,
-    top: 27,
-    width: 14,
-    height: 11,
-    borderRadius: 7,
-    backgroundColor: "#E46F79",
-  },
-
-  piggyLegOne: {
-    position: "absolute",
-    right: 48,
-    bottom: 5,
-    width: 13,
-    height: 19,
-    borderRadius: 7,
-    backgroundColor: "#F58A91",
-  },
-
-  piggyLegTwo: {
-    position: "absolute",
-    right: 16,
-    bottom: 5,
-    width: 13,
-    height: 19,
-    borderRadius: 7,
-    backgroundColor: "#F58A91",
-  },
 });
