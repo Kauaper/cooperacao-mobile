@@ -1,14 +1,23 @@
 import { router } from "expo-router";
 import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { useGame } from "@/context/GameContext";
+
+const COLORS = {
+  turquoise: "#08AEA4",
+  navy: "#003F4A",
+  yellow: "#D7E900",
+  white: "#FFFFFF",
+  gray: "#D1D5DB",
+};
 
 export default function PetSelectionScreen() {
   const { gameState, updateGameState } = useGame();
@@ -68,7 +77,9 @@ export default function PetSelectionScreen() {
   };
 
   const selectedCharacter =
-    characters[gameState.selectedCharacter as keyof typeof characters];
+    characters[
+      gameState.selectedCharacter as keyof typeof characters
+    ];
 
   const handleSelectPet = (petId: string) => {
     updateGameState({
@@ -80,134 +91,393 @@ export default function PetSelectionScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <Text style={styles.characterEmoji}>{selectedCharacter?.emoji}</Text>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* ==================================================
+            LOGOS
+            ================================================== */}
 
-          <Text style={styles.title}>Escolha seu Bichinho!</Text>
+        <View style={styles.topBar}>
+          <Image
+            source={require("@/assets/images/game-logo.png")}
+            style={styles.gameLogo}
+          />
 
-          <Text style={styles.characterEmoji}>{selectedCharacter?.emoji}</Text>
+          <Image
+            source={require("@/assets/images/sicoob-logo.png")}
+            style={styles.sicoobLogo}
+          />
         </View>
 
-        <Text style={styles.subtitle}>
-          {gameState.playerName}, qual bichinho você quer cuidar?
-        </Text>
+        {/* ==================================================
+            CARD PRINCIPAL
+            ================================================== */}
 
-        {pets.map((pet) => (
+        <View style={styles.card}>
+
+          {/* ==================================================
+              CABEÇALHO
+              ================================================== */}
+
+          <View style={styles.header}>
+            <Text style={styles.title}>
+              ESCOLHA SEU BICHINHO
+            </Text>
+
+            <Text style={styles.subtitle}>
+              {gameState.playerName}, qual bichinho você quer{"\n"}
+              cuidar?
+            </Text>
+          </View>
+
+          {/* ==================================================
+              GRID DOS BICHINHOS
+              ================================================== */}
+
+          <View style={styles.petGrid}>
+            {pets.map((pet) => (
+              <TouchableOpacity
+                key={pet.id}
+                style={styles.petCard}
+                activeOpacity={0.8}
+                onPress={() => handleSelectPet(pet.id)}
+              >
+                {/* Área principal do bichinho */}
+
+                <View style={styles.petImageArea}>
+                  <Text style={styles.petEmoji}>
+                    {pet.emoji}
+                  </Text>
+                </View>
+
+                {/* Nome */}
+
+                <Text style={styles.petName}>
+                  {pet.name}
+                </Text>
+
+                {/* Custo */}
+
+                <View style={styles.costBox}>
+                  <Text style={styles.costText}>
+                    Custo mensal: R$ {pet.cost}
+                  </Text>
+                </View>
+
+                {/* Cuidados */}
+
+                <View style={styles.careBox}>
+                  <Text style={styles.careText}>
+                    {pet.care}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* ==================================================
+              BOTÃO
+              ================================================== */}
+
           <TouchableOpacity
-            key={pet.id}
-            style={styles.petCard}
-            onPress={() => handleSelectPet(pet.id)}
+            style={styles.button}
+            activeOpacity={0.8}
           >
-            <Text style={styles.petEmoji}>{pet.emoji}</Text>
-
-            <Text style={styles.petName}>{pet.name}</Text>
-
-            <View style={styles.costBox}>
-              <Text style={styles.costText}>Custo mensal: R$ {pet.cost}</Text>
-            </View>
-
-            <View style={styles.careBox}>
-              <Text style={styles.careText}>{pet.care}</Text>
-            </View>
+            <Text style={styles.buttonText}>
+              CONTINUAR
+            </Text>
           </TouchableOpacity>
-        ))}
 
-        <Text style={styles.footerText}>
-          Clique no bichinho que você escolher para começar sua aventura!
-        </Text>
+        </View>
+
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+
+  // ==========================================================
+  // TELA
+  // ==========================================================
+
   container: {
     flex: 1,
-    backgroundColor: "#D5E72C",
+    backgroundColor: COLORS.turquoise,
   },
+
+  scroll: {
+    flex: 1,
+  },
+
+  scrollContent: {
+    alignItems: "center",
+
+    paddingHorizontal: 18,
+
+    paddingBottom: 30,
+  },
+
+  // ==========================================================
+  // LOGOS
+  // ==========================================================
+
+  topBar: {
+    width: "100%",
+
+    height: 82,
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    gap: 18,
+  },
+
+  gameLogo: {
+    width: 125,
+
+    height: 42,
+
+    resizeMode: "contain",
+  },
+
+  sicoobLogo: {
+    width: 92,
+
+    height: 38,
+
+    resizeMode: "contain",
+  },
+
+  // ==========================================================
+  // CARD PRINCIPAL
+  // ==========================================================
+
+  card: {
+    width: "100%",
+
+    maxWidth: 430,
+
+    backgroundColor: COLORS.navy,
+
+    borderRadius: 28,
+
+    paddingHorizontal: 10,
+
+    paddingTop: 20,
+
+    paddingBottom: 12,
+
+    overflow: "hidden",
+  },
+
+  // ==========================================================
+  // CABEÇALHO
+  // ==========================================================
 
   header: {
-    flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
-    paddingTop: 20,
-    paddingHorizontal: 16,
-  },
 
-  characterEmoji: {
-    fontSize: 36,
-    marginHorizontal: 10,
+    marginBottom: 14,
+
+    paddingHorizontal: 8,
   },
 
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#00353B",
+    color: COLORS.yellow,
+
+    fontSize: 18,
+
+    lineHeight: 21,
+
+    fontWeight: "900",
+
+    textAlign: "center",
+
+    textTransform: "uppercase",
   },
 
   subtitle: {
+    color: COLORS.white,
+
+    fontSize: 12,
+
+    lineHeight: 14,
+
+    fontWeight: "700",
+
     textAlign: "center",
-    marginTop: 12,
-    marginBottom: 20,
-    fontSize: 16,
-    color: "#00353B",
+
+    marginTop: 2,
   },
 
+  // ==========================================================
+  // GRID
+  // ==========================================================
+
+  petGrid: {
+    flexDirection: "row",
+
+    flexWrap: "wrap",
+
+    justifyContent: "space-between",
+
+    paddingHorizontal: 1,
+  },
+
+  // ==========================================================
+  // CARD DO PET
+  // ==========================================================
+
   petCard: {
-    backgroundColor: "#FFFFFF",
-    marginHorizontal: 16,
-    marginBottom: 16,
-    borderRadius: 12,
-    borderWidth: 3,
-    borderColor: "#1A3D38",
-    padding: 16,
+    width: "48.5%",
+
+    backgroundColor: COLORS.white,
+
+    borderRadius: 10,
+
+    borderWidth: 2,
+
+    borderColor: COLORS.yellow,
+
+    padding: 6,
+
+    marginBottom: 8,
+
     alignItems: "center",
   },
 
-  petEmoji: {
-    fontSize: 50,
-    marginBottom: 10,
+  // ==========================================================
+  // ÁREA DA IMAGEM
+  // ==========================================================
+
+  petImageArea: {
+    width: "100%",
+
+    height: 74,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    backgroundColor: COLORS.white,
+
+    borderRadius: 7,
   },
+
+  petEmoji: {
+    fontSize: 48,
+  },
+
+  // ==========================================================
+  // NOME
+  // ==========================================================
 
   petName: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#00353B",
-    marginBottom: 10,
+    color: COLORS.navy,
+
+    fontSize: 12,
+
+    lineHeight: 14,
+
+    fontWeight: "900",
+
+    textAlign: "center",
+
+    marginTop: 1,
+
+    marginBottom: 4,
   },
 
+  // ==========================================================
+  // CUSTO
+  // ==========================================================
+
   costBox: {
-    backgroundColor: "#2FBFA0",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
     width: "100%",
+
+    backgroundColor: "#2FBFA0",
+
+    borderRadius: 5,
+
+    paddingVertical: 4,
+
+    paddingHorizontal: 3,
+
+    marginBottom: 3,
   },
 
   costText: {
+    color: COLORS.white,
+
+    fontSize: 8,
+
+    fontWeight: "900",
+
     textAlign: "center",
-    color: "#FFFFFF",
-    fontWeight: "bold",
   },
 
+  // ==========================================================
+  // CUIDADOS
+  // ==========================================================
+
   careBox: {
-    backgroundColor: "#7FC241",
-    borderRadius: 8,
-    padding: 10,
     width: "100%",
+
+    backgroundColor: "#7FC241",
+
+    borderRadius: 5,
+
+    paddingVertical: 4,
+
+    paddingHorizontal: 3,
   },
 
   careText: {
+    color: COLORS.white,
+
+    fontSize: 7.5,
+
+    lineHeight: 9,
+
+    fontWeight: "700",
+
     textAlign: "center",
-    color: "#FFFFFF",
   },
 
-  footerText: {
-    textAlign: "center",
-    fontSize: 16,
-    color: "#00353B",
-    marginVertical: 20,
-    paddingHorizontal: 20,
+  // ==========================================================
+  // BOTÃO
+  // ==========================================================
+
+  button: {
+    height: 34,
+
+    backgroundColor: COLORS.yellow,
+
+    borderRadius: 6,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginTop: 5,
+
+    marginHorizontal: 10,
+  },
+
+  buttonText: {
+    color: COLORS.navy,
+
+    fontSize: 11,
+
+    fontWeight: "900",
+
+    textTransform: "uppercase",
   },
 });
