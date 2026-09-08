@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from "react-native";
 
 import { useGame } from "@/context/GameContext";
@@ -16,22 +17,15 @@ import { useGame } from "@/context/GameContext";
  * ============================================================
  * CORES DA IDENTIDADE VISUAL
  * ============================================================
- *
- * Centralizadas aqui para facilitar qualquer ajuste futuro.
- *
- * TURQUESA  -> fundo da tela e botão
- * AZUL      -> painel principal e textos
- * AMARELO   -> detalhes da identidade
- * BRANCO    -> cards e textos sobre fundo colorido
  */
 
 const COLORS = {
-  turquoise: "#16B8B0",
-  navy: "#123B5D",
+  turquoise: "#08B3A7",
+  navy: "#003B49",
   yellow: "#FFD447",
   white: "#FFFFFF",
-  inputBorder: "#D7DDE2",
-  placeholder: "#929292",
+  inputBorder: "#00A99D",
+  placeholder: "#777777",
 };
 
 export default function WelcomeScreen() {
@@ -39,6 +33,8 @@ export default function WelcomeScreen() {
   const [age, setAge] = useState("");
 
   const { updateGameState, resetGame } = useGame();
+
+  const { width, height } = useWindowDimensions();
 
   /*
    * ============================================================
@@ -77,54 +73,83 @@ export default function WelcomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-
       {/* ======================================================
-          SOL OFICIAL
+          SOL
           ====================================================== */}
 
       <Image
         source={require("@/assets/images/sun.png")}
-        style={styles.sun}
+        style={[
+          styles.sun,
+          {
+            width: width * 0.31,
+            height: width * 0.31,
+
+            /*
+             * Sol um pouco mais para baixo
+             */
+            left: -width * 0.025,
+            top: height * 0.035,
+          },
+        ]}
+        resizeMode="contain"
       />
-
-      {/* ======================================================
-          CABEÇALHO
-          ====================================================== */}
-
-      <View style={styles.header}>
-
-        <Image
-          source={require("@/assets/images/game-logo.png")}
-          style={styles.gameLogo}
-        />
-
-        <Text style={styles.subtitle}>
-          APRENDA A CUIDAR DO DINHEIRO
-        </Text>
-
-        <Text style={styles.subtitle}>
-          DE FORMA DIVERTIDA
-        </Text>
-
-      </View>
 
       {/* ======================================================
           PAINEL PRINCIPAL
           ====================================================== */}
 
-      <View style={styles.mainPanel}>
+      <View
+        style={[
+          styles.mainPanel,
+          {
+            width: width * 0.95,
+
+            /*
+             * Painel um pouco mais alto para comportar
+             * melhor o espaço entre formulário e Sicoob.
+             */
+            height: height * 0.58,
+
+            top: height * 0.215,
+          },
+        ]}
+      >
+        {/* ==================================================
+            LOGO COOPERAÇÃO
+            ================================================== */}
+
+        <Image
+          source={require("@/assets/images/game-logo.png")}
+          style={[
+            styles.gameLogo,
+            {
+              width: width * 0.82,
+              height: width * 0.27,
+            },
+          ]}
+          resizeMode="contain"
+        />
+
+        {/* ==================================================
+            SUBTÍTULO
+            ================================================== */}
+
+        <Text style={styles.subtitle}>
+          APRENDA A CUIDAR DO DINHEIRO DE FORMA DIVERTIDA
+        </Text>
+
+        {/* ==================================================
+            FORMULÁRIO
+            ================================================== */}
 
         <View style={styles.formCard}>
-
           {/* ==================================================
               APELIDO
               ================================================== */}
 
           <View style={styles.fieldContainer}>
-
-            <Text style={styles.label}>
-              Qual é o seu apelido?
-            </Text>
+            <Text style={styles.label}>Qual é o seu apelido?</Text>
 
             <TextInput
               value={name}
@@ -134,7 +159,6 @@ export default function WelcomeScreen() {
               style={styles.input}
               autoCapitalize="words"
             />
-
           </View>
 
           {/* ==================================================
@@ -142,10 +166,7 @@ export default function WelcomeScreen() {
               ================================================== */}
 
           <View style={styles.fieldContainer}>
-
-            <Text style={styles.label}>
-              Quantos anos você tem?
-            </Text>
+            <Text style={styles.label}>Qual é a sua idade?</Text>
 
             <TextInput
               value={age}
@@ -156,7 +177,6 @@ export default function WelcomeScreen() {
               style={styles.input}
               maxLength={2}
             />
-
           </View>
 
           {/* ==================================================
@@ -176,37 +196,43 @@ export default function WelcomeScreen() {
               COMEÇAR AVENTURA!
             </Text>
           </TouchableOpacity>
-
         </View>
 
+        {/* ==================================================
+            LOGO SICOOB
+            ================================================== */}
+
+        <View style={styles.footer}>
+          <Image
+            source={require("@/assets/images/sicoob-logo.png")}
+            style={styles.sicoobLogo}
+            resizeMode="contain"
+          />
+        </View>
       </View>
 
       {/* ======================================================
-          RODAPÉ
-          ====================================================== */}
-
-      <View style={styles.footer}>
-
-        <Text style={styles.footerText}>
-          UM JOGO DO
-        </Text>
-
-        <Image
-          source={require("@/assets/images/sicoob-logo.png")}
-          style={styles.sicoobLogo}
-        />
-
-      </View>
-
-      {/* ======================================================
-          PORQUINHO OFICIAL
+          PORQUINHO
           ====================================================== */}
 
       <Image
         source={require("@/assets/images/pig.png")}
-        style={styles.pig}
-      />
+        style={[
+          styles.pig,
+          {
+            /*
+             * Porquinho um pouco maior
+             */
+            width: width * 0.38,
+            height: width * 0.38,
 
+            right: -width * 0.005,
+
+            bottom: height * 0.01,
+          },
+        ]}
+        resizeMode="contain"
+      />
     </SafeAreaView>
   );
 }
@@ -218,7 +244,6 @@ export default function WelcomeScreen() {
  */
 
 const styles = StyleSheet.create({
-
   /*
    * ------------------------------------------------------------
    * TELA
@@ -227,9 +252,14 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
+
     backgroundColor: COLORS.turquoise,
+
     alignItems: "center",
+
     overflow: "hidden",
+
+    position: "relative",
   },
 
   /*
@@ -240,62 +270,70 @@ const styles = StyleSheet.create({
 
   sun: {
     position: "absolute",
-    width: 125,
-    height: 125,
-    top: -25,
-    left: -22,
-    resizeMode: "contain",
+
+    zIndex: 1,
   },
 
   /*
    * ------------------------------------------------------------
-   * CABEÇALHO
-   * ------------------------------------------------------------
-   */
-
-  header: {
-    width: "100%",
-    alignItems: "center",
-    paddingTop: 38,
-    paddingHorizontal: 20,
-  },
-
-  gameLogo: {
-    width: 230,
-    height: 82,
-    resizeMode: "contain",
-    marginBottom: 4,
-  },
-
-  subtitle: {
-    color: COLORS.white,
-    fontSize: 11,
-    lineHeight: 14,
-    fontWeight: "800",
-    letterSpacing: 0.9,
-    textAlign: "center",
-  },
-
-  /*
-   * ------------------------------------------------------------
-   * PAINEL AZUL
+   * PAINEL PRINCIPAL
    * ------------------------------------------------------------
    */
 
   mainPanel: {
-    width: "90%",
-    flex: 1,
-    maxHeight: 455,
-    marginTop: 26,
-    marginBottom: 8,
+    position: "absolute",
+
+    left: "2.5%",
 
     backgroundColor: COLORS.navy,
 
-    borderRadius: 30,
+    borderRadius: 14,
 
-    padding: 17,
+    alignItems: "center",
 
-    justifyContent: "center",
+    paddingTop: 5,
+
+    paddingBottom: 9,
+
+    overflow: "hidden",
+
+    zIndex: 2,
+  },
+
+  /*
+   * ------------------------------------------------------------
+   * LOGO COOPERAÇÃO
+   * ------------------------------------------------------------
+   */
+
+  gameLogo: {
+    marginTop: 0,
+
+    marginBottom: 0,
+  },
+
+  /*
+   * ------------------------------------------------------------
+   * SUBTÍTULO
+   * ------------------------------------------------------------
+   */
+
+  subtitle: {
+    color: COLORS.white,
+
+    fontSize: 7,
+
+    lineHeight: 9,
+
+    fontWeight: "800",
+
+    textAlign: "center",
+
+    marginTop: -1,
+
+    marginBottom: 7,
+
+    letterSpacing: 0.1,
   },
 
   /*
@@ -305,15 +343,17 @@ const styles = StyleSheet.create({
    */
 
   formCard: {
-    width: "100%",
+    width: "94%",
 
     backgroundColor: COLORS.white,
 
-    borderRadius: 21,
+    borderRadius: 12,
 
-    paddingHorizontal: 22,
-    paddingTop: 25,
-    paddingBottom: 25,
+    paddingHorizontal: 14,
+
+    paddingTop: 11,
+
+    paddingBottom: 11,
   },
 
   /*
@@ -323,36 +363,41 @@ const styles = StyleSheet.create({
    */
 
   fieldContainer: {
-    marginBottom: 18,
+    marginBottom: 7,
   },
 
   label: {
     color: COLORS.navy,
 
-    fontSize: 17,
-    lineHeight: 21,
+    fontSize: 11,
+
+    lineHeight: 14,
 
     fontWeight: "800",
 
-    marginBottom: 8,
+    marginBottom: 3,
   },
 
   input: {
     width: "100%",
-    height: 54,
+
+    height: 20,
 
     backgroundColor: COLORS.white,
 
-    borderWidth: 2,
+    borderWidth: 1.5,
+
     borderColor: COLORS.inputBorder,
 
-    borderRadius: 12,
+    borderRadius: 6,
 
-    paddingHorizontal: 15,
+    paddingHorizontal: 8,
+
+    paddingVertical: 0,
 
     color: COLORS.navy,
 
-    fontSize: 16,
+    fontSize: 8,
   },
 
   /*
@@ -363,16 +408,18 @@ const styles = StyleSheet.create({
 
   button: {
     width: "100%",
-    height: 56,
+
+    height: 22,
 
     backgroundColor: COLORS.turquoise,
 
-    borderRadius: 13,
+    borderRadius: 5,
 
     alignItems: "center",
+
     justifyContent: "center",
 
-    marginTop: 1,
+    marginTop: 2,
   },
 
   buttonDisabled: {
@@ -380,49 +427,42 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: COLORS.white,
+    color: COLORS.navy,
 
-    fontSize: 17,
+    fontSize: 9,
 
     fontWeight: "900",
 
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
   },
 
   /*
    * ------------------------------------------------------------
-   * RODAPÉ
+   * RODAPÉ SICOOB
    * ------------------------------------------------------------
    */
 
   footer: {
-    width: "100%",
-
-    height: 70,
-
     alignItems: "center",
+
     justifyContent: "center",
 
-    paddingBottom: 4,
-  },
+    /*
+     * Aumenta o espaço entre o card branco
+     * e a marca Sicoob.
+     */
+    marginTop: 12,
 
-  footerText: {
-    color: COLORS.white,
-
-    fontSize: 8,
-
-    fontWeight: "700",
-
-    letterSpacing: 1,
-
-    marginBottom: 2,
+    width: "100%",
   },
 
   sicoobLogo: {
-    width: 145,
-    height: 42,
+    /*
+     * Logo maior
+     */
+    width: 125,
 
-    resizeMode: "contain",
+    height: 34,
   },
 
   /*
@@ -434,13 +474,6 @@ const styles = StyleSheet.create({
   pig: {
     position: "absolute",
 
-    width: 120,
-    height: 120,
-
-    right: -4,
-    bottom: 0,
-
-    resizeMode: "contain",
+    zIndex: 3,
   },
-
 });

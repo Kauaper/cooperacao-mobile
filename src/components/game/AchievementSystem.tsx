@@ -2,13 +2,29 @@ import { useEffect, useState } from "react";
 
 import { StyleSheet, Text, View } from "react-native";
 
-import { COLORS } from "@/constants/colors";
 import { useGame } from "@/context/GameContext";
+
+const COLORS = {
+  turquoise: "#08AEA4",
+  navy: "#003F4A",
+  yellow: "#D7E900",
+  green: "#7FC241",
+  white: "#FFFFFF",
+  lightGreen: "#EAF7D7",
+  gray: "#68787B",
+};
 
 export default function AchievementSystem() {
   const { gameState, updateGameState } = useGame();
 
   const [showNewAchievement, setShowNewAchievement] = useState("");
+
+  /*
+   * ============================================================
+   * CONQUISTAS
+   * ============================================================
+   */
+
   const achievements = [
     {
       id: "first_investment",
@@ -35,7 +51,7 @@ export default function AchievementSystem() {
       id: "saver",
       name: "Cofre de Ouro",
       emoji: "💎",
-      description: "Juntou mais de R$100!",
+      description: "Juntou mais de R$ 100!",
     },
 
     {
@@ -63,7 +79,7 @@ export default function AchievementSystem() {
       id: "pet_lover",
       name: "Coração Animal",
       emoji: "💝",
-      description: "Gastou mais de R$50 com pet!",
+      description: "Gastou mais de R$ 50 com pet!",
     },
 
     {
@@ -91,7 +107,7 @@ export default function AchievementSystem() {
       id: "growth_expert",
       name: "Mago do Crescimento",
       emoji: "📈",
-      description: "Dominou investimentos!",
+      description: "Dominou os investimentos!",
     },
 
     {
@@ -122,16 +138,31 @@ export default function AchievementSystem() {
       description: "Pensou no futuro!",
     },
   ];
+
+  /*
+   * ============================================================
+   * VERIFICAR CONQUISTAS
+   * ============================================================
+   */
+
   const checkAchievements = () => {
     const newAchievements: string[] = [];
 
+    /*
+     * PET MASTER
+     */
+
     if (
       !gameState.achievements.includes("pet_master") &&
-      gameState.petHealth === 100 &&
+      gameState.petHealth >= 100 &&
       gameState.currentMonth > 1
     ) {
       newAchievements.push("pet_master");
     }
+
+    /*
+     * GOAL SETTER
+     */
 
     if (
       !gameState.achievements.includes("goal_setter") &&
@@ -139,6 +170,10 @@ export default function AchievementSystem() {
     ) {
       newAchievements.push("goal_setter");
     }
+
+    /*
+     * GOAL ACHIEVER
+     */
 
     if (
       !gameState.achievements.includes("goal_achiever") &&
@@ -149,6 +184,10 @@ export default function AchievementSystem() {
       newAchievements.push("goal_achiever");
     }
 
+    /*
+     * EMERGENCY PREPARED
+     */
+
     if (
       !gameState.achievements.includes("emergency_prepared") &&
       gameState.parentLoan.amount > 0
@@ -156,99 +195,495 @@ export default function AchievementSystem() {
       newAchievements.push("emergency_prepared");
     }
 
-    if (newAchievements.length > 0) {
-      const updatedAchievements = [
-        ...gameState.achievements,
-        ...newAchievements,
-      ];
+    /*
+     * ==========================================================
+     * NOVAS CONQUISTAS
+     * ==========================================================
+     */
 
-      updateGameState({
-        achievements: updatedAchievements,
-      });
-
-      setShowNewAchievement(newAchievements[0]);
-
-      setTimeout(() => {
-        setShowNewAchievement("");
-      }, 3000);
+    if (newAchievements.length === 0) {
+      return;
     }
+
+    const updatedAchievements = [
+      ...gameState.achievements,
+      ...newAchievements,
+    ];
+
+    updateGameState({
+      achievements: updatedAchievements,
+    });
+
+    /*
+     * Mostra apenas a primeira conquista nova.
+     */
+
+    setShowNewAchievement(newAchievements[0]);
+
+    setTimeout(() => {
+      setShowNewAchievement("");
+    }, 3500);
   };
+
+  /*
+   * ============================================================
+   * VERIFICAÇÃO AUTOMÁTICA
+   * ============================================================
+   */
 
   useEffect(() => {
     checkAchievements();
   }, [
     gameState.petHealth,
-    gameState.personalGoal,
-    gameState.parentLoan,
+    gameState.personalGoal?.currentAmount,
+    gameState.personalGoal?.targetAmount,
+    gameState.parentLoan.amount,
     gameState.balance,
     gameState.investmentBalance,
+    gameState.currentMonth,
   ]);
+
+  /*
+   * ============================================================
+   * SE NÃO HOUVER CONQUISTA NOVA
+   * ============================================================
+   */
+
   if (!showNewAchievement) {
     return null;
   }
 
-  const achievement = achievements.find((a) => a.id === showNewAchievement);
+  const achievement = achievements.find(
+    (item) => item.id === showNewAchievement,
+  );
 
   if (!achievement) {
     return null;
   }
 
+  /*
+   * ============================================================
+   * POPUP
+   * ============================================================
+   */
+
   return (
-    <View style={styles.container}>
+    <View style={styles.overlay} pointerEvents="none">
+
       <View style={styles.card}>
-        <Text style={styles.emoji}>{achievement.emoji}</Text>
 
-        <Text style={styles.title}>🏆 CONQUISTA!</Text>
+        {/* ======================================================
+            CABEÇALHO
+            ====================================================== */}
 
-        <Text style={styles.name}>{achievement.name}</Text>
+        <View style={styles.topBar}>
 
-        <Text style={styles.description}>{achievement.description}</Text>
+          <View style={styles.starCircle}>
+            <Text style={styles.star}>
+              ★
+            </Text>
+          </View>
+
+          <View style={styles.topBarCenter}>
+
+            <Text style={styles.topBarTitle}>
+              NOVA CONQUISTA!
+            </Text>
+
+            <Text style={styles.topBarSubtitle}>
+              VOCÊ DESBLOQUEOU UM SELO
+            </Text>
+
+          </View>
+
+          <View style={styles.starCircle}>
+            <Text style={styles.star}>
+              ★
+            </Text>
+          </View>
+
+        </View>
+
+        {/* ======================================================
+            CONTEÚDO
+            ====================================================== */}
+
+        <View style={styles.content}>
+
+          {/* ÍCONE */}
+
+          <View style={styles.achievementIcon}>
+
+            <Text style={styles.achievementEmoji}>
+              {achievement.emoji}
+            </Text>
+
+          </View>
+
+          {/* TEXTO */}
+
+          <Text style={styles.conquestLabel}>
+            CONQUISTA DESBLOQUEADA
+          </Text>
+
+          <Text style={styles.name}>
+            {achievement.name}
+          </Text>
+
+          <Text style={styles.description}>
+            {achievement.description}
+          </Text>
+
+          {/* DIVISOR */}
+
+          <View style={styles.divider} />
+
+          {/* RECOMPENSA */}
+
+          <View style={styles.rewardPill}>
+
+            <Text style={styles.rewardEmoji}>
+              🏅
+            </Text>
+
+            <Text style={styles.rewardText}>
+              Novo selo adicionado à sua coleção!
+            </Text>
+
+          </View>
+
+        </View>
+
       </View>
+
     </View>
   );
 }
+
+/*
+ * ============================================================
+ * ESTILOS
+ * ============================================================
+ */
+
 const styles = StyleSheet.create({
-  container: {
+
+  /*
+   * ==========================================================
+   * OVERLAY
+   * ==========================================================
+   */
+
+  overlay: {
     position: "absolute",
-    top: 20,
-    left: 20,
-    right: 20,
-    zIndex: 999,
+
+    top: 10,
+
+    left: 12,
+
+    right: 12,
+
+    zIndex: 9999,
+
+    alignItems: "center",
   },
+
+  /*
+   * ==========================================================
+   * CARD
+   * ==========================================================
+   */
 
   card: {
-    backgroundColor: "#FFF3B0",
-    borderRadius: 16,
-    padding: 16,
+    width: "100%",
+
+    maxWidth: 380,
+
+    backgroundColor: COLORS.white,
+
+    borderRadius: 22,
+
     borderWidth: 3,
-    borderColor: "#F4C430",
+
+    borderColor: COLORS.navy,
+
+    overflow: "hidden",
+
+    elevation: 12,
+
+    shadowColor: COLORS.navy,
+
+    shadowOffset: {
+      width: 0,
+
+      height: 6,
+    },
+
+    shadowOpacity: 0.28,
+
+    shadowRadius: 10,
+  },
+
+  /*
+   * ==========================================================
+   * TOPO
+   * ==========================================================
+   */
+
+  topBar: {
+    minHeight: 58,
+
+    backgroundColor: COLORS.navy,
+
+    paddingHorizontal: 12,
+
+    flexDirection: "row",
+
     alignItems: "center",
-    elevation: 8,
+
+    justifyContent: "center",
   },
 
-  emoji: {
-    fontSize: 48,
-    marginBottom: 8,
+  starCircle: {
+    width: 34,
+
+    height: 34,
+
+    borderRadius: 17,
+
+    backgroundColor: COLORS.yellow,
+
+    alignItems: "center",
+
+    justifyContent: "center",
   },
 
-  title: {
+  star: {
+    color: COLORS.navy,
+
     fontSize: 20,
-    fontWeight: "bold",
-    color: COLORS.dark,
-    marginBottom: 6,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
+  },
+
+  topBarCenter: {
+    flex: 1,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    paddingHorizontal: 8,
+  },
+
+  topBarTitle: {
+    color: COLORS.yellow,
+
+    fontSize: 17,
+
+    fontWeight: "900",
+
+    letterSpacing: 0.8,
+
+    textAlign: "center",
+
+    includeFontPadding: false,
+  },
+
+  topBarSubtitle: {
+    color: COLORS.white,
+
+    fontSize: 8,
+
+    fontWeight: "700",
+
+    marginTop: 3,
+
+    letterSpacing: 0.4,
+
+    textAlign: "center",
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * CONTEÚDO
+   * ==========================================================
+   */
+
+  content: {
+    backgroundColor: "#F8FAF6",
+
+    alignItems: "center",
+
+    paddingHorizontal: 18,
+
+    paddingTop: 18,
+
+    paddingBottom: 16,
+  },
+
+  /*
+   * ==========================================================
+   * ÍCONE
+   * ==========================================================
+   */
+
+  achievementIcon: {
+    width: 78,
+
+    height: 78,
+
+    borderRadius: 39,
+
+    backgroundColor: COLORS.yellow,
+
+    borderWidth: 3,
+
+    borderColor: COLORS.green,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginBottom: 10,
+
+    elevation: 4,
+
+    shadowColor: COLORS.navy,
+
+    shadowOffset: {
+      width: 0,
+
+      height: 3,
+    },
+
+    shadowOpacity: 0.16,
+
+    shadowRadius: 4,
+  },
+
+  achievementEmoji: {
+    fontSize: 43,
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * TEXTOS
+   * ==========================================================
+   */
+
+  conquestLabel: {
+    color: COLORS.turquoise,
+
+    fontSize: 9,
+
+    fontWeight: "900",
+
+    letterSpacing: 0.7,
+
+    textAlign: "center",
+
+    marginBottom: 3,
+
+    includeFontPadding: false,
   },
 
   name: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: COLORS.dark,
+    color: COLORS.navy,
+
+    fontSize: 22,
+
+    fontWeight: "900",
+
     textAlign: "center",
-    marginBottom: 6,
+
+    marginBottom: 5,
+
+    includeFontPadding: false,
   },
 
   description: {
-    fontSize: 14,
-    color: COLORS.darkAccent,
+    color: COLORS.gray,
+
+    fontSize: 12,
+
+    lineHeight: 17,
+
+    fontWeight: "600",
+
     textAlign: "center",
+
+    maxWidth: 300,
+
+    includeFontPadding: false,
   },
+
+  /*
+   * ==========================================================
+   * DIVISOR
+   * ==========================================================
+   */
+
+  divider: {
+    width: "65%",
+
+    height: 2,
+
+    backgroundColor: COLORS.yellow,
+
+    marginVertical: 11,
+
+    borderRadius: 999,
+  },
+
+  /*
+   * ==========================================================
+   * RECOMPENSA
+   * ==========================================================
+   */
+
+  rewardPill: {
+    backgroundColor: COLORS.lightGreen,
+
+    borderWidth: 1.5,
+
+    borderColor: COLORS.green,
+
+    borderRadius: 999,
+
+    minHeight: 32,
+
+    paddingHorizontal: 12,
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+  },
+
+  rewardEmoji: {
+    fontSize: 14,
+
+    marginRight: 5,
+  },
+
+  rewardText: {
+    color: COLORS.navy,
+
+    fontSize: 9,
+
+    fontWeight: "800",
+
+    textAlign: "center",
+
+    includeFontPadding: false,
+  },
+
 });

@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import { useState } from "react";
 import {
   Image,
   SafeAreaView,
@@ -7,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from "react-native";
 
 import { useGame } from "@/context/GameContext";
@@ -16,291 +18,442 @@ const COLORS = {
   navy: "#003F4A",
   yellow: "#D7E900",
   white: "#FFFFFF",
-  gray: "#D1D5DB",
+  green: "#7FC241",
+  petInfo: "#16B9AA",
 };
 
 export default function PetSelectionScreen() {
   const { gameState, updateGameState } = useGame();
 
+  const [selectedPet, setSelectedPet] = useState("");
+
+  const { width } = useWindowDimensions();
+
+  /*
+   * ============================================================
+   * PETS
+   * ============================================================
+   */
+
   const pets = [
     {
       id: "dog",
-      name: "Cachorrinho",
-      emoji: "🐶",
+      name: "CACHORRO",
+      image: require("@/assets/images/pets/dog.png"),
       cost: 15,
-      care: "Precisa de ração, brinquedos e carinho!",
+      care: "Precisa de ração e\ncarinho",
     },
     {
       id: "cat",
-      name: "Gatinho",
-      emoji: "🐱",
+      name: "GATO",
+      image: require("@/assets/images/pets/cat.png"),
       cost: 12,
-      care: "Ama petiscos, arranhador e sonecas!",
-    },
-    {
-      id: "hamster",
-      name: "Hamster",
-      emoji: "🐹",
-      cost: 8,
-      care: "Gosta de sementes e rodinhas!",
+      care: "Ama petiscos,\narranhador e soneca",
     },
     {
       id: "fish",
-      name: "Peixinho",
-      emoji: "🐠",
+      name: "PEIXE",
+      image: require("@/assets/images/pets/fish.png"),
       cost: 5,
-      care: "Quer aquário limpo e comida especial!",
+      care: "Quer aquário limpo\ne comida especial",
+    },
+    {
+      id: "hamster",
+      name: "HAMSTER",
+      image: require("@/assets/images/pets/hamster.png"),
+      cost: 8,
+      care: "Gosta de sementes\ne rodinhas",
     },
     {
       id: "bird",
-      name: "Passarinho",
-      emoji: "🐦",
+      name: "PÁSSARO",
+      image: require("@/assets/images/pets/bird.png"),
       cost: 10,
-      care: "Precisa de gaiola, alpiste e música!",
+      care: "Precisa de gaiola,\nalpiste e música",
     },
     {
       id: "turtle",
-      name: "Tartaruga",
-      emoji: "🐢",
+      name: "TARTARUGA",
+      image: require("@/assets/images/pets/turtle.png"),
       cost: 7,
-      care: "Adora verduras e um cantinho tranquilo!",
+      care: "Adora verduras e um\ncantinho tranquilo",
     },
   ];
 
-  const characters = {
-    girl1: { emoji: "👧🏻" },
-    boy1: { emoji: "👦🏻" },
-    girl2: { emoji: "👧🏽" },
-    boy2: { emoji: "👦🏽" },
-    girl3: { emoji: "👧🏿" },
-    boy3: { emoji: "👦🏿" },
-  };
+  /*
+   * ============================================================
+   * DIMENSÕES
+   * ============================================================
+   */
 
-  const selectedCharacter =
-    characters[
-      gameState.selectedCharacter as keyof typeof characters
-    ];
+  const screenPadding = 8;
+
+  const cardWidth = Math.min(
+    width - screenPadding * 2,
+    380,
+  );
+
+  const listWidth = cardWidth - 20;
+
+  /*
+   * ============================================================
+   * SELECIONAR PET
+   *
+   * IMPORTANTE:
+   * Aqui NÃO existe navegação.
+   * O usuário apenas escolhe o animal.
+   * ============================================================
+   */
 
   const handleSelectPet = (petId: string) => {
+    setSelectedPet(petId);
+  };
+
+  /*
+   * ============================================================
+   * CONTINUAR
+   *
+   * Só aqui avançamos para a tela de confirmação.
+   * ============================================================
+   */
+
+  const handleContinue = () => {
+    if (!selectedPet) return;
+
     updateGameState({
-      selectedPet: petId,
+      selectedPet,
     });
 
-    router.push("/game");
+    router.push("/pet_confirmation");
+  };
+
+  /*
+   * ============================================================
+   * VOLTAR
+   * ============================================================
+   */
+
+  const handleBack = () => {
+    router.back();
   };
 
   return (
     <SafeAreaView style={styles.container}>
+
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+
         {/* ==================================================
             LOGOS
             ================================================== */}
 
-        <View style={styles.topBar}>
+        <View
+          style={[
+            styles.topBar,
+            {
+              width: cardWidth - 28,
+            },
+          ]}
+        >
+
           <Image
-            source={require("@/assets/images/game-logo.png")}
+            source={require("@/assets/images/game-logo-white.png")}
             style={styles.gameLogo}
+            resizeMode="contain"
           />
 
           <Image
-            source={require("@/assets/images/sicoob-logo.png")}
+            source={require("@/assets/images/sicoob-logo-white.png")}
             style={styles.sicoobLogo}
+            resizeMode="contain"
           />
+
         </View>
 
         {/* ==================================================
             CARD PRINCIPAL
             ================================================== */}
 
-        <View style={styles.card}>
+        <View
+          style={[
+            styles.card,
+            {
+              width: cardWidth,
+            },
+          ]}
+        >
 
           {/* ==================================================
               CABEÇALHO
               ================================================== */}
 
           <View style={styles.header}>
+
             <Text style={styles.title}>
-              ESCOLHA SEU BICHINHO
+              ESCOLHA SEU ANIMAL
             </Text>
 
             <Text style={styles.subtitle}>
               {gameState.playerName}, qual bichinho você quer{"\n"}
               cuidar?
             </Text>
+
           </View>
 
           {/* ==================================================
-              GRID DOS BICHINHOS
+              LISTA DOS ANIMAIS
               ================================================== */}
 
-          <View style={styles.petGrid}>
-            {pets.map((pet) => (
-              <TouchableOpacity
-                key={pet.id}
-                style={styles.petCard}
-                activeOpacity={0.8}
-                onPress={() => handleSelectPet(pet.id)}
-              >
-                {/* Área principal do bichinho */}
+          <View
+            style={[
+              styles.petList,
+              {
+                width: listWidth,
+              },
+            ]}
+          >
 
-                <View style={styles.petImageArea}>
-                  <Text style={styles.petEmoji}>
-                    {pet.emoji}
-                  </Text>
-                </View>
+            {pets.map((pet) => {
 
-                {/* Nome */}
+              const isSelected =
+                selectedPet === pet.id;
 
-                <Text style={styles.petName}>
-                  {pet.name}
-                </Text>
+              return (
+                <TouchableOpacity
+                  key={pet.id}
+                  activeOpacity={0.85}
+                  onPress={() =>
+                    handleSelectPet(pet.id)
+                  }
+                  style={[
+                    styles.petCard,
+                    isSelected && styles.petCardSelected,
+                  ]}
+                >
 
-                {/* Custo */}
+                  {/* ========================================
+                      LADO ESQUERDO
+                      ======================================== */}
 
-                <View style={styles.costBox}>
-                  <Text style={styles.costText}>
-                    Custo mensal: R$ {pet.cost}
-                  </Text>
-                </View>
+                  <View style={styles.petLeft}>
 
-                {/* Cuidados */}
+                    <Image
+                      source={pet.image}
+                      style={styles.petImage}
+                      resizeMode="contain"
+                    />
 
-                <View style={styles.careBox}>
-                  <Text style={styles.careText}>
-                    {pet.care}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+                    <Text style={styles.petName}>
+                      {pet.name}
+                    </Text>
+
+                  </View>
+
+                  {/* ========================================
+                      LADO DIREITO
+                      ======================================== */}
+
+                  <View style={styles.petRight}>
+
+                    {/* CUSTO */}
+
+                    <View style={styles.costBox}>
+
+                      <Text style={styles.costText}>
+                        Custo mensal: R$ {pet.cost}
+                      </Text>
+
+                    </View>
+
+                    {/* CUIDADOS */}
+
+                    <View style={styles.careBox}>
+
+                      <Text style={styles.careText}>
+                        {pet.care}
+                      </Text>
+
+                    </View>
+
+                  </View>
+
+                </TouchableOpacity>
+              );
+            })}
+
           </View>
 
           {/* ==================================================
-              BOTÃO
+              CONTINUAR
               ================================================== */}
 
           <TouchableOpacity
-            style={styles.button}
+            style={[
+              styles.button,
+              {
+                width: listWidth,
+              },
+              !selectedPet && styles.buttonDisabled,
+            ]}
             activeOpacity={0.8}
+            disabled={!selectedPet}
+            onPress={handleContinue}
           >
+
             <Text style={styles.buttonText}>
               CONTINUAR
             </Text>
+
+          </TouchableOpacity>
+
+          {/* ==================================================
+              VOLTAR
+              ================================================== */}
+
+          <TouchableOpacity
+            style={[
+              styles.backButton,
+              {
+                width: listWidth,
+              },
+            ]}
+            activeOpacity={0.8}
+            onPress={handleBack}
+          >
+
+            <Text style={styles.backButtonText}>
+              VOLTAR
+            </Text>
+
           </TouchableOpacity>
 
         </View>
 
       </ScrollView>
+
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
 
-  // ==========================================================
-  // TELA
-  // ==========================================================
+  /*
+   * ==========================================================
+   * TELA
+   * ==========================================================
+   */
 
   container: {
     flex: 1,
+
     backgroundColor: COLORS.turquoise,
+
+    alignItems: "center",
   },
 
   scroll: {
     flex: 1,
+
+    width: "100%",
   },
 
   scrollContent: {
     alignItems: "center",
 
-    paddingHorizontal: 18,
+    paddingTop: 0,
 
-    paddingBottom: 30,
+    paddingBottom: 25,
   },
 
-  // ==========================================================
-  // LOGOS
-  // ==========================================================
+  /*
+   * ==========================================================
+   * LOGOS
+   * ==========================================================
+   */
 
   topBar: {
-    width: "100%",
-
-    height: 82,
+    height: 64,
 
     flexDirection: "row",
 
     alignItems: "center",
 
-    justifyContent: "center",
+    justifyContent: "space-between",
 
-    gap: 18,
+    alignSelf: "center",
   },
 
   gameLogo: {
-    width: 125,
+    width: 120,
 
-    height: 42,
+    height: 36,
 
     resizeMode: "contain",
   },
 
   sicoobLogo: {
-    width: 92,
+    width: 95,
 
-    height: 38,
+    height: 34,
 
     resizeMode: "contain",
   },
 
-  // ==========================================================
-  // CARD PRINCIPAL
-  // ==========================================================
+  /*
+   * ==========================================================
+   * CARD PRINCIPAL
+   * ==========================================================
+   */
 
   card: {
-    width: "100%",
-
-    maxWidth: 430,
-
     backgroundColor: COLORS.navy,
 
-    borderRadius: 28,
+    borderRadius: 8,
 
-    paddingHorizontal: 10,
-
-    paddingTop: 20,
-
-    paddingBottom: 12,
-
-    overflow: "hidden",
-  },
-
-  // ==========================================================
-  // CABEÇALHO
-  // ==========================================================
-
-  header: {
     alignItems: "center",
 
-    marginBottom: 14,
+    alignSelf: "center",
+
+    overflow: "hidden",
+
+    paddingTop: 10,
+
+    paddingBottom: 13,
+  },
+
+  /*
+   * ==========================================================
+   * CABEÇALHO
+   * ==========================================================
+   */
+
+  header: {
+    width: "100%",
+
+    alignItems: "center",
 
     paddingHorizontal: 8,
+
+    marginBottom: 10,
   },
 
   title: {
     color: COLORS.yellow,
 
-    fontSize: 18,
+    fontSize: 17,
 
-    lineHeight: 21,
+    lineHeight: 20,
 
     fontWeight: "900",
 
     textAlign: "center",
 
     textTransform: "uppercase",
+
+    includeFontPadding: false,
   },
 
   subtitle: {
@@ -314,77 +467,118 @@ const styles = StyleSheet.create({
 
     textAlign: "center",
 
-    marginTop: 2,
+    marginTop: 4,
+
+    includeFontPadding: false,
   },
 
-  // ==========================================================
-  // GRID
-  // ==========================================================
+  /*
+   * ==========================================================
+   * LISTA
+   * ==========================================================
+   */
 
-  petGrid: {
-    flexDirection: "row",
+  petList: {
+    width: "100%",
 
-    flexWrap: "wrap",
-
-    justifyContent: "space-between",
-
-    paddingHorizontal: 1,
+    alignItems: "center",
   },
 
-  // ==========================================================
-  // CARD DO PET
-  // ==========================================================
+  /*
+   * ==========================================================
+   * CARD DO ANIMAL
+   *
+   * FORMATO:
+   *
+   * ┌──────────────────────────────┐
+   * │   PET       CUSTO MENSAL     │
+   * │  NOME       CUIDADOS         │
+   * └──────────────────────────────┘
+   * ==========================================================
+   */
 
   petCard: {
-    width: "48.5%",
+    width: "100%",
+
+    minHeight: 92,
 
     backgroundColor: COLORS.white,
-
-    borderRadius: 10,
 
     borderWidth: 2,
 
     borderColor: COLORS.yellow,
 
-    padding: 6,
+    borderRadius: 8,
 
-    marginBottom: 8,
+    flexDirection: "row",
 
     alignItems: "center",
+
+    paddingHorizontal: 6,
+
+    paddingVertical: 5,
+
+    marginBottom: 7,
+
+    overflow: "hidden",
   },
 
-  // ==========================================================
-  // ÁREA DA IMAGEM
-  // ==========================================================
+  /*
+   * ==========================================================
+   * PET SELECIONADO
+   * ==========================================================
+   */
 
-  petImageArea: {
-    width: "100%",
+  petCardSelected: {
+    backgroundColor: COLORS.yellow,
 
-    height: 74,
+    borderColor: COLORS.yellow,
+
+    borderWidth: 3,
+  },
+
+  /*
+   * ==========================================================
+   * LADO ESQUERDO
+   * ==========================================================
+   */
+
+  petLeft: {
+    width: "39%",
+
+    height: 78,
 
     alignItems: "center",
 
     justifyContent: "center",
-
-    backgroundColor: COLORS.white,
-
-    borderRadius: 7,
   },
 
-  petEmoji: {
-    fontSize: 48,
+  /*
+   * ==========================================================
+   * IMAGEM
+   * ==========================================================
+   */
+
+  petImage: {
+    width: 61,
+
+    height: 55,
+
+    resizeMode: "contain",
   },
 
-  // ==========================================================
-  // NOME
-  // ==========================================================
+  /*
+   * ==========================================================
+   * NOME
+   * ==========================================================
+   */
 
   petName: {
     color: COLORS.navy,
 
-    fontSize: 12,
+    fontSize: 11,
 
-    lineHeight: 14,
+    lineHeight: 13,
 
     fontWeight: "900",
 
@@ -392,17 +586,33 @@ const styles = StyleSheet.create({
 
     marginTop: 1,
 
-    marginBottom: 4,
+    includeFontPadding: false,
   },
 
-  // ==========================================================
-  // CUSTO
-  // ==========================================================
+  /*
+   * ==========================================================
+   * LADO DIREITO
+   * ==========================================================
+   */
+
+  petRight: {
+    flex: 1,
+
+    justifyContent: "center",
+
+    paddingLeft: 2,
+  },
+
+  /*
+   * ==========================================================
+   * CUSTO
+   * ==========================================================
+   */
 
   costBox: {
     width: "100%",
 
-    backgroundColor: "#2FBFA0",
+    backgroundColor: COLORS.yellow,
 
     borderRadius: 5,
 
@@ -410,50 +620,70 @@ const styles = StyleSheet.create({
 
     paddingHorizontal: 3,
 
-    marginBottom: 3,
+    marginBottom: 4,
+
+    alignItems: "center",
+
+    justifyContent: "center",
   },
 
   costText: {
     color: COLORS.white,
 
-    fontSize: 8,
+    fontSize: 8.5,
+
+    lineHeight: 10,
 
     fontWeight: "900",
 
     textAlign: "center",
+
+    includeFontPadding: false,
   },
 
-  // ==========================================================
-  // CUIDADOS
-  // ==========================================================
+  /*
+   * ==========================================================
+   * CUIDADOS
+   * ==========================================================
+   */
 
   careBox: {
     width: "100%",
 
-    backgroundColor: "#7FC241",
+    backgroundColor: COLORS.petInfo,
 
     borderRadius: 5,
 
+    minHeight: 36,
+
     paddingVertical: 4,
 
-    paddingHorizontal: 3,
+    paddingHorizontal: 4,
+
+    alignItems: "center",
+
+    justifyContent: "center",
   },
 
   careText: {
     color: COLORS.white,
 
-    fontSize: 7.5,
+    fontSize: 8.5,
 
-    lineHeight: 9,
+    lineHeight: 10,
 
-    fontWeight: "700",
+    fontWeight: "800",
 
     textAlign: "center",
+
+    includeFontPadding: false,
   },
 
-  // ==========================================================
-  // BOTÃO
-  // ==========================================================
+  /*
+   * ==========================================================
+   * BOTÃO CONTINUAR
+   * ==========================================================
+   */
 
   button: {
     height: 34,
@@ -467,11 +697,49 @@ const styles = StyleSheet.create({
     justifyContent: "center",
 
     marginTop: 5,
+  },
 
-    marginHorizontal: 10,
+  buttonDisabled: {
+    backgroundColor: COLORS.navy,
+
+    borderWidth: 2,
+
+    borderColor: "#6E7E00",
   },
 
   buttonText: {
+    color: COLORS.navy,
+
+    fontSize: 12,
+
+    fontWeight: "900",
+
+    textTransform: "uppercase",
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * BOTÃO VOLTAR
+   * ==========================================================
+   */
+
+  backButton: {
+    height: 32,
+
+    backgroundColor: COLORS.white,
+
+    borderRadius: 6,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginTop: 5,
+  },
+
+  backButtonText: {
     color: COLORS.navy,
 
     fontSize: 11,
@@ -479,5 +747,8 @@ const styles = StyleSheet.create({
     fontWeight: "900",
 
     textTransform: "uppercase",
+
+    includeFontPadding: false,
   },
+
 });

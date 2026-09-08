@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import { COLORS } from "@/constants/colors";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
 import { useGame } from "@/context/GameContext";
 
 export default function PetInteraction() {
@@ -43,7 +48,8 @@ export default function PetInteraction() {
     },
   };
 
-  const selectedPet = pets[gameState.selectedPet as keyof typeof pets];
+  const selectedPet =
+    pets[gameState.selectedPet as keyof typeof pets];
 
   const needsVet = gameState.petHealth <= 0;
 
@@ -122,13 +128,19 @@ export default function PetInteraction() {
 
     const levelIncrease = interaction.levelBonus || 0;
 
-    const newLevel = gameState.petLevel + levelIncrease;
+    const newLevel =
+      gameState.petLevel + levelIncrease;
 
-    if (interaction.id === "vet" && gameState.petHealth <= 0) {
+    if (
+      interaction.id === "vet" &&
+      gameState.petHealth <= 0
+    ) {
       newHealth = Math.max(50, newHealth);
     }
 
-    const newAchievements = [...gameState.achievements];
+    const newAchievements = [
+      ...gameState.achievements,
+    ];
 
     if (
       newHealth === 100 &&
@@ -139,7 +151,8 @@ export default function PetInteraction() {
     }
 
     updateGameState({
-      balance: gameState.balance - interaction.cost,
+      balance:
+        gameState.balance - interaction.cost,
 
       petHealth: newHealth,
 
@@ -151,12 +164,18 @@ export default function PetInteraction() {
 
       currentMonthExtraExpenses: {
         ...gameState.currentMonthExtraExpenses,
-        petCare: gameState.currentMonthExtraExpenses.petCare + interaction.cost,
+        petCare:
+          gameState.currentMonthExtraExpenses.petCare +
+          interaction.cost,
       },
     });
 
     setLastInteraction(interaction.id);
-    setInteractionMessage(interaction.message || "Interação realizada!");
+
+    setInteractionMessage(
+      interaction.message ||
+        "Interação realizada!",
+    );
 
     setTimeout(() => {
       setLastInteraction("");
@@ -174,11 +193,16 @@ export default function PetInteraction() {
       },
     });
 
-    setInteractionMessage("Seus pais emprestaram R$ 40 para ajudar!");
+    setInteractionMessage(
+      "Seus pais emprestaram R$ 40 para ajudar!",
+    );
   };
 
   const getPetMood = () => {
-    const avg = (gameState.petHealth + gameState.petHappiness) / 2;
+    const avg =
+      (gameState.petHealth +
+        gameState.petHappiness) /
+      2;
 
     if (gameState.petHealth <= 0) {
       return {
@@ -225,301 +249,847 @@ export default function PetInteraction() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.title}>
-          {needsVet
-            ? "🚨 EMERGÊNCIA VETERINÁRIA 🚨"
-            : `Cuidar do ${selectedPet?.name}`}
-        </Text>
+      <View
+        style={[
+          styles.card,
+          needsVet && styles.emergencyCard,
+        ]}
+      >
 
-        <View style={styles.petBox}>
-          <Text style={styles.petEmoji}>{selectedPet?.emoji}</Text>
+        {/* ================================================== */}
+        {/* CABEÇALHO */}
+        {/* ================================================== */}
 
-          <Text style={styles.petName}>{selectedPet?.name}</Text>
-
-          <Text style={styles.petLevel}>
-            Nível {Math.floor(gameState.petLevel)}
+        <View
+          style={[
+            styles.header,
+            needsVet && styles.emergencyHeader,
+          ]}
+        >
+          <Text style={styles.headerSmall}>
+            {needsVet
+              ? "ATENÇÃO"
+              : "MEU PET"}
           </Text>
 
-          <View style={styles.moodBox}>
+          <Text style={styles.title}>
+            {needsVet
+              ? "Emergência Veterinária"
+              : `Cuidar do ${selectedPet?.name}`}
+          </Text>
+
+          <Text style={styles.headerSubtitle}>
+            {needsVet
+              ? "Seu bichinho precisa de cuidados"
+              : "Cuide, brinque e fortaleça sua amizade"}
+          </Text>
+        </View>
+
+        {/* ================================================== */}
+        {/* PET */}
+        {/* ================================================== */}
+
+        <View style={styles.petBox}>
+
+          <View
+            style={[
+              styles.petAvatar,
+              needsVet && styles.petAvatarEmergency,
+            ]}
+          >
+            <Text style={styles.petEmoji}>
+              {selectedPet?.emoji}
+            </Text>
+          </View>
+
+          <Text style={styles.petName}>
+            {selectedPet?.name}
+          </Text>
+
+          <View style={styles.levelBadge}>
+            <Text style={styles.levelText}>
+              ⭐ Nível {Math.floor(gameState.petLevel)}
+            </Text>
+          </View>
+
+          <View
+            style={[
+              styles.moodBox,
+              needsVet && styles.moodBoxEmergency,
+            ]}
+          >
             <Text style={styles.moodText}>
               {petMood.emoji} {petMood.mood}
             </Text>
           </View>
+
         </View>
 
+        {/* ================================================== */}
+        {/* STATUS */}
+        {/* ================================================== */}
+
         <View style={styles.statusContainer}>
+
           <View style={styles.statusCard}>
-            <Text style={styles.statusLabel}>❤️ Saúde</Text>
+
+            <View style={styles.statusTop}>
+              <Text style={styles.statusIcon}>
+                ❤️
+              </Text>
+
+              <Text style={styles.statusLabel}>
+                Saúde
+              </Text>
+            </View>
 
             <Text style={styles.statusValue}>
               {gameState.petHealth.toFixed(0)}%
             </Text>
+
+            <View style={styles.statusBar}>
+              <View
+                style={[
+                  styles.statusFillHealth,
+                  {
+                    width: `${Math.max(
+                      0,
+                      Math.min(
+                        100,
+                        gameState.petHealth,
+                      ),
+                    )}%`,
+                  },
+                ]}
+              />
+            </View>
+
           </View>
 
           <View style={styles.statusCard}>
-            <Text style={styles.statusLabel}>😊 Felicidade</Text>
+
+            <View style={styles.statusTop}>
+              <Text style={styles.statusIcon}>
+                😊
+              </Text>
+
+              <Text style={styles.statusLabel}>
+                Felicidade
+              </Text>
+            </View>
 
             <Text style={styles.statusValue}>
               {gameState.petHappiness.toFixed(0)}%
             </Text>
+
+            <View style={styles.statusBar}>
+              <View
+                style={[
+                  styles.statusFillHappiness,
+                  {
+                    width: `${Math.max(
+                      0,
+                      Math.min(
+                        100,
+                        gameState.petHappiness,
+                      ),
+                    )}%`,
+                  },
+                ]}
+              />
+            </View>
+
           </View>
+
         </View>
+
+        {/* ================================================== */}
+        {/* MENSAGEM */}
+        {/* ================================================== */}
 
         {interactionMessage !== "" && (
           <View style={styles.messageBox}>
-            <Text style={styles.messageText}>{interactionMessage}</Text>
+
+            <Text style={styles.messageIcon}>
+              💬
+            </Text>
+
+            <Text style={styles.messageText}>
+              {interactionMessage}
+            </Text>
+
           </View>
         )}
 
+        {/* ================================================== */}
+        {/* EMERGÊNCIA */}
+        {/* ================================================== */}
+
         {needsVet && (
           <View style={styles.emergencyBox}>
-            <Text style={styles.emergencyTitle}>
-              🚨 Seu pet precisa de veterinário!
-            </Text>
 
-            <Text style={styles.emergencyText}>Custo: R$ 40</Text>
+            <View style={styles.emergencyBadge}>
+              <Text style={styles.emergencyBadgeText}>
+                🚨 ATENÇÃO
+              </Text>
+            </View>
+
+            <Text style={styles.emergencyTitle}>
+              Seu pet precisa de veterinário
+            </Text>
 
             <Text style={styles.emergencyText}>
-              Seu saldo: R$ {gameState.balance}
+              A saúde chegou a 0%. É importante
+              agir agora para cuidar dele.
             </Text>
+
+            <View style={styles.emergencyInfoRow}>
+
+              <View style={styles.emergencyInfo}>
+                <Text style={styles.emergencyInfoLabel}>
+                  Custo
+                </Text>
+
+                <Text style={styles.emergencyInfoValue}>
+                  R$ 40
+                </Text>
+              </View>
+
+              <View style={styles.emergencyInfo}>
+                <Text style={styles.emergencyInfoLabel}>
+                  Seu saldo
+                </Text>
+
+                <Text style={styles.emergencyInfoValue}>
+                  R$ {gameState.balance}
+                </Text>
+              </View>
+
+            </View>
 
             {gameState.balance >= 40 ? (
               <TouchableOpacity
                 style={styles.vetButton}
-                onPress={() => handleInteraction(vetAction)}
+                onPress={() =>
+                  handleInteraction(vetAction)
+                }
+                activeOpacity={0.85}
               >
-                <Text style={styles.buttonText}>🏥 Levar ao Veterinário</Text>
+                <Text style={styles.buttonEmoji}>
+                  🏥
+                </Text>
+
+                <View style={styles.buttonContent}>
+                  <Text style={styles.buttonText}>
+                    Levar ao Veterinário
+                  </Text>
+
+                  <Text style={styles.buttonSubtext}>
+                    Custa R$ 40
+                  </Text>
+                </View>
+
+                <Text style={styles.buttonArrow}>
+                  →
+                </Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 style={styles.loanButton}
                 onPress={handleParentLoan}
+                activeOpacity={0.85}
               >
-                <Text style={styles.buttonText}>🆘 Pedir ajuda aos pais</Text>
+                <Text style={styles.buttonEmoji}>
+                  🆘
+                </Text>
+
+                <View style={styles.buttonContent}>
+                  <Text style={styles.buttonText}>
+                    Pedir ajuda aos pais
+                  </Text>
+
+                  <Text style={styles.buttonSubtext}>
+                    Empréstimo de R$ 40
+                  </Text>
+                </View>
+
+                <Text style={styles.buttonArrow}>
+                  →
+                </Text>
               </TouchableOpacity>
             )}
+
           </View>
         )}
 
+        {/* ================================================== */}
+        {/* INTERAÇÕES */}
+        {/* ================================================== */}
+
         {!needsVet && (
           <>
-            <Text style={styles.sectionTitle}>Como deseja cuidar do pet?</Text>
 
-            {interactions.map((interaction) => {
-              const canAfford = interaction.cost <= gameState.balance;
+            <View style={styles.actionsHeader}>
 
-              return (
-                <TouchableOpacity
-                  key={interaction.id}
-                  disabled={!canAfford}
-                  style={[
-                    styles.actionButton,
-                    !canAfford && styles.actionButtonDisabled,
-                  ]}
-                  onPress={() => handleInteraction(interaction)}
-                >
-                  <Text style={styles.actionEmoji}>{interaction.emoji}</Text>
+              <Text style={styles.sectionTitle}>
+                Como cuidar do pet?
+              </Text>
 
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.actionTitle}>{interaction.name}</Text>
+              <Text style={styles.sectionSubtitle}>
+                Cada cuidado muda a saúde e a felicidade dele.
+              </Text>
 
-                    <Text style={styles.actionCost}>
-                      {interaction.cost === 0
-                        ? "Grátis"
-                        : `R$ ${interaction.cost}`}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
+            </View>
+
+            <View style={styles.actionsList}>
+
+              {interactions.map((interaction) => {
+                const canAfford =
+                  interaction.cost <=
+                  gameState.balance;
+
+                return (
+                  <TouchableOpacity
+                    key={interaction.id}
+                    disabled={!canAfford}
+                    style={[
+                      styles.actionButton,
+                      !canAfford &&
+                        styles.actionButtonDisabled,
+                    ]}
+                    onPress={() =>
+                      handleInteraction(interaction)
+                    }
+                    activeOpacity={0.8}
+                  >
+
+                    <View style={styles.actionIconBox}>
+                      <Text style={styles.actionEmoji}>
+                        {interaction.emoji}
+                      </Text>
+                    </View>
+
+                    <View style={styles.actionInfo}>
+
+                      <Text style={styles.actionTitle}>
+                        {interaction.name}
+                      </Text>
+
+                      <Text style={styles.actionDescription}>
+                        {interaction.id === "feed" &&
+                          "Recupere um pouco da saúde"}
+
+                        {interaction.id === "play" &&
+                          "Deixe seu pet mais feliz"}
+
+                        {interaction.id === "groom" &&
+                          "Cuide da higiene e da saúde"}
+
+                        {interaction.id === "train" &&
+                          "Treine e aumente o nível"}
+
+                        {interaction.id === "cuddle" &&
+                          "Demonstre carinho e afeto"}
+                      </Text>
+
+                    </View>
+
+                    <View style={styles.actionCostBox}>
+
+                      <Text
+                        style={[
+                          styles.actionCost,
+                          interaction.cost === 0 &&
+                            styles.freeCost,
+                        ]}
+                      >
+                        {interaction.cost === 0
+                          ? "GRÁTIS"
+                          : `R$ ${interaction.cost}`}
+                      </Text>
+
+                      <Text style={styles.actionArrow}>
+                        →
+                      </Text>
+
+                    </View>
+
+                  </TouchableOpacity>
+                );
+              })}
+
+            </View>
+
           </>
         )}
+
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+
+  /*
+   * ==========================================================
+   * ESTRUTURA
+   * ==========================================================
+   */
+
   container: {
-    marginTop: 20,
+    marginTop: 16,
   },
 
   card: {
-    backgroundColor: COLORS.white,
-    borderRadius: 16,
-    borderWidth: 3,
-    borderColor: COLORS.border,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 22,
+    borderWidth: 2,
+    borderColor: "#D8E2DE",
     padding: 16,
+    shadowColor: "#003F4A",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.10,
+    shadowRadius: 7,
+    elevation: 3,
+  },
+
+  emergencyCard: {
+    borderColor: "#E07A61",
+  },
+
+  /*
+   * ==========================================================
+   * CABEÇALHO
+   * ==========================================================
+   */
+
+  header: {
+    backgroundColor: "#D7E900",
+    borderRadius: 17,
+    borderWidth: 2,
+    borderColor: "#003F4A",
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    alignItems: "center",
+    marginBottom: 16,
+  },
+
+  emergencyHeader: {
+    backgroundColor: "#FFE4DC",
+    borderColor: "#D4553F",
+  },
+
+  headerSmall: {
+    color: "#405C59",
+    fontSize: 9,
+    fontWeight: "900",
+    letterSpacing: 1,
+    marginBottom: 3,
   },
 
   title: {
+    color: "#003F4A",
     fontSize: 22,
-    fontWeight: "bold",
+    fontWeight: "900",
     textAlign: "center",
-    color: COLORS.dark,
-    marginBottom: 20,
   },
+
+  headerSubtitle: {
+    color: "#405C59",
+    fontSize: 11,
+    fontWeight: "600",
+    textAlign: "center",
+    marginTop: 3,
+  },
+
+  /*
+   * ==========================================================
+   * PET
+   * ==========================================================
+   */
 
   petBox: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 16,
+  },
+
+  petAvatar: {
+    width: 108,
+    height: 108,
+    borderRadius: 54,
+    backgroundColor: "#E7F6F2",
+    borderWidth: 3,
+    borderColor: "#2FBFA0",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 8,
+  },
+
+  petAvatarEmergency: {
+    backgroundColor: "#FFE4DC",
+    borderColor: "#D4553F",
   },
 
   petEmoji: {
-    fontSize: 64,
+    fontSize: 65,
   },
 
   petName: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: COLORS.dark,
-    marginTop: 8,
+    color: "#003F4A",
+    fontSize: 22,
+    fontWeight: "900",
   },
 
-  petLevel: {
-    fontSize: 16,
-    color: COLORS.darkAccent,
-    marginTop: 4,
+  levelBadge: {
+    backgroundColor: "#F3F6F5",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginTop: 5,
+    borderWidth: 1,
+    borderColor: "#D8E2DE",
+  },
+
+  levelText: {
+    color: "#405C59",
+    fontSize: 11,
+    fontWeight: "800",
   },
 
   moodBox: {
-    backgroundColor: COLORS.background,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 10,
-    marginTop: 10,
+    backgroundColor: "#EAF7D7",
+    borderRadius: 999,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    marginTop: 7,
+  },
+
+  moodBoxEmergency: {
+    backgroundColor: "#FFE4DC",
   },
 
   moodText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: COLORS.dark,
+    color: "#003F4A",
+    fontSize: 14,
+    fontWeight: "900",
   },
+
+  /*
+   * ==========================================================
+   * STATUS
+   * ==========================================================
+   */
 
   statusContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
     gap: 10,
+    marginBottom: 14,
   },
 
   statusCard: {
     flex: 1,
-    backgroundColor: "#f4f4f4",
-    padding: 12,
-    borderRadius: 10,
+    backgroundColor: "#F5F8F6",
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: "#DCE5E1",
+    padding: 11,
+  },
+
+  statusTop: {
+    flexDirection: "row",
     alignItems: "center",
   },
 
+  statusIcon: {
+    fontSize: 17,
+    marginRight: 5,
+  },
+
   statusLabel: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: COLORS.dark,
+    color: "#405C59",
+    fontSize: 11,
+    fontWeight: "800",
   },
 
   statusValue: {
+    color: "#003F4A",
     fontSize: 22,
-    fontWeight: "bold",
-    color: COLORS.primary,
-    marginTop: 4,
+    fontWeight: "900",
+    marginTop: 3,
   },
 
+  statusBar: {
+    height: 7,
+    backgroundColor: "#DDE5E1",
+    borderRadius: 999,
+    overflow: "hidden",
+    marginTop: 7,
+  },
+
+  statusFillHealth: {
+    height: "100%",
+    backgroundColor: "#E07A61",
+    borderRadius: 999,
+  },
+
+  statusFillHappiness: {
+    height: "100%",
+    backgroundColor: "#2FBFA0",
+    borderRadius: 999,
+  },
+
+  /*
+   * ==========================================================
+   * MENSAGEM
+   * ==========================================================
+   */
+
   messageBox: {
-    backgroundColor: "#E8F8E8",
-    borderWidth: 2,
-    borderColor: COLORS.secondary,
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#EAF7D7",
+    borderRadius: 13,
+    borderWidth: 1.5,
+    borderColor: "#7FC241",
+    padding: 11,
+    marginBottom: 14,
+  },
+
+  messageIcon: {
+    fontSize: 20,
+    marginRight: 8,
   },
 
   messageText: {
-    textAlign: "center",
-    color: COLORS.dark,
-    fontWeight: "600",
+    flex: 1,
+    color: "#003F4A",
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: "700",
   },
 
+  /*
+   * ==========================================================
+   * EMERGÊNCIA
+   * ==========================================================
+   */
+
   emergencyBox: {
-    backgroundColor: "#FFE5E5",
+    backgroundColor: "#FFF5F1",
+    borderRadius: 17,
     borderWidth: 2,
-    borderColor: "#FF4444",
-    borderRadius: 10,
-    padding: 16,
+    borderColor: "#E07A61",
+    padding: 14,
+    marginBottom: 4,
+  },
+
+  emergencyBadge: {
+    alignSelf: "center",
+    backgroundColor: "#D4553F",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginBottom: 7,
+  },
+
+  emergencyBadgeText: {
+    color: "#FFFFFF",
+    fontSize: 9,
+    fontWeight: "900",
+    letterSpacing: 0.5,
   },
 
   emergencyTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+    color: "#9F3828",
+    fontSize: 18,
+    fontWeight: "900",
     textAlign: "center",
-    color: "#CC0000",
-    marginBottom: 10,
   },
 
   emergencyText: {
+    color: "#6F514B",
+    fontSize: 11,
+    lineHeight: 17,
     textAlign: "center",
-    marginBottom: 8,
-    color: COLORS.dark,
+    marginTop: 5,
+    marginBottom: 12,
+  },
+
+  emergencyInfoRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 11,
+  },
+
+  emergencyInfo: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 11,
+    borderWidth: 1,
+    borderColor: "#E8C5BC",
+    paddingVertical: 8,
+    alignItems: "center",
+  },
+
+  emergencyInfoLabel: {
+    color: "#876C66",
+    fontSize: 9,
+    fontWeight: "700",
+  },
+
+  emergencyInfoValue: {
+    color: "#9F3828",
+    fontSize: 17,
+    fontWeight: "900",
+    marginTop: 2,
+  },
+
+  vetButton: {
+    backgroundColor: "#D4553F",
+    borderRadius: 13,
+    borderWidth: 2,
+    borderColor: "#8F3022",
+    minHeight: 53,
+    paddingHorizontal: 12,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  loanButton: {
+    backgroundColor: "#EA8A38",
+    borderRadius: 13,
+    borderWidth: 2,
+    borderColor: "#9C531D",
+    minHeight: 53,
+    paddingHorizontal: 12,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  buttonEmoji: {
+    fontSize: 25,
+    marginRight: 9,
+  },
+
+  buttonContent: {
+    flex: 1,
+  },
+
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 13,
+    fontWeight: "900",
+  },
+
+  buttonSubtext: {
+    color: "#FFFFFF",
+    opacity: 0.85,
+    fontSize: 9,
+    fontWeight: "700",
+    marginTop: 2,
+  },
+
+  buttonArrow: {
+    color: "#FFFFFF",
+    fontSize: 21,
+    fontWeight: "900",
+  },
+
+  /*
+   * ==========================================================
+   * AÇÕES
+   * ==========================================================
+   */
+
+  actionsHeader: {
+    marginBottom: 11,
   },
 
   sectionTitle: {
+    color: "#003F4A",
     fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: COLORS.dark,
-    marginBottom: 15,
+    fontWeight: "900",
+  },
+
+  sectionSubtitle: {
+    color: "#68787B",
+    fontSize: 10,
+    lineHeight: 15,
+    marginTop: 3,
+  },
+
+  actionsList: {
+    gap: 8,
   },
 
   actionButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.background,
-    borderWidth: 2,
-    borderColor: COLORS.border,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 10,
+    backgroundColor: "#F7FAF8",
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: "#D6E1DC",
+    padding: 10,
+    minHeight: 65,
   },
 
   actionButtonDisabled: {
-    opacity: 0.4,
+    opacity: 0.38,
+  },
+
+  actionIconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: "#E7F6F2",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
   },
 
   actionEmoji: {
-    fontSize: 32,
-    marginRight: 12,
+    fontSize: 25,
+  },
+
+  actionInfo: {
+    flex: 1,
   },
 
   actionTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: COLORS.dark,
+    color: "#003F4A",
+    fontSize: 14,
+    fontWeight: "900",
   },
 
-  actionCost: {
-    fontSize: 14,
-    color: COLORS.darkAccent,
+  actionDescription: {
+    color: "#68787B",
+    fontSize: 9,
+    lineHeight: 13,
     marginTop: 2,
   },
 
-  vetButton: {
-    backgroundColor: "#D32F2F",
-    paddingVertical: 14,
-    borderRadius: 10,
-    marginTop: 12,
+  actionCostBox: {
+    alignItems: "flex-end",
+    marginLeft: 7,
   },
 
-  loanButton: {
-    backgroundColor: "#FF9800",
-    paddingVertical: 14,
-    borderRadius: 10,
-    marginTop: 12,
+  actionCost: {
+    color: "#2FBFA0",
+    fontSize: 13,
+    fontWeight: "900",
   },
 
-  buttonText: {
-    color: COLORS.white,
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 16,
+  freeCost: {
+    color: "#3D9A35",
+  },
+
+  actionArrow: {
+    color: "#91A09C",
+    fontSize: 15,
+    fontWeight: "900",
+    marginTop: 2,
   },
 });

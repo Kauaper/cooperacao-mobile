@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from "react-native";
 
 import { useGame } from "@/context/GameContext";
@@ -22,7 +23,6 @@ const COLORS = {
   navy: "#003F4A",
   yellow: "#D7E900",
   white: "#FFFFFF",
-  gray: "#D1D5DB",
 };
 
 /*
@@ -36,6 +36,8 @@ export default function PresentationScreen() {
 
   const [currentStep, setCurrentStep] = useState(0);
 
+  const { width, height } = useWindowDimensions();
+
   /*
    * ============================================================
    * CONTEÚDO ORIGINAL
@@ -45,18 +47,28 @@ export default function PresentationScreen() {
   const childContent = [
     {
       title: `Oi, ${gameState.playerName}!`,
-      content: `Que incrível ter você no CooperAção Kids! Você tem ${gameState.playerAge} anos e está na idade perfeita para começar a aprender sobre dinheiro de uma forma super divertida!`,
+
+      highlight: "Que incrível ter você no CooperAção!",
+
+      content: `Você tem ${gameState.playerAge} anos e está na idade perfeita para começar a aprender sobre dinheiro de uma forma super divertida!`,
+
       emoji: "😊",
     },
+
     {
       title: "Sua Mesada Especial",
+
       content: `Como você ainda é uma criança, seus pais te dão uma mesada de R$ ${gameState.monthlyIncome} por mês. Isso é seu tesouro! Vamos aprender a usar esse dinheiro de forma inteligente e divertida!`,
+
       emoji: "👨‍👩‍👧‍👦",
     },
+
     {
       title: "Aventura do Aprendizado!",
+
       content:
         "No CooperAção Kids você vai descobrir como poupar, gastar com sabedoria e fazer seu dinheiro crescer como mágica! E o mais legal: vai cuidar de um bichinho virtual super fofo!",
+
       emoji: "🎮",
     },
   ];
@@ -64,18 +76,26 @@ export default function PresentationScreen() {
   const teenContent = [
     {
       title: `Fala, ${gameState.playerName}!`,
+
       content: `Show de bola te conhecer no CooperAção Kids! Você tem ${gameState.playerAge} anos e já está pronto(a) para encarar o mundo financeiro como um verdadeiro jovem empreendedor!`,
+
       emoji: "😎",
     },
+
     {
       title: "Salário de Jovem Aprendiz",
+
       content: `Como jovem aprendiz, você ganha R$ ${gameState.monthlyIncome} por mês! Agora você tem uma grana própria e pode aprender a administrar como um chefe!`,
+
       emoji: "💪",
     },
+
     {
       title: "Sua Missão Financeira",
+
       content:
         "No CooperAção Kids você vai dominar orçamento, poupança, investimentos e responsabilidades. E ainda vai cuidar de um pet virtual que vai depender das suas decisões financeiras!",
+
       emoji: "🎯",
     },
   ];
@@ -108,107 +128,253 @@ export default function PresentationScreen() {
     <SafeAreaView style={styles.container}>
 
       {/* ======================================================
-          LOGOS
+          LOGOS SUPERIORES
           ====================================================== */}
 
-      <View style={styles.topBar}>
-
+      <View
+        style={[
+          styles.topBar,
+          {
+            width: width * 0.84,
+            height: height * 0.115,
+          },
+        ]}
+      >
         <Image
-          source={require("@/assets/images/game-logo.png")}
-          style={styles.gameLogo}
+          source={require("@/assets/images/game-logo-white.png")}
+          style={[
+            styles.gameLogo,
+            {
+              width: width * 0.40,
+              height: width * 0.16,
+            },
+          ]}
+          resizeMode="contain"
         />
 
         <Image
-          source={require("@/assets/images/sicoob-logo.png")}
-          style={styles.sicoobLogo}
+          source={require("@/assets/images/sicoob-logo-white.png")}
+          style={[
+            styles.sicoobLogo,
+            {
+              width: width * 0.35,
+              height: width * 0.15,
+            },
+          ]}
+          resizeMode="contain"
         />
-
       </View>
 
       {/* ======================================================
           CARD PRINCIPAL
           ====================================================== */}
 
-      <View style={styles.card}>
+      <View
+        style={[
+          styles.card,
+          {
+            width: width * 0.97,
+            height: height * 0.605,
+            borderRadius: width * 0.075,
+          },
+        ]}
+      >
 
-        {/* ----------------------------------------------------
+        {/* ====================================================
             CABEÇALHO
-            ---------------------------------------------------- */}
+            ==================================================== */}
 
-        <View style={styles.cardHeader}>
+        <View
+          style={[
+            styles.cardHeader,
+            {
+              height: height * 0.165,
+              paddingHorizontal: width * 0.075,
+            },
+          ]}
+        >
 
-          {/* ÍCONE */}
-          <View style={styles.avatar}>
+          {/* ==================================================
+              CARINHA FELIZ
+              ================================================== */}
 
-            <Text style={styles.avatarEmoji}>
-              {content[currentStep].emoji}
-            </Text>
-
+          <View
+            style={[
+              styles.avatar,
+              {
+                width: width * 0.205,
+                height: width * 0.205,
+                borderRadius: width * 0.105,
+                marginRight: width * 0.045,
+              },
+            ]}
+          >
+            <Image
+              source={require("@/assets/images/happy-face.png")}
+              style={[
+                styles.avatarImage,
+                {
+                  width: width * 0.165,
+                  height: width * 0.165,
+                },
+              ]}
+              resizeMode="contain"
+            />
           </View>
 
-          {/* TÍTULO */}
-          <Text style={styles.title}>
+          {/* ==================================================
+              TÍTULO
+              ================================================== */}
+
+          <Text
+            style={[
+              styles.title,
+              {
+                fontSize: width * 0.055,
+                lineHeight: width * 0.062,
+              },
+            ]}
+          >
             {content[currentStep].title}
           </Text>
 
         </View>
 
-        {/* ----------------------------------------------------
+        {/* ====================================================
             CONTEÚDO
-            ---------------------------------------------------- */}
+            ==================================================== */}
 
-        <View style={styles.content}>
+        <View
+          style={[
+            styles.content,
+            {
+              paddingHorizontal: width * 0.025,
+            },
+          ]}
+        >
 
-          <View style={styles.messageBox}>
+          {/* ==================================================
+              MENSAGEM
+              ================================================== */}
 
-            <Text style={styles.message}>
-              {content[currentStep].content}
-            </Text>
+          <View
+            style={[
+              styles.messageBox,
+              {
+                height: height * 0.285,
+                borderRadius: width * 0.035,
+                paddingHorizontal: width * 0.055,
+              },
+            ]}
+          >
+
+            {content[currentStep].highlight ? (
+              <View style={styles.messageContent}>
+
+                <Text
+                  style={[
+                    styles.messageHighlight,
+                    {
+                      fontSize: width * 0.041,
+                      lineHeight: width * 0.050,
+                    },
+                  ]}
+                >
+                  {content[currentStep].highlight}
+                </Text>
+
+                <Text
+                  style={[
+                    styles.message,
+                    {
+                      fontSize: width * 0.041,
+                      lineHeight: width * 0.052,
+                    },
+                  ]}
+                >
+                  {content[currentStep].content}
+                </Text>
+
+              </View>
+            ) : (
+              <Text
+                style={[
+                  styles.message,
+                  {
+                    fontSize: width * 0.041,
+                    lineHeight: width * 0.055,
+                  },
+                ]}
+              >
+                {content[currentStep].content}
+              </Text>
+            )}
 
           </View>
 
-          {/* --------------------------------------------------
+          {/* ==================================================
               INDICADORES
-              -------------------------------------------------- */}
+              ================================================== */}
 
-          <View style={styles.dots}>
-
+          <View
+            style={[
+              styles.dots,
+              {
+                height: height * 0.055,
+              },
+            ]}
+          >
             {content.map((_, index) => (
               <View
                 key={index}
                 style={[
                   styles.dot,
+                  {
+                    width: width * 0.028,
+                    height: width * 0.028,
+                    borderRadius: width * 0.014,
+                    marginHorizontal: width * 0.014,
+                  },
                   index === currentStep
                     ? styles.activeDot
                     : styles.inactiveDot,
                 ]}
               />
             ))}
-
           </View>
 
-          {/* --------------------------------------------------
+          {/* ==================================================
               BOTÃO
-              -------------------------------------------------- */}
+              ================================================== */}
 
           <TouchableOpacity
-            style={styles.button}
+            style={[
+              styles.button,
+              {
+                height: height * 0.052,
+                borderRadius: width * 0.018,
+                marginHorizontal: width * 0.045,
+              },
+            ]}
             onPress={handleNext}
             activeOpacity={0.8}
           >
-
-            <Text style={styles.buttonText}>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  fontSize: width * 0.034,
+                },
+              ]}
+            >
               {currentStep < content.length - 1
                 ? "CONTINUAR"
                 : "ESCOLHER PERSONAGEM!"}
             </Text>
-
           </TouchableOpacity>
 
         </View>
-
       </View>
-
     </SafeAreaView>
   );
 }
@@ -223,7 +389,7 @@ const styles = StyleSheet.create({
 
   /*
    * ------------------------------------------------------------
-   * FUNDO
+   * TELA
    * ------------------------------------------------------------
    */
 
@@ -234,7 +400,11 @@ const styles = StyleSheet.create({
 
     alignItems: "center",
 
-    paddingHorizontal: 20,
+    justifyContent: "flex-start",
+
+    overflow: "hidden",
+
+    width: "100%",
   },
 
   /*
@@ -244,51 +414,43 @@ const styles = StyleSheet.create({
    */
 
   topBar: {
-    width: "100%",
-
-    height: 90,
-
     flexDirection: "row",
 
     alignItems: "center",
 
-    justifyContent: "center",
+    justifyContent: "space-between",
 
-    gap: 16,
+    alignSelf: "center",
+
+    paddingHorizontal: 0,
   },
 
   gameLogo: {
-    width: 125,
-    height: 50,
-
     resizeMode: "contain",
   },
 
   sicoobLogo: {
-    width: 100,
-    height: 40,
-
     resizeMode: "contain",
   },
 
   /*
    * ------------------------------------------------------------
-   * CARD
+   * CARD PRINCIPAL
    * ------------------------------------------------------------
    */
 
   card: {
-    width: "100%",
-
-    maxWidth: 430,
-
     backgroundColor: COLORS.navy,
 
-    borderRadius: 28,
+    alignSelf: "center",
 
     overflow: "hidden",
 
-    marginTop: 5,
+    marginTop: 0,
+
+    /*
+     * Centralização horizontal explícita.
+     */
   },
 
   /*
@@ -298,15 +460,13 @@ const styles = StyleSheet.create({
    */
 
   cardHeader: {
-    minHeight: 100,
+    width: "100%",
 
     flexDirection: "row",
 
     alignItems: "center",
 
-    paddingHorizontal: 22,
-
-    paddingVertical: 17,
+    justifyContent: "flex-start",
   },
 
   /*
@@ -316,26 +476,21 @@ const styles = StyleSheet.create({
    */
 
   avatar: {
-    width: 58,
-    height: 58,
-
-    borderRadius: 29,
-
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
 
     borderWidth: 3,
 
-    borderColor: "#B9D600",
+    borderColor: COLORS.yellow,
 
     alignItems: "center",
 
     justifyContent: "center",
 
-    marginRight: 13,
+    flexShrink: 0,
   },
 
-  avatarEmoji: {
-    fontSize: 29,
+  avatarImage: {
+    resizeMode: "contain",
   },
 
   /*
@@ -349,13 +504,11 @@ const styles = StyleSheet.create({
 
     color: COLORS.white,
 
-    fontSize: 17,
-
-    lineHeight: 19,
-
     fontWeight: "900",
 
     textTransform: "uppercase",
+
+    includeFontPadding: false,
   },
 
   /*
@@ -365,41 +518,71 @@ const styles = StyleSheet.create({
    */
 
   content: {
-    paddingHorizontal: 10,
+    flex: 1,
 
-    paddingBottom: 12,
+    width: "100%",
   },
 
   /*
    * ------------------------------------------------------------
-   * CAIXA DE MENSAGEM
+   * CAIXA BRANCA
    * ------------------------------------------------------------
    */
 
   messageBox: {
+    width: "100%",
+
     backgroundColor: COLORS.white,
 
-    borderRadius: 13,
+    justifyContent: "center",
 
-    minHeight: 174,
+    alignItems: "center",
+  },
 
-    paddingHorizontal: 18,
+  messageContent: {
+    width: "100%",
 
-    paddingVertical: 22,
+    alignItems: "center",
 
     justifyContent: "center",
   },
 
-  message: {
+  /*
+   * ------------------------------------------------------------
+   * DESTAQUE
+   * ------------------------------------------------------------
+   */
+
+  messageHighlight: {
+    width: "100%",
+
     color: COLORS.navy,
 
-    fontSize: 14,
-
-    lineHeight: 19,
-
-    fontWeight: "700",
+    fontWeight: "900",
 
     textAlign: "center",
+
+    marginBottom: 10,
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ------------------------------------------------------------
+   * TEXTO NORMAL
+   * ------------------------------------------------------------
+   */
+
+  message: {
+    width: "100%",
+
+    color: COLORS.navy,
+
+    fontWeight: "500",
+
+    textAlign: "center",
+
+    includeFontPadding: false,
   },
 
   /*
@@ -414,17 +597,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
 
     justifyContent: "center",
-
-    height: 31,
   },
 
   dot: {
-    width: 10,
-    height: 10,
-
-    borderRadius: 5,
-
-    marginHorizontal: 4,
+    flexShrink: 0,
   },
 
   activeDot: {
@@ -442,27 +618,20 @@ const styles = StyleSheet.create({
    */
 
   button: {
-    height: 39,
-
     backgroundColor: COLORS.yellow,
-
-    borderRadius: 7,
 
     alignItems: "center",
 
     justifyContent: "center",
-
-    marginHorizontal: 8,
   },
 
   buttonText: {
     color: COLORS.navy,
 
-    fontSize: 12,
-
     fontWeight: "900",
 
     textTransform: "uppercase",
-  },
 
+    includeFontPadding: false,
+  },
 });

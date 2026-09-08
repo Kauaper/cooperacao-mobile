@@ -1,8 +1,11 @@
 import { useState } from "react";
 
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-import { COLORS } from "@/constants/colors";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface EventOption {
   id: string;
@@ -18,11 +21,9 @@ interface EventOption {
 interface ChapterEvent {
   id: string;
   type: "help" | "temptation" | "responsibility" | "opportunity";
-
   title: string;
   description: string;
   emoji: string;
-
   options: EventOption[];
 }
 
@@ -30,19 +31,22 @@ interface ChapterSpecialEventProps {
   currentMonth: number;
   balance: number;
   petCost: number;
-
   onEventComplete: (result: any) => void;
 }
 
 export default function ChapterSpecialEvent({
   currentMonth,
-  balance,
-  petCost,
   onEventComplete,
 }: ChapterSpecialEventProps) {
   const [selectedOption, setSelectedOption] = useState("");
 
   const [showResult, setShowResult] = useState(false);
+
+  /*
+   * ============================================================
+   * EVENTOS
+   * ============================================================
+   */
 
   const chapterEvents: Record<number, ChapterEvent> = {
     1: {
@@ -51,7 +55,8 @@ export default function ChapterSpecialEvent({
 
       title: "Primeira Oportunidade de Ajuda!",
 
-      description: "Dona Rosa precisa de ajuda para carregar as compras.",
+      description:
+        "Dona Rosa precisa de ajuda para carregar as compras.",
 
       emoji: "👵",
 
@@ -61,7 +66,8 @@ export default function ChapterSpecialEvent({
 
           text: "Ajudar com muito prazer!",
 
-          consequence: "Dona Rosa ficou emocionada e te deu R$15.",
+          consequence:
+            "Dona Rosa ficou emocionada e te deu R$15.",
 
           moneyChange: 0,
 
@@ -69,7 +75,8 @@ export default function ChapterSpecialEvent({
 
           petHappinessChange: 15,
 
-          lesson: "Ajudar outros sempre traz recompensas.",
+          lesson:
+            "Ajudar os outros sempre traz recompensas.",
 
           achievement: "helper",
         },
@@ -79,7 +86,8 @@ export default function ChapterSpecialEvent({
 
           text: "Ajudar, mas com pressa",
 
-          consequence: "Você ajudou rapidamente e ganhou R$8.",
+          consequence:
+            "Você ajudou rapidamente e ganhou R$8.",
 
           moneyChange: 0,
 
@@ -87,7 +95,8 @@ export default function ChapterSpecialEvent({
 
           petHappinessChange: 5,
 
-          lesson: "Ajudar sempre vale a pena.",
+          lesson:
+            "Ajudar sempre vale a pena.",
         },
 
         {
@@ -95,25 +104,27 @@ export default function ChapterSpecialEvent({
 
           text: "Dizer que está ocupado",
 
-          consequence: "Você se sentiu mal por não ajudar.",
+          consequence:
+            "Você se sentiu mal por não ajudar.",
 
           moneyChange: 0,
 
           petHappinessChange: -10,
 
-          lesson: "Perdemos oportunidades quando não ajudamos.",
+          lesson:
+            "Perdemos oportunidades quando não ajudamos.",
         },
       ],
     },
 
     2: {
       id: "first_temptation",
-
       type: "temptation",
 
       title: "Primeira Grande Tentação!",
 
-      description: "Seu doce favorito está em promoção.",
+      description:
+        "Seu doce favorito está em promoção.",
 
       emoji: "🍭",
 
@@ -123,13 +134,15 @@ export default function ChapterSpecialEvent({
 
           text: "Comprar tudo (R$18)",
 
-          consequence: "Você gastou bastante.",
+          consequence:
+            "Você gastou bastante.",
 
           moneyChange: -18,
 
           petHappinessChange: 10,
 
-          lesson: "Promoções podem enganar.",
+          lesson:
+            "Promoções podem enganar.",
         },
 
         {
@@ -137,13 +150,15 @@ export default function ChapterSpecialEvent({
 
           text: "Comprar só um pouco (R$8)",
 
-          consequence: "Você se controlou.",
+          consequence:
+            "Você se controlou.",
 
           moneyChange: -8,
 
           petHappinessChange: 5,
 
-          lesson: "Moderação é importante.",
+          lesson:
+            "Moderação é importante.",
 
           achievement: "smart_spender",
         },
@@ -153,26 +168,29 @@ export default function ChapterSpecialEvent({
 
           text: "Resistir",
 
-          consequence: "Você venceu a tentação.",
+          consequence:
+            "Você venceu a tentação.",
 
           moneyChange: 0,
 
           petHappinessChange: 20,
 
-          lesson: "Força de vontade é valiosa.",
+          lesson:
+            "Força de vontade é valiosa.",
 
           achievement: "resist_temptation",
         },
       ],
     },
+
     4: {
       id: "talent_opportunity",
-
       type: "opportunity",
 
       title: "Descobrindo Seus Talentos!",
 
-      description: "A escola está organizando uma feira de talentos.",
+      description:
+        "A escola está organizando uma feira de talentos.",
 
       emoji: "🎨",
 
@@ -182,7 +200,8 @@ export default function ChapterSpecialEvent({
 
           text: "Vender desenhos (R$5)",
 
-          consequence: "Você ganhou R$25 com seus desenhos.",
+          consequence:
+            "Você ganhou R$25 com seus desenhos.",
 
           moneyChange: -5,
 
@@ -190,7 +209,8 @@ export default function ChapterSpecialEvent({
 
           petHappinessChange: 20,
 
-          lesson: "Investir nos seus talentos vale a pena.",
+          lesson:
+            "Investir nos seus talentos vale a pena.",
 
           achievement: "helper",
         },
@@ -200,7 +220,8 @@ export default function ChapterSpecialEvent({
 
           text: "Tocar música",
 
-          consequence: "Você ganhou R$12 de gorjetas.",
+          consequence:
+            "Você ganhou R$12 de gorjetas.",
 
           moneyChange: 0,
 
@@ -208,7 +229,8 @@ export default function ChapterSpecialEvent({
 
           petHappinessChange: 15,
 
-          lesson: "Talentos podem gerar renda.",
+          lesson:
+            "Talentos podem gerar renda.",
         },
 
         {
@@ -216,25 +238,27 @@ export default function ChapterSpecialEvent({
 
           text: "Não participar",
 
-          consequence: "Você perdeu uma oportunidade.",
+          consequence:
+            "Você perdeu uma oportunidade.",
 
           moneyChange: 0,
 
           petHappinessChange: -5,
 
-          lesson: "A timidez pode nos impedir de crescer.",
+          lesson:
+            "A timidez pode nos impedir de crescer.",
         },
       ],
     },
 
     5: {
       id: "sweet_temptation",
-
       type: "temptation",
 
       title: "Festival de Doces!",
 
-      description: "A cidade inteira está participando.",
+      description:
+        "A cidade inteira está participando.",
 
       emoji: "🍬",
 
@@ -244,13 +268,15 @@ export default function ChapterSpecialEvent({
 
           text: "Comer tudo (R$30)",
 
-          consequence: "Você exagerou nos doces.",
+          consequence:
+            "Você exagerou nos doces.",
 
           moneyChange: -30,
 
           petHappinessChange: 5,
 
-          lesson: "Exageros têm consequências.",
+          lesson:
+            "Exageros têm consequências.",
         },
 
         {
@@ -258,13 +284,15 @@ export default function ChapterSpecialEvent({
 
           text: "Comer com moderação (R$12)",
 
-          consequence: "Você se divertiu sem exagerar.",
+          consequence:
+            "Você se divertiu sem exagerar.",
 
           moneyChange: -12,
 
           petHappinessChange: 15,
 
-          lesson: "Moderação é sabedoria.",
+          lesson:
+            "Moderação é sabedoria.",
 
           achievement: "smart_spender",
         },
@@ -274,13 +302,15 @@ export default function ChapterSpecialEvent({
 
           text: "Resistir",
 
-          consequence: "Você mostrou força de vontade.",
+          consequence:
+            "Você mostrou força de vontade.",
 
           moneyChange: 0,
 
           petHappinessChange: 25,
 
-          lesson: "Disciplina gera crescimento.",
+          lesson:
+            "Disciplina gera crescimento.",
 
           achievement: "resist_temptation",
         },
@@ -289,12 +319,12 @@ export default function ChapterSpecialEvent({
 
     6: {
       id: "school_uniform",
-
       type: "responsibility",
 
       title: "Uniforme Escolar!",
 
-      description: "A escola exige um uniforme novo.",
+      description:
+        "A escola exige um uniforme novo.",
 
       emoji: "👔",
 
@@ -304,13 +334,15 @@ export default function ChapterSpecialEvent({
 
           text: "Comprar novo (R$45)",
 
-          consequence: "Você comprou o uniforme oficial.",
+          consequence:
+            "Você comprou o uniforme oficial.",
 
           moneyChange: -45,
 
           petHappinessChange: 5,
 
-          lesson: "Alguns gastos são obrigatórios.",
+          lesson:
+            "Alguns gastos são obrigatórios.",
 
           achievement: "emergency_prepared",
         },
@@ -320,13 +352,15 @@ export default function ChapterSpecialEvent({
 
           text: "Pedir ajuda aos pais",
 
-          consequence: "Seus pais ajudaram você.",
+          consequence:
+            "Seus pais ajudaram você.",
 
           moneyChange: 0,
 
           extraEarnings: 45,
 
-          lesson: "Pedir ajuda é normal.",
+          lesson:
+            "Pedir ajuda é normal.",
         },
 
         {
@@ -334,26 +368,29 @@ export default function ChapterSpecialEvent({
 
           text: "Comprar usado (R$25)",
 
-          consequence: "Você economizou bastante.",
+          consequence:
+            "Você economizou bastante.",
 
           moneyChange: -25,
 
           petHappinessChange: 10,
 
-          lesson: "Pesquisar antes economiza dinheiro.",
+          lesson:
+            "Pesquisar antes economiza dinheiro.",
 
           achievement: "smart_spender",
         },
       ],
     },
+
     7: {
       id: "pet_emergency",
-
       type: "responsibility",
 
       title: "Emergência do Pet!",
 
-      description: "Seu bichinho ficou doente e precisa de cuidados.",
+      description:
+        "Seu bichinho ficou doente e precisa de cuidados.",
 
       emoji: "🏥",
 
@@ -363,13 +400,15 @@ export default function ChapterSpecialEvent({
 
           text: "Levar ao veterinário (R$35)",
 
-          consequence: "Seu pet se recuperou rapidamente.",
+          consequence:
+            "Seu pet se recuperou rapidamente.",
 
           moneyChange: -35,
 
           petHappinessChange: 30,
 
-          lesson: "Precisamos estar preparados para emergências.",
+          lesson:
+            "Precisamos estar preparados para emergências.",
 
           achievement: "pet_lover",
         },
@@ -379,13 +418,15 @@ export default function ChapterSpecialEvent({
 
           text: "Cuidar em casa (R$10)",
 
-          consequence: "Seu pet melhorou devagar.",
+          consequence:
+            "Seu pet melhorou devagar.",
 
           moneyChange: -10,
 
           petHappinessChange: 10,
 
-          lesson: "Nem sempre a solução mais barata é a melhor.",
+          lesson:
+            "Nem sempre a solução mais barata é a melhor.",
         },
 
         {
@@ -393,25 +434,27 @@ export default function ChapterSpecialEvent({
 
           text: "Esperar passar",
 
-          consequence: "Seu pet ficou triste e piorou.",
+          consequence:
+            "Seu pet ficou triste e piorou.",
 
           moneyChange: 0,
 
           petHappinessChange: -25,
 
-          lesson: "Responsabilidade exige ação.",
+          lesson:
+            "Responsabilidade exige ação.",
         },
       ],
     },
 
     8: {
       id: "community_event",
-
       type: "help",
 
       title: "Mutirão da Comunidade!",
 
-      description: "O bairro está organizando uma ação voluntária.",
+      description:
+        "O bairro está organizando uma ação voluntária.",
 
       emoji: "🤝",
 
@@ -421,7 +464,8 @@ export default function ChapterSpecialEvent({
 
           text: "Participar o dia inteiro",
 
-          consequence: "Você recebeu reconhecimento da comunidade.",
+          consequence:
+            "Você recebeu reconhecimento da comunidade.",
 
           moneyChange: 0,
 
@@ -429,7 +473,8 @@ export default function ChapterSpecialEvent({
 
           petHappinessChange: 20,
 
-          lesson: "Ajudar gera valor para todos.",
+          lesson:
+            "Ajudar gera valor para todos.",
 
           achievement: "generous_heart",
         },
@@ -439,7 +484,8 @@ export default function ChapterSpecialEvent({
 
           text: "Participar algumas horas",
 
-          consequence: "Você colaborou e aprendeu bastante.",
+          consequence:
+            "Você colaborou e aprendeu bastante.",
 
           moneyChange: 0,
 
@@ -447,7 +493,8 @@ export default function ChapterSpecialEvent({
 
           petHappinessChange: 10,
 
-          lesson: "Toda ajuda faz diferença.",
+          lesson:
+            "Toda ajuda faz diferença.",
         },
 
         {
@@ -455,25 +502,27 @@ export default function ChapterSpecialEvent({
 
           text: "Ficar em casa",
 
-          consequence: "Você perdeu uma experiência importante.",
+          consequence:
+            "Você perdeu uma experiência importante.",
 
           moneyChange: 0,
 
           petHappinessChange: -5,
 
-          lesson: "Participar da comunidade é valioso.",
+          lesson:
+            "Participar da comunidade é valioso.",
         },
       ],
     },
 
     9: {
       id: "investment_opportunity",
-
       type: "opportunity",
 
       title: "Oportunidade de Crescimento!",
 
-      description: "Você encontrou uma forma de fazer seu dinheiro render.",
+      description:
+        "Você encontrou uma forma de fazer seu dinheiro render.",
 
       emoji: "📈",
 
@@ -483,7 +532,8 @@ export default function ChapterSpecialEvent({
 
           text: "Investir bastante (R$30)",
 
-          consequence: "Seu dinheiro começou a crescer.",
+          consequence:
+            "Seu dinheiro começou a crescer.",
 
           moneyChange: -30,
 
@@ -491,7 +541,8 @@ export default function ChapterSpecialEvent({
 
           petHappinessChange: 10,
 
-          lesson: "Investimentos podem gerar retorno.",
+          lesson:
+            "Investimentos podem gerar retorno.",
 
           achievement: "growth_expert",
         },
@@ -501,7 +552,8 @@ export default function ChapterSpecialEvent({
 
           text: "Investir pouco (R$10)",
 
-          consequence: "Você teve um retorno moderado.",
+          consequence:
+            "Você teve um retorno moderado.",
 
           moneyChange: -10,
 
@@ -509,7 +561,8 @@ export default function ChapterSpecialEvent({
 
           petHappinessChange: 5,
 
-          lesson: "Começar pequeno também funciona.",
+          lesson:
+            "Começar pequeno também funciona.",
         },
 
         {
@@ -517,17 +570,19 @@ export default function ChapterSpecialEvent({
 
           text: "Não investir",
 
-          consequence: "Você perdeu a oportunidade.",
+          consequence:
+            "Você perdeu a oportunidade.",
 
           moneyChange: 0,
 
-          lesson: "Oportunidades precisam ser aproveitadas.",
+          lesson:
+            "Oportunidades precisam ser aproveitadas.",
         },
       ],
     },
+
     10: {
       id: "friend_needs_help",
-
       type: "help",
 
       title: "Um Amigo Precisa de Você",
@@ -543,13 +598,15 @@ export default function ChapterSpecialEvent({
 
           text: "Doar R$20",
 
-          consequence: "Seu amigo ficou muito feliz.",
+          consequence:
+            "Seu amigo ficou muito feliz.",
 
           moneyChange: -20,
 
           petHappinessChange: 15,
 
-          lesson: "Generosidade transforma vidas.",
+          lesson:
+            "Generosidade transforma vidas.",
 
           achievement: "generous_heart",
         },
@@ -559,13 +616,15 @@ export default function ChapterSpecialEvent({
 
           text: "Doar R$10",
 
-          consequence: "Você ajudou dentro das suas possibilidades.",
+          consequence:
+            "Você ajudou dentro das suas possibilidades.",
 
           moneyChange: -10,
 
           petHappinessChange: 10,
 
-          lesson: "Toda ajuda importa.",
+          lesson:
+            "Toda ajuda importa.",
         },
 
         {
@@ -573,25 +632,27 @@ export default function ChapterSpecialEvent({
 
           text: "Não ajudar",
 
-          consequence: "Você guardou seu dinheiro.",
+          consequence:
+            "Você guardou seu dinheiro.",
 
           moneyChange: 0,
 
           petHappinessChange: -5,
 
-          lesson: "Às vezes precisamos pensar nos outros também.",
+          lesson:
+            "Às vezes precisamos pensar nos outros também.",
         },
       ],
     },
 
     11: {
       id: "holiday_shopping",
-
       type: "temptation",
 
       title: "Promoção Imperdível!",
 
-      description: "Uma grande loja lançou descontos incríveis.",
+      description:
+        "Uma grande loja lançou descontos incríveis.",
 
       emoji: "🛍️",
 
@@ -601,13 +662,15 @@ export default function ChapterSpecialEvent({
 
           text: "Comprar muitas coisas (R$40)",
 
-          consequence: "Você gastou bastante dinheiro.",
+          consequence:
+            "Você gastou bastante dinheiro.",
 
           moneyChange: -40,
 
           petHappinessChange: 5,
 
-          lesson: "Nem toda promoção vale a pena.",
+          lesson:
+            "Nem toda promoção vale a pena.",
         },
 
         {
@@ -615,13 +678,15 @@ export default function ChapterSpecialEvent({
 
           text: "Comprar apenas o necessário (R$15)",
 
-          consequence: "Você fez compras conscientes.",
+          consequence:
+            "Você fez compras conscientes.",
 
           moneyChange: -15,
 
           petHappinessChange: 10,
 
-          lesson: "Planejamento evita desperdícios.",
+          lesson:
+            "Planejamento evita desperdícios.",
 
           achievement: "smart_spender",
         },
@@ -631,13 +696,15 @@ export default function ChapterSpecialEvent({
 
           text: "Não comprar",
 
-          consequence: "Você economizou dinheiro.",
+          consequence:
+            "Você economizou dinheiro.",
 
           moneyChange: 0,
 
           petHappinessChange: 15,
 
-          lesson: "Resistir também é uma escolha inteligente.",
+          lesson:
+            "Resistir também é uma escolha inteligente.",
 
           achievement: "resist_temptation",
         },
@@ -646,12 +713,12 @@ export default function ChapterSpecialEvent({
 
     12: {
       id: "final_challenge",
-
       type: "opportunity",
 
       title: "Grande Desafio Final!",
 
-      description: "Chegou a última oportunidade da sua jornada.",
+      description:
+        "Chegou a última oportunidade da sua jornada.",
 
       emoji: "🏆",
 
@@ -661,7 +728,8 @@ export default function ChapterSpecialEvent({
 
           text: "Aceitar o desafio",
 
-          consequence: "Você mostrou coragem e ganhou uma recompensa.",
+          consequence:
+            "Você mostrou coragem e ganhou uma recompensa.",
 
           moneyChange: 0,
 
@@ -669,7 +737,8 @@ export default function ChapterSpecialEvent({
 
           petHappinessChange: 20,
 
-          lesson: "Grandes conquistas exigem coragem.",
+          lesson:
+            "Grandes conquistas exigem coragem.",
 
           achievement: "future_planner",
         },
@@ -679,7 +748,8 @@ export default function ChapterSpecialEvent({
 
           text: "Seguir com segurança",
 
-          consequence: "Você manteve estabilidade financeira.",
+          consequence:
+            "Você manteve estabilidade financeira.",
 
           moneyChange: 0,
 
@@ -687,7 +757,8 @@ export default function ChapterSpecialEvent({
 
           petHappinessChange: 10,
 
-          lesson: "Segurança também é importante.",
+          lesson:
+            "Segurança também é importante.",
         },
 
         {
@@ -695,28 +766,44 @@ export default function ChapterSpecialEvent({
 
           text: "Não participar",
 
-          consequence: "Você encerrou o ano sem mudanças.",
+          consequence:
+            "Você encerrou o ano sem mudanças.",
 
           moneyChange: 0,
 
-          lesson: "Oportunidades não voltam para sempre.",
+          lesson:
+            "Oportunidades não voltam para sempre.",
         },
       ],
     },
   };
+
   const currentEvent = chapterEvents[currentMonth];
 
   if (!currentEvent) {
     return null;
   }
+
   const selectedEventOption = currentEvent.options.find(
     (option) => option.id === selectedOption,
   );
+
+  /*
+   * ============================================================
+   * ESCOLHA
+   * ============================================================
+   */
 
   const handleSelectOption = (optionId: string) => {
     setSelectedOption(optionId);
     setShowResult(true);
   };
+
+  /*
+   * ============================================================
+   * CONTINUAR
+   * ============================================================
+   */
 
   const handleContinue = () => {
     if (!selectedEventOption) {
@@ -726,228 +813,937 @@ export default function ChapterSpecialEvent({
     onEventComplete({
       moneyChange: selectedEventOption.moneyChange,
 
-      extraEarnings: selectedEventOption.extraEarnings || 0,
+      extraEarnings:
+        selectedEventOption.extraEarnings || 0,
 
-      petHappinessChange: selectedEventOption.petHappinessChange || 0,
+      petHappinessChange:
+        selectedEventOption.petHappinessChange || 0,
 
-      achievement: selectedEventOption.achievement,
+      achievement:
+        selectedEventOption.achievement,
 
-      lesson: selectedEventOption.lesson,
+      lesson:
+        selectedEventOption.lesson,
     });
   };
+
+  /*
+   * ============================================================
+   * EVENTO
+   * ============================================================
+   */
+
   if (!showResult) {
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.emoji}>{currentEvent.emoji}</Text>
 
-          <Text style={styles.title}>{currentEvent.title}</Text>
+        <View style={styles.eventCard}>
 
-          <Text style={styles.description}>{currentEvent.description}</Text>
+          {/* ÍCONE */}
+
+          <View style={styles.emojiCircle}>
+            <Text style={styles.emoji}>
+              {currentEvent.emoji}
+            </Text>
+          </View>
+
+          {/* TIPO */}
+
+          <View style={styles.typeBadge}>
+            <Text style={styles.typeText}>
+              DECISÃO DO CAPÍTULO
+            </Text>
+          </View>
+
+          {/* TÍTULO */}
+
+          <Text style={styles.title}>
+            {currentEvent.title}
+          </Text>
+
+          {/* DESCRIÇÃO */}
+
+          <Text style={styles.description}>
+            {currentEvent.description}
+          </Text>
+
         </View>
 
-        <View style={styles.optionsContainer}>
-          {currentEvent.options.map((option) => (
-            <TouchableOpacity
-              key={option.id}
-              style={styles.optionButton}
-              onPress={() => handleSelectOption(option.id)}
-            >
-              <Text style={styles.optionText}>{option.text}</Text>
-            </TouchableOpacity>
-          ))}
+        {/* OPÇÕES */}
+
+        <View style={styles.optionsCard}>
+
+          <Text style={styles.chooseTitle}>
+            🤔 O que você vai fazer?
+          </Text>
+
+          <Text style={styles.chooseSubtitle}>
+            Sua escolha terá consequências.
+          </Text>
+
+          <View style={styles.optionsContainer}>
+
+            {currentEvent.options.map((option, index) => (
+              <TouchableOpacity
+                key={option.id}
+                style={styles.optionButton}
+                onPress={() => handleSelectOption(option.id)}
+                activeOpacity={0.8}
+              >
+
+                <View style={styles.optionNumber}>
+                  <Text style={styles.optionNumberText}>
+                    {index + 1}
+                  </Text>
+                </View>
+
+                <Text style={styles.optionText}>
+                  {option.text}
+                </Text>
+
+                <Text style={styles.optionArrow}>
+                  →
+                </Text>
+
+              </TouchableOpacity>
+            ))}
+
+          </View>
+
         </View>
+
       </View>
     );
   }
+
+  /*
+   * ============================================================
+   * RESULTADO
+   * ============================================================
+   */
+
   return (
     <View style={styles.container}>
-      <View style={styles.resultCard}>
-        <Text style={styles.resultEmoji}>{currentEvent.emoji}</Text>
 
-        <Text style={styles.resultTitle}>Resultado da Sua Escolha</Text>
+      <View style={styles.resultCard}>
+
+        {/* ÍCONE */}
+
+        <View style={styles.resultEmojiCircle}>
+          <Text style={styles.resultEmoji}>
+            {currentEvent.emoji}
+          </Text>
+        </View>
+
+        <View style={styles.resultBadge}>
+          <Text style={styles.resultBadgeText}>
+            ESCOLHA REALIZADA
+          </Text>
+        </View>
+
+        {/* TÍTULO */}
+
+        <Text style={styles.resultTitle}>
+          Resultado da Sua Escolha
+        </Text>
+
+        {/* ESCOLHA */}
+
+        <View style={styles.choiceBox}>
+
+          <Text style={styles.choiceLabel}>
+            VOCÊ ESCOLHEU
+          </Text>
+
+          <Text style={styles.choiceText}>
+            {selectedEventOption?.text}
+          </Text>
+
+        </View>
+
+        {/* CONSEQUÊNCIA */}
 
         <Text style={styles.resultDescription}>
           {selectedEventOption?.consequence}
         </Text>
 
-        <View style={styles.lessonBox}>
-          <Text style={styles.lessonTitle}>📚 Lição Aprendida</Text>
-
-          <Text style={styles.lessonText}>{selectedEventOption?.lesson}</Text>
-        </View>
+        {/* DINHEIRO */}
 
         {selectedEventOption?.moneyChange !== 0 && (
-          <View style={styles.infoBox}>
-            <Text style={styles.infoText}>
-              💰 Dinheiro: R$
-              {selectedEventOption?.moneyChange}
+          <View
+            style={[
+              styles.infoBox,
+              selectedEventOption?.moneyChange > 0
+                ? styles.positiveBox
+                : styles.negativeBox,
+            ]}
+          >
+            <Text style={styles.infoEmoji}>
+              {selectedEventOption?.moneyChange > 0
+                ? "💰"
+                : "💸"}
             </Text>
+
+            <View style={styles.infoContent}>
+              <Text style={styles.infoLabel}>
+                DINHEIRO
+              </Text>
+
+              <Text
+                style={[
+                  styles.infoValue,
+                  selectedEventOption?.moneyChange > 0
+                    ? styles.positiveText
+                    : styles.negativeText,
+                ]}
+              >
+                {selectedEventOption?.moneyChange > 0
+                  ? "+"
+                  : ""}
+                R$ {Math.abs(selectedEventOption?.moneyChange)}
+              </Text>
+            </View>
           </View>
         )}
 
-        {selectedEventOption?.extraEarnings && (
-          <View style={styles.infoBox}>
-            <Text style={styles.infoText}>
-              ✨ Ganhos Extras: R$
-              {selectedEventOption.extraEarnings}
+        {/* GANHOS EXTRAS */}
+
+        {!!selectedEventOption?.extraEarnings && (
+          <View style={[styles.infoBox, styles.positiveBox]}>
+
+            <Text style={styles.infoEmoji}>
+              ✨
             </Text>
+
+            <View style={styles.infoContent}>
+
+              <Text style={styles.infoLabel}>
+                GANHO EXTRA
+              </Text>
+
+              <Text style={[styles.infoValue, styles.positiveText]}>
+                + R$ {selectedEventOption.extraEarnings}
+              </Text>
+
+            </View>
+
           </View>
         )}
+
+        {/* LIÇÃO */}
+
+        <View style={styles.lessonBox}>
+
+          <View style={styles.lessonHeader}>
+
+            <Text style={styles.lessonEmoji}>
+              📚
+            </Text>
+
+            <Text style={styles.lessonTitle}>
+              LIÇÃO APRENDIDA
+            </Text>
+
+          </View>
+
+          <Text style={styles.lessonText}>
+            {selectedEventOption?.lesson}
+          </Text>
+
+        </View>
+
+        {/* CONQUISTA */}
 
         {selectedEventOption?.achievement && (
           <View style={styles.achievementBox}>
-            <Text style={styles.achievementText}>
-              🏅 Conquista Desbloqueada!
-            </Text>
+
+            <View style={styles.achievementIcon}>
+              <Text style={styles.achievementEmoji}>
+                🏅
+              </Text>
+            </View>
+
+            <View style={styles.achievementContent}>
+
+              <Text style={styles.achievementTitle}>
+                NOVA CONQUISTA!
+              </Text>
+
+              <Text style={styles.achievementText}>
+                Você desbloqueou um novo selo.
+              </Text>
+
+            </View>
+
           </View>
         )}
+
+        {/* CONTINUAR */}
 
         <TouchableOpacity
           style={styles.continueButton}
           onPress={handleContinue}
+          activeOpacity={0.85}
         >
-          <Text style={styles.continueButtonText}>Continuar ➜</Text>
+          <Text style={styles.continueButtonText}>
+            Continuar
+          </Text>
+
+          <Text style={styles.continueArrow}>
+            →
+          </Text>
         </TouchableOpacity>
+
       </View>
+
     </View>
   );
 }
+
+/*
+ * ============================================================
+ * ESTILOS
+ * ============================================================
+ */
+
 const styles = StyleSheet.create({
+
+  /*
+   * CONTAINER
+   */
+
   container: {
-    backgroundColor: COLORS.white,
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 2,
-    borderColor: COLORS.border,
+    width: "100%",
   },
 
-  header: {
+  /*
+   * EVENTO
+   */
+
+  eventCard: {
+    backgroundColor: "#FFFFFF",
+
+    borderRadius: 22,
+
+    borderWidth: 3,
+
+    borderColor: "#003F4A",
+
+    padding: 18,
+
     alignItems: "center",
+
+    shadowColor: "#003F4A",
+
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+
+    shadowOpacity: 0.14,
+
+    shadowRadius: 7,
+
+    elevation: 4,
+  },
+
+  emojiCircle: {
+    width: 82,
+
+    height: 82,
+
+    borderRadius: 41,
+
+    backgroundColor: "#D7E900",
+
+    borderWidth: 3,
+
+    borderColor: "#7FC241",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginBottom: 10,
   },
 
   emoji: {
-    fontSize: 70,
-    marginBottom: 12,
+    fontSize: 48,
+  },
+
+  typeBadge: {
+    backgroundColor: "#003F4A",
+
+    paddingHorizontal: 12,
+
+    paddingVertical: 5,
+
+    borderRadius: 999,
+
+    marginBottom: 10,
+  },
+
+  typeText: {
+    color: "#FFFFFF",
+
+    fontSize: 9,
+
+    fontWeight: "900",
+
+    letterSpacing: 0.7,
   },
 
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: COLORS.dark,
+    color: "#003F4A",
+
+    fontSize: 23,
+
+    lineHeight: 28,
+
+    fontWeight: "900",
+
     textAlign: "center",
-    marginBottom: 10,
-  },
 
-  description: {
-    fontSize: 16,
-    color: COLORS.darkAccent,
-    textAlign: "center",
-    marginBottom: 20,
-  },
-
-  optionsContainer: {
-    gap: 12,
-  },
-
-  optionButton: {
-    backgroundColor: COLORS.primary,
-    padding: 16,
-    borderRadius: 12,
-  },
-
-  optionText: {
-    color: COLORS.white,
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-
-  resultCard: {
-    alignItems: "center",
-  },
-
-  resultEmoji: {
-    fontSize: 80,
-    marginBottom: 12,
-  },
-
-  resultTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: COLORS.dark,
-    textAlign: "center",
-    marginBottom: 12,
-  },
-
-  resultDescription: {
-    fontSize: 16,
-    textAlign: "center",
-    color: COLORS.darkAccent,
-    marginBottom: 20,
-  },
-
-  lessonBox: {
-    width: "100%",
-    backgroundColor: COLORS.background,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-  },
-
-  lessonTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: COLORS.dark,
     marginBottom: 8,
   },
 
-  lessonText: {
-    color: COLORS.darkAccent,
-    lineHeight: 22,
+  description: {
+    color: "#405C59",
+
+    fontSize: 14,
+
+    lineHeight: 21,
+
+    textAlign: "center",
+
+    maxWidth: 320,
   },
+
+  /*
+   * OPÇÕES
+   */
+
+  optionsCard: {
+    backgroundColor: "#F5F8F6",
+
+    borderRadius: 20,
+
+    borderWidth: 2,
+
+    borderColor: "#D8E2DE",
+
+    padding: 16,
+
+    marginTop: 12,
+  },
+
+  chooseTitle: {
+    color: "#003F4A",
+
+    fontSize: 18,
+
+    fontWeight: "900",
+
+    textAlign: "center",
+  },
+
+  chooseSubtitle: {
+    color: "#68787B",
+
+    fontSize: 12,
+
+    fontWeight: "600",
+
+    textAlign: "center",
+
+    marginTop: 3,
+
+    marginBottom: 14,
+  },
+
+  optionsContainer: {
+    gap: 10,
+  },
+
+  optionButton: {
+    minHeight: 62,
+
+    backgroundColor: "#7FC241",
+
+    borderRadius: 15,
+
+    borderWidth: 2,
+
+    borderColor: "#003F4A",
+
+    paddingHorizontal: 12,
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    shadowColor: "#003F4A",
+
+    shadowOffset: {
+      width: 0,
+
+      height: 2,
+    },
+
+    shadowOpacity: 0.12,
+
+    shadowRadius: 3,
+
+    elevation: 2,
+  },
+
+  optionNumber: {
+    width: 34,
+
+    height: 34,
+
+    borderRadius: 17,
+
+    backgroundColor: "#D7E900",
+
+    borderWidth: 2,
+
+    borderColor: "#003F4A",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginRight: 10,
+  },
+
+  optionNumberText: {
+    color: "#003F4A",
+
+    fontSize: 15,
+
+    fontWeight: "900",
+  },
+
+  optionText: {
+    flex: 1,
+
+    color: "#FFFFFF",
+
+    fontSize: 14,
+
+    lineHeight: 19,
+
+    fontWeight: "800",
+  },
+
+  optionArrow: {
+    color: "#FFFFFF",
+
+    fontSize: 23,
+
+    fontWeight: "900",
+
+    marginLeft: 8,
+  },
+
+  /*
+   * RESULTADO
+   */
+
+  resultCard: {
+    backgroundColor: "#FFFFFF",
+
+    borderRadius: 22,
+
+    borderWidth: 3,
+
+    borderColor: "#003F4A",
+
+    padding: 18,
+
+    alignItems: "center",
+
+    shadowColor: "#003F4A",
+
+    shadowOffset: {
+      width: 0,
+
+      height: 4,
+    },
+
+    shadowOpacity: 0.14,
+
+    shadowRadius: 7,
+
+    elevation: 4,
+  },
+
+  resultEmojiCircle: {
+    width: 76,
+
+    height: 76,
+
+    borderRadius: 38,
+
+    backgroundColor: "#D7E900",
+
+    borderWidth: 3,
+
+    borderColor: "#7FC241",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginBottom: 9,
+  },
+
+  resultEmoji: {
+    fontSize: 43,
+  },
+
+  resultBadge: {
+    backgroundColor: "#2FBFA0",
+
+    paddingHorizontal: 12,
+
+    paddingVertical: 5,
+
+    borderRadius: 999,
+
+    marginBottom: 9,
+  },
+
+  resultBadgeText: {
+    color: "#FFFFFF",
+
+    fontSize: 9,
+
+    fontWeight: "900",
+
+    letterSpacing: 0.6,
+  },
+
+  resultTitle: {
+    color: "#003F4A",
+
+    fontSize: 22,
+
+    fontWeight: "900",
+
+    textAlign: "center",
+
+    marginBottom: 12,
+  },
+
+  choiceBox: {
+    width: "100%",
+
+    backgroundColor: "#F3F7F5",
+
+    borderRadius: 13,
+
+    borderWidth: 1.5,
+
+    borderColor: "#D6E0DC",
+
+    paddingVertical: 10,
+
+    paddingHorizontal: 13,
+
+    alignItems: "center",
+
+    marginBottom: 12,
+  },
+
+  choiceLabel: {
+    color: "#7A8988",
+
+    fontSize: 9,
+
+    fontWeight: "900",
+
+    letterSpacing: 0.6,
+
+    marginBottom: 3,
+  },
+
+  choiceText: {
+    color: "#003F4A",
+
+    fontSize: 14,
+
+    fontWeight: "800",
+
+    textAlign: "center",
+  },
+
+  resultDescription: {
+    color: "#405C59",
+
+    fontSize: 14,
+
+    lineHeight: 21,
+
+    textAlign: "center",
+
+    marginBottom: 12,
+  },
+
+  /*
+   * INFORMAÇÕES FINANCEIRAS
+   */
 
   infoBox: {
     width: "100%",
-    padding: 12,
-    backgroundColor: COLORS.white,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 10,
-    marginBottom: 10,
+
+    borderRadius: 13,
+
+    borderWidth: 1.5,
+
+    paddingVertical: 10,
+
+    paddingHorizontal: 13,
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    marginBottom: 8,
   },
 
-  infoText: {
-    textAlign: "center",
-    fontWeight: "600",
-    color: COLORS.dark,
+  positiveBox: {
+    backgroundColor: "#EAF7D7",
+
+    borderColor: "#7FC241",
   },
+
+  negativeBox: {
+    backgroundColor: "#FFF1ED",
+
+    borderColor: "#F2B8A7",
+  },
+
+  infoEmoji: {
+    fontSize: 24,
+
+    marginRight: 10,
+  },
+
+  infoContent: {
+    flex: 1,
+  },
+
+  infoLabel: {
+    color: "#68787B",
+
+    fontSize: 8,
+
+    fontWeight: "900",
+
+    letterSpacing: 0.6,
+
+    marginBottom: 1,
+  },
+
+  infoValue: {
+    fontSize: 17,
+
+    fontWeight: "900",
+  },
+
+  positiveText: {
+    color: "#3D9A35",
+  },
+
+  negativeText: {
+    color: "#D4553F",
+  },
+
+  /*
+   * LIÇÃO
+   */
+
+  lessonBox: {
+    width: "100%",
+
+    backgroundColor: "#FFF9D8",
+
+    borderRadius: 14,
+
+    borderWidth: 2,
+
+    borderColor: "#D7E900",
+
+    padding: 13,
+
+    marginTop: 4,
+
+    marginBottom: 9,
+  },
+
+  lessonHeader: {
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    marginBottom: 5,
+  },
+
+  lessonEmoji: {
+    fontSize: 18,
+
+    marginRight: 6,
+  },
+
+  lessonTitle: {
+    color: "#003F4A",
+
+    fontSize: 11,
+
+    fontWeight: "900",
+
+    letterSpacing: 0.5,
+  },
+
+  lessonText: {
+    color: "#405C59",
+
+    fontSize: 12,
+
+    lineHeight: 18,
+
+    fontWeight: "600",
+  },
+
+  /*
+   * CONQUISTA
+   */
 
   achievementBox: {
     width: "100%",
-    padding: 14,
-    borderRadius: 12,
-    backgroundColor: COLORS.secondary,
-    marginBottom: 16,
+
+    backgroundColor: "#E7F6F2",
+
+    borderRadius: 14,
+
+    borderWidth: 2,
+
+    borderColor: "#2FBFA0",
+
+    padding: 11,
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    marginBottom: 10,
+  },
+
+  achievementIcon: {
+    width: 42,
+
+    height: 42,
+
+    borderRadius: 21,
+
+    backgroundColor: "#D7E900",
+
+    borderWidth: 2,
+
+    borderColor: "#003F4A",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginRight: 9,
+  },
+
+  achievementEmoji: {
+    fontSize: 23,
+  },
+
+  achievementContent: {
+    flex: 1,
+  },
+
+  achievementTitle: {
+    color: "#003F4A",
+
+    fontSize: 11,
+
+    fontWeight: "900",
+
+    letterSpacing: 0.4,
+
+    marginBottom: 2,
   },
 
   achievementText: {
-    color: COLORS.white,
-    textAlign: "center",
-    fontWeight: "bold",
+    color: "#405C59",
+
+    fontSize: 11,
+
+    fontWeight: "600",
   },
 
+  /*
+   * BOTÃO
+   */
+
   continueButton: {
-    backgroundColor: COLORS.secondary,
-    paddingVertical: 16,
-    paddingHorizontal: 30,
-    borderRadius: 12,
-    marginTop: 10,
+    width: "100%",
+
+    minHeight: 52,
+
+    backgroundColor: "#2FBFA0",
+
+    borderRadius: 14,
+
+    borderWidth: 2,
+
+    borderColor: "#003F4A",
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginTop: 5,
+
+    shadowColor: "#003F4A",
+
+    shadowOffset: {
+      width: 0,
+
+      height: 3,
+    },
+
+    shadowOpacity: 0.16,
+
+    shadowRadius: 4,
+
+    elevation: 3,
   },
 
   continueButtonText: {
-    color: COLORS.white,
-    fontWeight: "bold",
-    fontSize: 18,
+    color: "#FFFFFF",
+
+    fontSize: 16,
+
+    fontWeight: "900",
+
+    marginRight: 8,
+  },
+
+  continueArrow: {
+    color: "#FFFFFF",
+
+    fontSize: 21,
+
+    fontWeight: "900",
   },
 });

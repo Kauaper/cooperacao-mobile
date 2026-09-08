@@ -1,6 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-import { COLORS } from "@/constants/colors";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface EarningOpportunity {
   id: string;
@@ -15,20 +18,49 @@ interface EarningOpportunity {
 interface EarningOpportunitiesProps {
   currentMonth: number;
 
-  onEarningAccept: (opportunity: EarningOpportunity) => void;
+  onEarningAccept: (
+    opportunity: EarningOpportunity,
+  ) => void;
 
   onEarningReject: () => void;
 }
+
+const COLORS = {
+  turquoise: "#08AEA4",
+  navy: "#003F4A",
+  yellow: "#D7E900",
+  green: "#7FC241",
+  white: "#FFFFFF",
+
+  lightGreen: "#EAF7D7",
+  lightBlue: "#E9F7F5",
+  lightYellow: "#FFF8D6",
+  lightGray: "#F4F7F7",
+
+  gray: "#68787B",
+  border: "#DCE6E5",
+};
 
 export default function EarningOpportunities({
   currentMonth,
   onEarningAccept,
   onEarningReject,
 }: EarningOpportunitiesProps) {
-  const opportunitiesByMonth: Record<number, EarningOpportunity> = {
+  /*
+   * ============================================================
+   * OPORTUNIDADES ESPECIAIS
+   * ============================================================
+   */
+
+  const opportunitiesByMonth: Record<
+    number,
+    EarningOpportunity
+  > = {
     1: {
       id: "help_neighbor",
+
       title: "Ajudar Dona Maria",
+
       description:
         "Dona Maria precisa de ajuda para carregar as compras até em casa!",
 
@@ -36,13 +68,16 @@ export default function EarningOpportunities({
 
       emoji: "👵",
 
-      effort: "Vai ser um pouco cansativo, mas ela ficará muito feliz!",
+      effort:
+        "Vai ser um pouco cansativo, mas ela ficará muito feliz!",
 
-      lesson: "Ajudar os outros sempre traz boas recompensas!",
+      lesson:
+        "Ajudar os outros sempre traz boas recompensas!",
     },
 
     4: {
       id: "clean_yard",
+
       title: "Limpar o Quintal",
 
       description:
@@ -52,28 +87,35 @@ export default function EarningOpportunities({
 
       emoji: "🧹",
 
-      effort: "Vai sujar as mãos, mas é um trabalho honesto!",
+      effort:
+        "Vai sujar as mãos, mas é um trabalho honesto!",
 
-      lesson: "Trabalhar em casa ajuda toda a família!",
+      lesson:
+        "Trabalhar em casa ajuda toda a família!",
     },
 
     7: {
       id: "sell_drawings",
+
       title: "Vender Seus Desenhos",
 
-      description: "Você pode vender seus desenhos incríveis para os amigos!",
+      description:
+        "Você pode vender seus desenhos incríveis para os amigos!",
 
       earning: 12,
 
       emoji: "🎨",
 
-      effort: "Precisa caprichar bem nos desenhos!",
+      effort:
+        "Precisa caprichar bem nos desenhos!",
 
-      lesson: "Usar seus talentos pode gerar dinheiro!",
+      lesson:
+        "Usar seus talentos pode gerar dinheiro!",
     },
 
     10: {
       id: "return_wallet",
+
       title: "Devolver Carteira Perdida",
 
       description:
@@ -83,12 +125,22 @@ export default function EarningOpportunities({
 
       emoji: "💳",
 
-      effort: "Fazer a coisa certa às vezes demora, mas vale a pena!",
+      effort:
+        "Fazer a coisa certa às vezes demora, mas vale a pena!",
 
-      lesson: "Honestidade sempre é recompensada!",
+      lesson:
+        "Honestidade sempre é recompensada!",
     },
   };
-  let currentOpportunity = opportunitiesByMonth[currentMonth];
+
+  /*
+   * ============================================================
+   * OPORTUNIDADES GENÉRICAS
+   * ============================================================
+   */
+
+  let currentOpportunity =
+    opportunitiesByMonth[currentMonth];
 
   if (!currentOpportunity) {
     const genericOpportunities: EarningOpportunity[] = [
@@ -104,9 +156,11 @@ export default function EarningOpportunities({
 
         emoji: "🐕",
 
-        effort: "Os cachorros são fofos e obedientes!",
+        effort:
+          "Os cachorros são fofos e obedientes!",
 
-        lesson: "Cuidar de animais é uma responsabilidade!",
+        lesson:
+          "Cuidar de animais é uma responsabilidade!",
       },
 
       {
@@ -121,9 +175,11 @@ export default function EarningOpportunities({
 
         emoji: "📚",
 
-        effort: "É um trabalho calmo e você aprende coisas novas!",
+        effort:
+          "É um trabalho calmo e você aprende coisas novas!",
 
-        lesson: "Ajudar a comunidade sempre vale a pena!",
+        lesson:
+          "Ajudar a comunidade sempre vale a pena!",
       },
 
       {
@@ -131,22 +187,33 @@ export default function EarningOpportunities({
 
         title: "Lavar Carros",
 
-        description: "Seus vizinhos querem lavar os carros e podem te pagar!",
+        description:
+          "Seus vizinhos querem lavar os carros e podem te pagar!",
 
         earning: 18,
 
         emoji: "🚗",
 
-        effort: "Vai molhar um pouco, mas é divertido!",
+        effort:
+          "Vai molhar um pouco, mas é divertido!",
 
-        lesson: "Trabalho duro sempre é recompensado!",
+        lesson:
+          "Trabalho duro sempre é recompensado!",
       },
     ];
 
-    const opportunityIndex = currentMonth % genericOpportunities.length;
+    const opportunityIndex =
+      currentMonth % genericOpportunities.length;
 
-    currentOpportunity = genericOpportunities[opportunityIndex];
+    currentOpportunity =
+      genericOpportunities[opportunityIndex];
   }
+
+  /*
+   * ============================================================
+   * AÇÕES
+   * ============================================================
+   */
 
   const handleAccept = () => {
     onEarningAccept(currentOpportunity);
@@ -155,182 +222,630 @@ export default function EarningOpportunities({
   const handleReject = () => {
     onEarningReject();
   };
+
+  /*
+   * ============================================================
+   * TELA
+   * ============================================================
+   */
+
   return (
     <View style={styles.card}>
+
+      {/* ======================================================
+          CABEÇALHO
+          ====================================================== */}
+
       <View style={styles.header}>
-        <Text style={styles.headerEmoji}>{currentOpportunity.emoji}</Text>
 
-        <Text style={styles.headerTitle}>OPORTUNIDADE ESPECIAL</Text>
+        <View style={styles.headerIcon}>
+          <Text style={styles.headerEmoji}>
+            {currentOpportunity.emoji}
+          </Text>
+        </View>
 
-        <Text style={styles.headerEmoji}>{currentOpportunity.emoji}</Text>
+        <View style={styles.headerTextArea}>
+
+          <Text style={styles.headerTitle}>
+            OPORTUNIDADE ESPECIAL
+          </Text>
+
+          <Text style={styles.headerSubtitle}>
+            Você pode ganhar dinheiro extra!
+          </Text>
+
+        </View>
+
       </View>
 
-      <Text style={styles.title}>{currentOpportunity.title}</Text>
+      {/* ======================================================
+          TÍTULO
+          ====================================================== */}
 
-      <Text style={styles.description}>{currentOpportunity.description}</Text>
+      <Text style={styles.title}>
+        {currentOpportunity.title}
+      </Text>
+
+      {/* ======================================================
+          DESCRIÇÃO
+          ====================================================== */}
+
+      <Text style={styles.description}>
+        {currentOpportunity.description}
+      </Text>
+
+      {/* ======================================================
+          RECOMPENSA
+          ====================================================== */}
 
       <View style={styles.rewardBox}>
+
+        <Text style={styles.rewardLabel}>
+          VOCÊ VAI GANHAR
+        </Text>
+
         <Text style={styles.rewardValue}>
           + R$ {currentOpportunity.earning}
         </Text>
 
-        <Text style={styles.rewardLabel}>✨ Dinheiro extra para você ✨</Text>
+        <Text style={styles.rewardSubtext}>
+          💰 Dinheiro extra para sua aventura
+        </Text>
+
       </View>
+
+      {/* ======================================================
+          ESFORÇO
+          ====================================================== */}
 
       <View style={styles.infoBox}>
-        <Text style={styles.infoText}>{currentOpportunity.effort}</Text>
+
+        <View style={styles.infoIcon}>
+          <Text style={styles.infoEmoji}>
+            💪
+          </Text>
+        </View>
+
+        <View style={styles.infoContent}>
+
+          <Text style={styles.infoLabel}>
+            COMO VAI SER?
+          </Text>
+
+          <Text style={styles.infoText}>
+            {currentOpportunity.effort}
+          </Text>
+
+        </View>
+
       </View>
+
+      {/* ======================================================
+          LIÇÃO
+          ====================================================== */}
 
       <View style={styles.lessonBox}>
-        <Text style={styles.lessonText}>{currentOpportunity.lesson}</Text>
+
+        <View style={styles.lessonIcon}>
+          <Text style={styles.lessonEmoji}>
+            💡
+          </Text>
+        </View>
+
+        <View style={styles.lessonContent}>
+
+          <Text style={styles.lessonLabel}>
+            O QUE VOCÊ APRENDE?
+          </Text>
+
+          <Text style={styles.lessonText}>
+            {currentOpportunity.lesson}
+          </Text>
+
+        </View>
+
       </View>
+
+      {/* ======================================================
+          BOTÕES
+          ====================================================== */}
+
       <View style={styles.buttons}>
-        <TouchableOpacity style={styles.rejectButton} onPress={handleReject}>
-          <Text style={styles.rejectText}>Agora Não</Text>
+
+        <TouchableOpacity
+          style={styles.rejectButton}
+          onPress={handleReject}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.rejectText}>
+            AGORA NÃO
+          </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.acceptButton} onPress={handleAccept}>
-          <Text style={styles.acceptText}>ACEITO O DESAFIO! 🚀</Text>
+        <TouchableOpacity
+          style={styles.acceptButton}
+          onPress={handleAccept}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.acceptText}>
+            ACEITAR!
+          </Text>
+
+          <Text style={styles.acceptEmoji}>
+            💪
+          </Text>
         </TouchableOpacity>
+
       </View>
+
+      {/* ======================================================
+          RODAPÉ
+          ====================================================== */}
 
       <View style={styles.footerBox}>
+
         <Text style={styles.footerText}>
-          ✨ Fazer boas ações sempre traz recompensas ✨
+          ✨ Boas escolhas trazem boas recompensas! ✨
         </Text>
+
       </View>
+
     </View>
   );
 }
+
+/*
+ * ============================================================
+ * ESTILOS
+ * ============================================================
+ */
+
 const styles = StyleSheet.create({
+
+  /*
+   * ==========================================================
+   * CARD PRINCIPAL
+   * ==========================================================
+   */
+
   card: {
+    width: "100%",
+
     backgroundColor: COLORS.white,
-    borderRadius: 16,
-    padding: 16,
+
+    borderRadius: 22,
+
     borderWidth: 2,
-    borderColor: COLORS.secondary,
+
+    borderColor: COLORS.yellow,
+
+    padding: 10,
+
+    overflow: "hidden",
   },
 
+  /*
+   * ==========================================================
+   * CABEÇALHO
+   * ==========================================================
+   */
+
   header: {
+    width: "100%",
+
+    backgroundColor: COLORS.navy,
+
+    borderRadius: 16,
+
+    paddingVertical: 10,
+
+    paddingHorizontal: 10,
+
     flexDirection: "row",
-    justifyContent: "center",
+
     alignItems: "center",
-    gap: 10,
-    marginBottom: 16,
+
+    marginBottom: 12,
+  },
+
+  headerIcon: {
+    width: 44,
+
+    height: 44,
+
+    borderRadius: 22,
+
+    backgroundColor: COLORS.yellow,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginRight: 9,
   },
 
   headerEmoji: {
-    fontSize: 30,
+    fontSize: 24,
+  },
+
+  headerTextArea: {
+    flex: 1,
   },
 
   headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: COLORS.dark,
+    color: COLORS.yellow,
+
+    fontSize: 13,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
+
+  headerSubtitle: {
+    color: COLORS.white,
+
+    fontSize: 9,
+
+    fontWeight: "600",
+
+    marginTop: 3,
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * TÍTULO
+   * ==========================================================
+   */
 
   title: {
+    color: COLORS.navy,
+
+    fontSize: 20,
+
+    fontWeight: "900",
+
     textAlign: "center",
-    fontSize: 22,
-    fontWeight: "bold",
-    color: COLORS.dark,
-    marginBottom: 12,
+
+    marginBottom: 6,
+
+    includeFontPadding: false,
   },
+
+  /*
+   * ==========================================================
+   * DESCRIÇÃO
+   * ==========================================================
+   */
 
   description: {
+    color: COLORS.gray,
+
+    fontSize: 11,
+
+    fontWeight: "600",
+
+    lineHeight: 16,
+
     textAlign: "center",
-    color: COLORS.darkAccent,
-    marginBottom: 16,
-    lineHeight: 22,
+
+    paddingHorizontal: 8,
+
+    marginBottom: 10,
+
+    includeFontPadding: false,
   },
+
+  /*
+   * ==========================================================
+   * RECOMPENSA
+   * ==========================================================
+   */
 
   rewardBox: {
-    backgroundColor: "#DCFCE7",
-    borderRadius: 12,
-    padding: 16,
-    alignItems: "center",
-    marginBottom: 12,
-  },
+    backgroundColor: COLORS.green,
 
-  rewardValue: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: COLORS.secondary,
+    borderRadius: 16,
+
+    borderWidth: 2,
+
+    borderColor: COLORS.navy,
+
+    paddingVertical: 10,
+
+    alignItems: "center",
+
+    marginBottom: 8,
   },
 
   rewardLabel: {
-    color: COLORS.dark,
-    marginTop: 4,
+    color: COLORS.white,
+
+    fontSize: 8,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
 
+  rewardValue: {
+    color: COLORS.white,
+
+    fontSize: 27,
+
+    fontWeight: "900",
+
+    marginTop: 2,
+
+    includeFontPadding: false,
+  },
+
+  rewardSubtext: {
+    color: COLORS.white,
+
+    fontSize: 8,
+
+    fontWeight: "700",
+
+    marginTop: 2,
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * INFORMAÇÃO
+   * ==========================================================
+   */
+
   infoBox: {
-    backgroundColor: "#DBEAFE",
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 12,
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    backgroundColor: COLORS.lightBlue,
+
+    borderRadius: 14,
+
+    borderWidth: 2,
+
+    borderColor: COLORS.turquoise,
+
+    padding: 9,
+
+    marginBottom: 7,
+  },
+
+  infoIcon: {
+    width: 34,
+
+    height: 34,
+
+    borderRadius: 17,
+
+    backgroundColor: COLORS.turquoise,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginRight: 8,
+  },
+
+  infoEmoji: {
+    fontSize: 17,
+  },
+
+  infoContent: {
+    flex: 1,
+  },
+
+  infoLabel: {
+    color: COLORS.navy,
+
+    fontSize: 7,
+
+    fontWeight: "900",
+
+    marginBottom: 2,
+
+    includeFontPadding: false,
   },
 
   infoText: {
-    textAlign: "center",
-    color: COLORS.dark,
+    color: COLORS.navy,
+
+    fontSize: 9,
+
     fontWeight: "600",
+
+    lineHeight: 13,
+
+    includeFontPadding: false,
   },
 
+  /*
+   * ==========================================================
+   * LIÇÃO
+   * ==========================================================
+   */
+
   lessonBox: {
-    backgroundColor: "#FEF3C7",
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 16,
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    backgroundColor: COLORS.lightYellow,
+
+    borderRadius: 14,
+
+    borderWidth: 2,
+
+    borderColor: COLORS.yellow,
+
+    padding: 9,
+
+    marginBottom: 9,
+  },
+
+  lessonIcon: {
+    width: 34,
+
+    height: 34,
+
+    borderRadius: 17,
+
+    backgroundColor: COLORS.yellow,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginRight: 8,
+  },
+
+  lessonEmoji: {
+    fontSize: 17,
+  },
+
+  lessonContent: {
+    flex: 1,
+  },
+
+  lessonLabel: {
+    color: COLORS.navy,
+
+    fontSize: 7,
+
+    fontWeight: "900",
+
+    marginBottom: 2,
+
+    includeFontPadding: false,
   },
 
   lessonText: {
-    textAlign: "center",
-    color: COLORS.dark,
+    color: COLORS.navy,
+
+    fontSize: 9,
+
     fontWeight: "600",
+
+    lineHeight: 13,
+
+    includeFontPadding: false,
   },
+
+  /*
+   * ==========================================================
+   * BOTÕES
+   * ==========================================================
+   */
 
   buttons: {
     flexDirection: "row",
-    gap: 12,
-    marginBottom: 16,
+
+    gap: 7,
+
+    marginBottom: 8,
   },
 
   rejectButton: {
     flex: 1,
+
+    minHeight: 39,
+
+    backgroundColor: COLORS.lightGray,
+
+    borderRadius: 11,
+
     borderWidth: 2,
-    borderColor: COLORS.border,
-    borderRadius: 12,
-    padding: 14,
+
+    borderColor: "#B9C6C5",
+
+    alignItems: "center",
+
+    justifyContent: "center",
   },
 
   rejectText: {
-    textAlign: "center",
-    fontWeight: "bold",
-    color: COLORS.dark,
+    color: COLORS.navy,
+
+    fontSize: 9,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
 
   acceptButton: {
     flex: 1,
-    backgroundColor: COLORS.secondary,
-    borderRadius: 12,
-    padding: 14,
+
+    minHeight: 39,
+
+    backgroundColor: COLORS.yellow,
+
+    borderRadius: 11,
+
+    borderWidth: 2,
+
+    borderColor: COLORS.navy,
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    gap: 4,
   },
 
   acceptText: {
-    textAlign: "center",
-    fontWeight: "bold",
-    color: COLORS.white,
+    color: COLORS.navy,
+
+    fontSize: 9,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
 
+  acceptEmoji: {
+    fontSize: 12,
+  },
+
+  /*
+   * ==========================================================
+   * RODAPÉ
+   * ==========================================================
+   */
+
   footerBox: {
-    backgroundColor: "#F3E8FF",
-    borderRadius: 12,
-    padding: 12,
+    backgroundColor: COLORS.lightGreen,
+
+    borderRadius: 11,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.green,
+
+    paddingVertical: 7,
+
+    paddingHorizontal: 8,
   },
 
   footerText: {
+    color: COLORS.navy,
+
+    fontSize: 8,
+
+    fontWeight: "700",
+
     textAlign: "center",
-    color: COLORS.dark,
-    fontSize: 12,
+
+    includeFontPadding: false,
   },
+
 });

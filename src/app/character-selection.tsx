@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from "react-native";
 
 import { useGame } from "@/context/GameContext";
@@ -16,7 +17,6 @@ const COLORS = {
   navy: "#003F4A",
   yellow: "#D7E900",
   white: "#FFFFFF",
-  disabled: "#536D72",
 };
 
 export default function CharacterSelectionScreen() {
@@ -24,38 +24,52 @@ export default function CharacterSelectionScreen() {
 
   const [selectedCharacter, setSelectedCharacter] = useState("");
 
+  const { width, height } = useWindowDimensions();
+
+  /*
+   * ============================================================
+   * PERSONAGENS
+   * ============================================================
+   */
+
   const characters = [
     {
       id: "girl1",
-      emoji: "👧🏻",
-      description: "Criativa e sonhadora",
+      image: require("@/assets/images/characters/girl1.png"),
+      description: "Criativa e\nsonhadora",
     },
     {
       id: "boy1",
-      emoji: "👦🏻",
-      description: "Aventureiro e corajoso",
+      image: require("@/assets/images/characters/boy1.png"),
+      description: "Aventureiro e\ncorajoso",
     },
     {
       id: "girl2",
-      emoji: "👧🏽",
-      description: "Inteligente e organizada",
+      image: require("@/assets/images/characters/girl2.png"),
+      description: "Inteligente e\norganizada",
     },
     {
       id: "boy2",
-      emoji: "👦🏽",
-      description: "Esportivo e determinado",
+      image: require("@/assets/images/characters/boy2.png"),
+      description: "Esportivo e\ndeterminado",
     },
     {
       id: "girl3",
-      emoji: "👧🏿",
-      description: "Artística e expressiva",
+      image: require("@/assets/images/characters/girl3.png"),
+      description: "Artística e\nexpressiva",
     },
     {
       id: "boy3",
-      emoji: "👦🏿",
-      description: "Tecnológico e inovador",
+      image: require("@/assets/images/characters/boy3.png"),
+      description: "Tecnológico e\ninovador",
     },
   ];
+
+  /*
+   * ============================================================
+   * CONFIRMAR
+   * ============================================================
+   */
 
   const handleConfirm = () => {
     if (!selectedCharacter) return;
@@ -74,49 +88,110 @@ export default function CharacterSelectionScreen() {
   return (
     <SafeAreaView style={styles.container}>
 
-      {/* =====================================================
+      {/* ======================================================
           LOGOS
-          ===================================================== */}
+          ====================================================== */}
 
-      <View style={styles.topBar}>
+      <View
+        style={[
+          styles.topBar,
+          {
+            width: width * 0.84,
+            height: height * 0.085,
+          },
+        ]}
+      >
         <Image
-          source={require("@/assets/images/game-logo.png")}
-          style={styles.gameLogo}
+          source={require("@/assets/images/game-logo-white.png")}
+          style={[
+            styles.gameLogo,
+            {
+              width: width * 0.40,
+              height: width * 0.14,
+            },
+          ]}
+          resizeMode="contain"
         />
 
         <Image
-          source={require("@/assets/images/sicoob-logo.png")}
-          style={styles.sicoobLogo}
+          source={require("@/assets/images/sicoob-logo-white.png")}
+          style={[
+            styles.sicoobLogo,
+            {
+              width: width * 0.32,
+              height: width * 0.13,
+            },
+          ]}
+          resizeMode="contain"
         />
       </View>
 
-      {/* =====================================================
+      {/* ======================================================
           CARD PRINCIPAL
-          ===================================================== */}
+          ====================================================== */}
 
-      <View style={styles.card}>
+      <View
+        style={[
+          styles.card,
+          {
+            width: width * 0.95,
+            height: height * 0.68,
+            borderRadius: width * 0.075,
+          },
+        ]}
+      >
 
-        {/* ---------------------------------------------------
+        {/* ====================================================
             TÍTULO
-            --------------------------------------------------- */}
+            ==================================================== */}
 
-        <View style={styles.header}>
-          <Text style={styles.title}>
-            ESCOLHA SEU PERSONAGEM
+        <View
+          style={[
+            styles.header,
+            {
+              paddingTop: height * 0.018,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.title,
+              {
+                fontSize: width * 0.050,
+                lineHeight: width * 0.058,
+              },
+            ]}
+          >
+            ESCOLHA SEU{"\n"}PERSONAGEM
           </Text>
 
-          <Text style={styles.subtitle}>
-            {gameState.playerName}, qual personagem representa
-            {"\n"}
-            melhor você?
+          <Text
+            style={[
+              styles.subtitle,
+              {
+                fontSize: width * 0.034,
+                lineHeight: width * 0.041,
+              },
+            ]}
+          >
+            {gameState.playerName}, qual personagem{"\n"}
+            representa melhor você?
           </Text>
         </View>
 
-        {/* ---------------------------------------------------
-            PERSONAGENS
-            --------------------------------------------------- */}
+        {/* ====================================================
+            GRID
+            ==================================================== */}
 
-        <View style={styles.grid}>
+        <View
+          style={[
+            styles.grid,
+            {
+              width: width * 0.89,
+              marginTop: height * 0.012,
+            },
+          ]}
+        >
           {characters.map((character) => {
             const isSelected =
               selectedCharacter === character.id;
@@ -130,59 +205,143 @@ export default function CharacterSelectionScreen() {
                 }
                 style={[
                   styles.characterCard,
+                  {
+                    width: width * 0.275,
+                    height: width * 0.235,
+                    borderRadius: width * 0.025,
+                  },
                   isSelected && styles.selectedCharacter,
                 ]}
               >
-                <Text style={styles.characterEmoji}>
-                  {character.emoji}
+
+                {/* IMAGEM */}
+
+                <Image
+                  source={character.image}
+                  style={[
+                    styles.characterImage,
+                    {
+                      width: width * 0.13,
+                      height: width * 0.13,
+                    },
+                  ]}
+                  resizeMode="contain"
+                />
+
+                {/* DESCRIÇÃO */}
+
+                <Text
+                  style={[
+                    styles.characterDescription,
+                    {
+                      fontSize: width * 0.022,
+                      lineHeight: width * 0.025,
+                    },
+                  ]}
+                >
+                  {character.description}
                 </Text>
+
               </TouchableOpacity>
             );
           })}
         </View>
 
-        {/* ---------------------------------------------------
+        {/* ====================================================
             PREVIEW
-            --------------------------------------------------- */}
+            ==================================================== */}
 
         {selectedCharacterData && (
-          <View style={styles.preview}>
-
-            <View style={styles.previewAvatar}>
-              <Text style={styles.previewEmoji}>
-                {selectedCharacterData.emoji}
-              </Text>
-            </View>
+          <View
+            style={[
+              styles.preview,
+              {
+                width: width * 0.82,
+                height: width * 0.20,
+                borderRadius: width * 0.025,
+                marginTop: height * 0.012,
+              },
+            ]}
+          >
+            <Image
+              source={selectedCharacterData.image}
+              style={[
+                styles.previewImage,
+                {
+                  width: width * 0.14,
+                  height: width * 0.14,
+                },
+              ]}
+              resizeMode="contain"
+            />
 
             <View style={styles.previewText}>
-              <Text style={styles.previewTitle}>
+              <Text
+                style={[
+                  styles.previewTitle,
+                  {
+                    fontSize: width * 0.040,
+                    lineHeight: width * 0.032,
+                  },
+                ]}
+              >
                 Você escolheu
-                {"\n"}
-                este personagem
               </Text>
 
-              <Text style={styles.previewDescription}>
-                {selectedCharacterData.description}
+              <Text
+                style={[
+                  styles.previewTitle,
+                  {
+                    fontSize: width * 0.040,
+                    lineHeight: width * 0.032,
+                  },
+                ]}
+              >
+                este personagem!
+              </Text>
+
+              <Text
+                style={[
+                  styles.previewDescription,
+                  {
+                    fontSize: width * 0.021,
+                    lineHeight: width * 0.024,
+                  },
+                ]}
+              >
+                {selectedCharacterData.description.replace("\n", " ")}
               </Text>
             </View>
-
           </View>
         )}
 
-        {/* ---------------------------------------------------
+        {/* ====================================================
             BOTÃO
-            --------------------------------------------------- */}
+            ==================================================== */}
 
         <TouchableOpacity
           style={[
             styles.button,
+            {
+              width: width * 0.82,
+              height: width * 0.085,
+              borderRadius: width * 0.018,
+              marginTop: height * 0.014,
+            },
             !selectedCharacter && styles.buttonDisabled,
           ]}
           disabled={!selectedCharacter}
           onPress={handleConfirm}
           activeOpacity={0.8}
         >
-          <Text style={styles.buttonText}>
+          <Text
+            style={[
+              styles.buttonText,
+              {
+                fontSize: width * 0.030,
+              },
+            ]}
+          >
             CONTINUAR
           </Text>
         </TouchableOpacity>
@@ -194,9 +353,11 @@ export default function CharacterSelectionScreen() {
 
 const styles = StyleSheet.create({
 
-  // ==========================================================
-  // TELA
-  // ==========================================================
+  /*
+   * ==========================================================
+   * TELA
+   * ==========================================================
+   */
 
   container: {
     flex: 1,
@@ -205,106 +366,94 @@ const styles = StyleSheet.create({
 
     alignItems: "center",
 
-    paddingHorizontal: 18,
+    overflow: "hidden",
   },
 
-  // ==========================================================
-  // LOGOS
-  // ==========================================================
+  /*
+   * ==========================================================
+   * LOGOS
+   * ==========================================================
+   */
 
   topBar: {
-    width: "100%",
-
-    height: 86,
-
     flexDirection: "row",
 
     alignItems: "center",
 
-    justifyContent: "center",
+    justifyContent: "space-between",
 
-    gap: 18,
+    alignSelf: "center",
   },
 
   gameLogo: {
-    width: 125,
-
-    height: 42,
-
     resizeMode: "contain",
   },
 
   sicoobLogo: {
-    width: 92,
-
-    height: 38,
-
     resizeMode: "contain",
   },
 
-  // ==========================================================
-  // CARD PRINCIPAL
-  // ==========================================================
+  /*
+   * ==========================================================
+   * CARD
+   * ==========================================================
+   */
 
   card: {
-    width: "100%",
-
-    maxWidth: 430,
-
     backgroundColor: COLORS.navy,
 
-    borderRadius: 28,
-
-    paddingHorizontal: 12,
-
-    paddingTop: 25,
-
-    paddingBottom: 12,
-
-    overflow: "hidden",
-  },
-
-  // ==========================================================
-  // CABEÇALHO
-  // ==========================================================
-
-  header: {
     alignItems: "center",
 
-    marginBottom: 20,
+    alignSelf: "center",
 
-    paddingHorizontal: 10,
+    overflow: "hidden",
+
+    paddingBottom: 12,
+  },
+
+  /*
+   * ==========================================================
+   * CABEÇALHO
+   * ==========================================================
+   */
+
+  header: {
+    width: "100%",
+
+    alignItems: "center",
+
+    justifyContent: "center",
   },
 
   title: {
     color: COLORS.yellow,
 
-    fontSize: 20,
-
-    lineHeight: 23,
-
     fontWeight: "900",
 
     textAlign: "center",
+
+    textTransform: "uppercase",
+
+    includeFontPadding: false,
   },
 
   subtitle: {
-    marginTop: 4,
-
     color: COLORS.white,
-
-    fontSize: 15,
-
-    lineHeight: 17,
 
     fontWeight: "700",
 
     textAlign: "center",
+
+    marginTop: 5,
+
+    includeFontPadding: false,
   },
 
-  // ==========================================================
-  // GRID
-  // ==========================================================
+  /*
+   * ==========================================================
+   * GRID
+   * ==========================================================
+   */
 
   grid: {
     flexDirection: "row",
@@ -313,31 +462,31 @@ const styles = StyleSheet.create({
 
     justifyContent: "space-between",
 
-    paddingHorizontal: 1,
+    rowGap: 8,
   },
 
-  // ==========================================================
-  // PERSONAGEM
-  // ==========================================================
+  /*
+   * ==========================================================
+   * PERSONAGEM
+   * ==========================================================
+   */
 
   characterCard: {
-    width: "31.5%",
-
-    aspectRatio: 0.9,
-
     backgroundColor: COLORS.white,
 
     borderWidth: 2,
 
     borderColor: COLORS.yellow,
 
-    borderRadius: 12,
-
     alignItems: "center",
 
     justifyContent: "center",
 
-    marginBottom: 10,
+    paddingVertical: 3,
+
+    marginBottom: 0,
+
+    overflow: "hidden",
   },
 
   selectedCharacter: {
@@ -348,96 +497,82 @@ const styles = StyleSheet.create({
     borderColor: COLORS.yellow,
   },
 
-  characterEmoji: {
-    fontSize: 52,
+  characterImage: {
+    resizeMode: "contain",
+
+    marginBottom: 0,
   },
 
-  // ==========================================================
-  // PREVIEW
-  // ==========================================================
+  characterDescription: {
+    color: COLORS.navy,
+
+    fontWeight: "800",
+
+    textAlign: "center",
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * PREVIEW
+   * ==========================================================
+   */
 
   preview: {
-    minHeight: 88,
-
     backgroundColor: COLORS.turquoise,
-
-    borderRadius: 12,
-
-    marginTop: 7,
-
-    paddingHorizontal: 18,
 
     flexDirection: "row",
 
     alignItems: "center",
+
+    paddingHorizontal: 10,
   },
 
-  previewAvatar: {
-    width: 56,
+  previewImage: {
+    resizeMode: "contain",
 
-    height: 56,
-
-    borderRadius: 28,
-
-    backgroundColor: COLORS.white,
-
-    alignItems: "center",
-
-    justifyContent: "center",
-
-    marginRight: 15,
-  },
-
-  previewEmoji: {
-    fontSize: 34,
+    marginRight: 8,
   },
 
   previewText: {
     flex: 1,
+
+    justifyContent: "center",
   },
 
   previewTitle: {
     color: COLORS.white,
 
-    fontSize: 17,
-
-    lineHeight: 17,
-
     fontWeight: "900",
 
     fontStyle: "italic",
+
+    includeFontPadding: false,
   },
 
   previewDescription: {
     color: COLORS.white,
 
-    fontSize: 12,
-
-    lineHeight: 15,
-
     fontWeight: "700",
 
     marginTop: 2,
+
+    includeFontPadding: false,
   },
 
-  // ==========================================================
-  // BOTÃO
-  // ==========================================================
+  /*
+   * ==========================================================
+   * BOTÃO
+   * ==========================================================
+   */
 
   button: {
-    height: 42,
-
     backgroundColor: COLORS.yellow,
-
-    borderRadius: 8,
 
     alignItems: "center",
 
     justifyContent: "center",
-
-    marginTop: 12,
-
-    marginHorizontal: 12,
   },
 
   buttonDisabled: {
@@ -451,10 +586,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: COLORS.navy,
 
-    fontSize: 14,
-
     fontWeight: "900",
 
     textTransform: "uppercase",
+
+    includeFontPadding: false,
   },
 });

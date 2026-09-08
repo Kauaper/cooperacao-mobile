@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
-import { StyleSheet, Text, View } from "react-native";
-
-import { COLORS } from "@/constants/colors";
 import { useGame } from "@/context/GameContext";
 
 interface Sticker {
@@ -14,17 +16,45 @@ interface Sticker {
   requirement: string;
 }
 
+const COLORS = {
+  turquoise: "#08AEA4",
+  navy: "#003F4A",
+  yellow: "#D7E900",
+  green: "#7FC241",
+  white: "#FFFFFF",
+
+  lightGreen: "#EAF7D7",
+  lightBlue: "#E8F7F5",
+  lightYellow: "#FFF8D6",
+  lightGray: "#F3F6F5",
+
+  gray: "#68787B",
+  border: "#DCE6E5",
+
+  bronze: "#C98B55",
+  silver: "#AEB9BD",
+  gold: "#F2C94C",
+  special: "#FF6BA6",
+};
+
 export default function CollectibleStickers() {
   const { gameState } = useGame();
 
   const [newSticker, setNewSticker] = useState("");
+
+  /*
+   * ============================================================
+   * TODOS OS SELOS
+   * ============================================================
+   */
 
   const allStickers: Sticker[] = [
     {
       id: "first_investment",
       name: "Primeira Semente",
       emoji: "🌱",
-      description: "Plantou sua primeira semente financeira!",
+      description:
+        "Plantou sua primeira semente financeira!",
       category: "bronze",
       requirement: "Faça primeiro investimento",
     },
@@ -33,7 +63,8 @@ export default function CollectibleStickers() {
       id: "pet_master",
       name: "Amigo dos Bichos",
       emoji: "🐾",
-      description: "Cuidou super bem do seu pet!",
+      description:
+        "Cuidou super bem do seu pet!",
       category: "silver",
       requirement: "Pet com 100% saúde",
     },
@@ -42,7 +73,8 @@ export default function CollectibleStickers() {
       id: "goal_setter",
       name: "Sonhador",
       emoji: "🎯",
-      description: "Criou um sonho para alcançar!",
+      description:
+        "Criou um sonho para alcançar!",
       category: "bronze",
       requirement: "Crie uma meta",
     },
@@ -51,7 +83,8 @@ export default function CollectibleStickers() {
       id: "saver",
       name: "Cofre de Ouro",
       emoji: "💎",
-      description: "Juntou uma fortuna incrível!",
+      description:
+        "Juntou uma fortuna incrível!",
       category: "gold",
       requirement: "Tenha R$ 100 total",
     },
@@ -60,15 +93,18 @@ export default function CollectibleStickers() {
       id: "helper",
       name: "Anjo da Guarda",
       emoji: "😇",
-      description: "Ajudou alguém em necessidade!",
+      description:
+        "Ajudou alguém em necessidade!",
       category: "special",
       requirement: "Aceite oportunidade de ajuda",
     },
+
     {
       id: "resist_temptation",
       name: "Super Forte",
       emoji: "🛡️",
-      description: "Resistiu a uma tentação difícil!",
+      description:
+        "Resistiu a uma tentação difícil!",
       category: "gold",
       requirement: "Recuse oferta tentadora",
     },
@@ -77,7 +113,8 @@ export default function CollectibleStickers() {
       id: "goal_achiever",
       name: "Conquistador",
       emoji: "🏅",
-      description: "Realizou seu sonho!",
+      description:
+        "Realizou seu sonho!",
       category: "gold",
       requirement: "Complete sua meta",
     },
@@ -86,7 +123,8 @@ export default function CollectibleStickers() {
       id: "pet_lover",
       name: "Coração Animal",
       emoji: "💝",
-      description: "Ama muito seu bichinho!",
+      description:
+        "Ama muito seu bichinho!",
       category: "silver",
       requirement: "Gaste R$ 50+ com pet",
     },
@@ -95,7 +133,8 @@ export default function CollectibleStickers() {
       id: "smart_spender",
       name: "Cérebro Financeiro",
       emoji: "🧠",
-      description: "Gastou com muita inteligência!",
+      description:
+        "Gastou com muita inteligência!",
       category: "gold",
       requirement: "Balance gastos bem",
     },
@@ -104,7 +143,8 @@ export default function CollectibleStickers() {
       id: "social_butterfly",
       name: "Amizade Dourada",
       emoji: "🦋",
-      description: "Investiu nas amizades com sabedoria!",
+      description:
+        "Investiu nas amizades com sabedoria!",
       category: "silver",
       requirement: "Gaste R$ 30-80 com amigos",
     },
@@ -113,7 +153,8 @@ export default function CollectibleStickers() {
       id: "emergency_prepared",
       name: "Sempre Pronto",
       emoji: "🚨",
-      description: "Enfrentou uma emergência!",
+      description:
+        "Enfrentou uma emergência!",
       category: "silver",
       requirement: "Lide com emergência",
     },
@@ -122,7 +163,8 @@ export default function CollectibleStickers() {
       id: "growth_expert",
       name: "Mago do Crescimento",
       emoji: "📈",
-      description: "Fez o dinheiro crescer magicamente!",
+      description:
+        "Fez o dinheiro crescer magicamente!",
       category: "gold",
       requirement: "Investimento cresceu 20%",
     },
@@ -131,7 +173,8 @@ export default function CollectibleStickers() {
       id: "balanced_life",
       name: "Mestre do Equilíbrio",
       emoji: "⚖️",
-      description: "Equilibrou tudo perfeitamente!",
+      description:
+        "Equilibrou tudo perfeitamente!",
       category: "special",
       requirement: "Pet saudável + meta + amigos",
     },
@@ -140,7 +183,8 @@ export default function CollectibleStickers() {
       id: "wise_chooser",
       name: "Sábio das Decisões",
       emoji: "🦉",
-      description: "Tomou decisões super inteligentes!",
+      description:
+        "Tomou decisões super inteligentes!",
       category: "special",
       requirement: "4+ escolhas sábias",
     },
@@ -149,7 +193,8 @@ export default function CollectibleStickers() {
       id: "generous_heart",
       name: "Coração Gigante",
       emoji: "❤️",
-      description: "Ajudou muitas pessoas!",
+      description:
+        "Ajudou muitas pessoas!",
       category: "special",
       requirement: "Ajude 2+ vezes",
     },
@@ -158,224 +203,912 @@ export default function CollectibleStickers() {
       id: "future_planner",
       name: "Vidente Financeiro",
       emoji: "🔮",
-      description: "Sempre pensou no futuro!",
+      description:
+        "Sempre pensou no futuro!",
       category: "special",
       requirement: "Invista consistentemente",
     },
   ];
-  const unlockedStickers = allStickers.filter((sticker) =>
-    gameState.achievements.includes(sticker.id),
+
+  /*
+   * ============================================================
+   * SELOS DESBLOQUEADOS
+   * ============================================================
+   */
+
+  const unlockedStickers = allStickers.filter(
+    (sticker) =>
+      gameState.achievements.includes(sticker.id),
   );
 
-  const stickersByCategory = {
-    bronze: unlockedStickers.filter((s) => s.category === "bronze"),
-
-    silver: unlockedStickers.filter((s) => s.category === "silver"),
-
-    gold: unlockedStickers.filter((s) => s.category === "gold"),
-
-    special: unlockedStickers.filter((s) => s.category === "special"),
-  };
+  /*
+   * ============================================================
+   * DETECTAR NOVO SELO
+   * ============================================================
+   */
 
   useEffect(() => {
-    const lastCount = newSticker
-      ? unlockedStickers.length - 1
-      : unlockedStickers.length;
-
-    if (unlockedStickers.length > lastCount) {
-      const newest = unlockedStickers[unlockedStickers.length - 1];
-
-      setNewSticker(newest.id);
-
-      setTimeout(() => {
-        setNewSticker("");
-      }, 4000);
+    if (gameState.achievements.length === 0) {
+      return;
     }
+
+    const newestId =
+      gameState.achievements[
+        gameState.achievements.length - 1
+      ];
+
+    const newestSticker = allStickers.find(
+      (sticker) => sticker.id === newestId,
+    );
+
+    if (!newestSticker) {
+      return;
+    }
+
+    setNewSticker(newestSticker.id);
+
+    const timer = setTimeout(() => {
+      setNewSticker("");
+    }, 4000);
+
+    return () => clearTimeout(timer);
   }, [gameState.achievements]);
+
+  /*
+   * ============================================================
+   * CATEGORIAS
+   * ============================================================
+   */
+
+  const categories = [
+    {
+      key: "bronze" as const,
+      label: "PRIMEIROS PASSOS",
+      color: COLORS.bronze,
+      background: "#FFF2E6",
+    },
+
+    {
+      key: "silver" as const,
+      label: "CONQUISTAS",
+      color: COLORS.silver,
+      background: "#F1F5F6",
+    },
+
+    {
+      key: "gold" as const,
+      label: "GRANDES CONQUISTAS",
+      color: COLORS.gold,
+      background: "#FFF8D6",
+    },
+
+    {
+      key: "special" as const,
+      label: "SELOS ESPECIAIS",
+      color: COLORS.special,
+      background: "#FFF0F6",
+    },
+  ];
+
+  const progress =
+    (unlockedStickers.length / allStickers.length) * 100;
+
+  /*
+   * ============================================================
+   * RENDER
+   * ============================================================
+   */
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>🏷️ Coleção de Selos</Text>
 
-      <Text style={styles.progressText}>
-        {unlockedStickers.length} / {allStickers.length} Selos Coletados
-      </Text>
+      {/* ======================================================
+          CABEÇALHO
+          ====================================================== */}
 
-      <View style={styles.progressBar}>
-        <View
-          style={[
-            styles.progressFill,
-            {
-              width: `${(unlockedStickers.length / allStickers.length) * 100}%`,
-            },
-          ]}
-        />
-      </View>
-      {newSticker !== "" && (
-        <View style={styles.newStickerBox}>
-          <Text style={styles.newStickerTitle}>🎉 NOVO SELO!</Text>
+      <View style={styles.header}>
 
-          <Text style={styles.newStickerEmoji}>
-            {allStickers.find((s) => s.id === newSticker)?.emoji}
+        <View style={styles.headerIcon}>
+          <Text style={styles.headerEmoji}>
+            🏷️
           </Text>
         </View>
+
+        <View style={styles.headerTextArea}>
+
+          <Text style={styles.title}>
+            COLEÇÃO DE SELOS
+          </Text>
+
+          <Text style={styles.subtitle}>
+            Complete sua coleção!
+          </Text>
+
+        </View>
+
+        <View style={styles.counterBadge}>
+
+          <Text style={styles.counterValue}>
+            {unlockedStickers.length}
+          </Text>
+
+          <Text style={styles.counterTotal}>
+            / {allStickers.length}
+          </Text>
+
+        </View>
+
+      </View>
+
+      {/* ======================================================
+          PROGRESSO
+          ====================================================== */}
+
+      <View style={styles.progressSection}>
+
+        <View style={styles.progressHeader}>
+
+          <Text style={styles.progressLabel}>
+            SUA COLEÇÃO
+          </Text>
+
+          <Text style={styles.progressPercent}>
+            {Math.round(progress)}%
+          </Text>
+
+        </View>
+
+        <View style={styles.progressBar}>
+
+          <View
+            style={[
+              styles.progressFill,
+              {
+                width: `${progress}%`,
+              },
+            ]}
+          />
+
+        </View>
+
+      </View>
+
+      {/* ======================================================
+          NOVO SELO
+          ====================================================== */}
+
+      {newSticker !== "" && (
+        <View style={styles.newStickerBox}>
+
+          <View style={styles.newStickerIcon}>
+
+            <Text style={styles.newStickerEmoji}>
+              {
+                allStickers.find(
+                  (s) => s.id === newSticker,
+                )?.emoji
+              }
+            </Text>
+
+          </View>
+
+          <View style={styles.newStickerContent}>
+
+            <Text style={styles.newStickerTitle}>
+              🎉 NOVO SELO!
+            </Text>
+
+            <Text style={styles.newStickerName}>
+              {
+                allStickers.find(
+                  (s) => s.id === newSticker,
+                )?.name
+              }
+            </Text>
+
+          </View>
+
+        </View>
       )}
-      {Object.entries(stickersByCategory).map(([category, stickers]) => (
-        <View key={category} style={styles.categoryBox}>
-          <Text style={styles.categoryTitle}>{category.toUpperCase()}</Text>
 
-          {stickers.length > 0 ? (
-            <View style={styles.stickerGrid}>
-              {stickers.map((sticker) => (
-                <View key={sticker.id} style={styles.stickerCard}>
-                  <Text style={styles.stickerEmoji}>{sticker.emoji}</Text>
+      {/* ======================================================
+          CATEGORIAS
+          ====================================================== */}
 
-                  <Text style={styles.stickerName}>{sticker.name}</Text>
+      {categories.map((category) => {
+        const stickers = unlockedStickers.filter(
+          (sticker) =>
+            sticker.category === category.key,
+        );
+
+        const totalInCategory = allStickers.filter(
+          (sticker) =>
+            sticker.category === category.key,
+        ).length;
+
+        return (
+          <View
+            key={category.key}
+            style={[
+              styles.categoryBox,
+              {
+                backgroundColor: category.background,
+              },
+            ]}
+          >
+
+            {/* CABEÇALHO DA CATEGORIA */}
+
+            <View style={styles.categoryHeader}>
+
+              <View
+                style={[
+                  styles.categoryDot,
+                  {
+                    backgroundColor: category.color,
+                  },
+                ]}
+              />
+
+              <Text style={styles.categoryTitle}>
+                {category.label}
+              </Text>
+
+              <View style={styles.categoryCount}>
+
+                <Text style={styles.categoryCountText}>
+                  {stickers.length}/{totalInCategory}
+                </Text>
+
+              </View>
+
+            </View>
+
+            {/* SELOS */}
+
+            {stickers.length > 0 ? (
+              <View style={styles.stickerGrid}>
+
+                {stickers.map((sticker) => (
+                  <View
+                    key={sticker.id}
+                    style={styles.stickerItem}
+                  >
+
+                    <View
+                      style={[
+                        styles.stickerCircle,
+                        {
+                          borderColor:
+                            category.color,
+                        },
+                      ]}
+                    >
+
+                      <Text
+                        style={styles.stickerEmoji}
+                      >
+                        {sticker.emoji}
+                      </Text>
+
+                    </View>
+
+                    <Text
+                      style={styles.stickerName}
+                      numberOfLines={2}
+                    >
+                      {sticker.name}
+                    </Text>
+
+                  </View>
+                ))}
+
+              </View>
+            ) : (
+              <View style={styles.emptyBox}>
+
+                <View style={styles.lockCircle}>
+                  <Text style={styles.lockEmoji}>
+                    🔒
+                  </Text>
                 </View>
-              ))}
-            </View>
-          ) : (
-            <View style={styles.emptyBox}>
-              <Text style={styles.emptyText}>🔒 Nenhum selo ainda</Text>
-            </View>
-          )}
-        </View>
-      ))}
-      {unlockedStickers.length === allStickers.length && (
+
+                <View>
+
+                  <Text style={styles.emptyTitle}>
+                    Ainda não tem nenhum selo
+                  </Text>
+
+                  <Text style={styles.emptyText}>
+                    Continue sua aventura para desbloquear!
+                  </Text>
+
+                </View>
+
+              </View>
+            )}
+
+          </View>
+        );
+      })}
+
+      {/* ======================================================
+          COLEÇÃO COMPLETA
+          ====================================================== */}
+
+      {unlockedStickers.length ===
+        allStickers.length && (
         <View style={styles.masterBox}>
-          <Text style={styles.masterEmoji}>👑</Text>
 
-          <Text style={styles.masterTitle}>COLECIONADOR SUPREMO</Text>
+          <View style={styles.masterCircle}>
 
-          <Text style={styles.masterText}>Você coletou todos os selos!</Text>
+            <Text style={styles.masterEmoji}>
+              👑
+            </Text>
+
+          </View>
+
+          <Text style={styles.masterTitle}>
+            COLECIONADOR SUPREMO!
+          </Text>
+
+          <Text style={styles.masterText}>
+            Você desbloqueou todos os selos!
+          </Text>
+
+          <Text style={styles.masterSubtext}>
+            Que aventura incrível! 🌟
+          </Text>
+
         </View>
       )}
+
     </View>
   );
 }
+
+/*
+ * ============================================================
+ * ESTILOS
+ * ============================================================
+ */
+
 const styles = StyleSheet.create({
+
+  /*
+   * ==========================================================
+   * CONTAINER
+   * ==========================================================
+   */
+
   container: {
+    width: "100%",
+
     backgroundColor: COLORS.white,
-    borderRadius: 16,
-    padding: 16,
+
+    borderRadius: 22,
+
+    padding: 10,
+
     borderWidth: 2,
-    borderColor: COLORS.border,
+
+    borderColor: COLORS.yellow,
+
+    overflow: "hidden",
+  },
+
+  /*
+   * ==========================================================
+   * CABEÇALHO
+   * ==========================================================
+   */
+
+  header: {
+    backgroundColor: COLORS.navy,
+
+    borderRadius: 17,
+
+    padding: 10,
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    marginBottom: 10,
+  },
+
+  headerIcon: {
+    width: 44,
+
+    height: 44,
+
+    borderRadius: 22,
+
+    backgroundColor: COLORS.yellow,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginRight: 9,
+  },
+
+  headerEmoji: {
+    fontSize: 23,
+  },
+
+  headerTextArea: {
+    flex: 1,
   },
 
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: COLORS.dark,
-    textAlign: "center",
-    marginBottom: 10,
+    color: COLORS.yellow,
+
+    fontSize: 14,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
 
-  progressText: {
-    textAlign: "center",
-    marginBottom: 10,
-    color: COLORS.darkAccent,
+  subtitle: {
+    color: COLORS.white,
+
+    fontSize: 9,
+
     fontWeight: "600",
+
+    marginTop: 2,
+
+    includeFontPadding: false,
+  },
+
+  counterBadge: {
+    backgroundColor: COLORS.white,
+
+    minWidth: 46,
+
+    height: 40,
+
+    borderRadius: 20,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    flexDirection: "row",
+
+    paddingHorizontal: 7,
+  },
+
+  counterValue: {
+    color: COLORS.navy,
+
+    fontSize: 17,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
+  },
+
+  counterTotal: {
+    color: COLORS.gray,
+
+    fontSize: 10,
+
+    fontWeight: "800",
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * PROGRESSO
+   * ==========================================================
+   */
+
+  progressSection: {
+    backgroundColor: COLORS.lightGray,
+
+    borderRadius: 14,
+
+    padding: 9,
+
+    marginBottom: 9,
+  },
+
+  progressHeader: {
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    justifyContent: "space-between",
+
+    marginBottom: 5,
+  },
+
+  progressLabel: {
+    color: COLORS.navy,
+
+    fontSize: 8,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
+  },
+
+  progressPercent: {
+    color: COLORS.green,
+
+    fontSize: 9,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
 
   progressBar: {
+    width: "100%",
+
     height: 10,
-    backgroundColor: "#ddd",
-    borderRadius: 20,
+
+    backgroundColor: "#DDE5E3",
+
+    borderRadius: 999,
+
     overflow: "hidden",
-    marginBottom: 20,
   },
 
   progressFill: {
     height: "100%",
-    backgroundColor: COLORS.primary,
+
+    backgroundColor: COLORS.green,
+
+    borderRadius: 999,
   },
+
+  /*
+   * ==========================================================
+   * NOVO SELO
+   * ==========================================================
+   */
 
   newStickerBox: {
-    backgroundColor: "#FFF6CC",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
+    backgroundColor: COLORS.yellow,
+
+    borderRadius: 16,
+
+    borderWidth: 2,
+
+    borderColor: COLORS.navy,
+
+    padding: 9,
+
+    flexDirection: "row",
+
     alignItems: "center",
+
+    marginBottom: 9,
   },
 
-  newStickerTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+  newStickerIcon: {
+    width: 46,
+
+    height: 46,
+
+    borderRadius: 23,
+
+    backgroundColor: COLORS.white,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginRight: 9,
   },
 
   newStickerEmoji: {
-    fontSize: 50,
-    marginTop: 10,
+    fontSize: 26,
   },
 
+  newStickerContent: {
+    flex: 1,
+  },
+
+  newStickerTitle: {
+    color: COLORS.navy,
+
+    fontSize: 9,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
+  },
+
+  newStickerName: {
+    color: COLORS.navy,
+
+    fontSize: 13,
+
+    fontWeight: "900",
+
+    marginTop: 2,
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * CATEGORIA
+   * ==========================================================
+   */
+
   categoryBox: {
-    marginBottom: 20,
+    borderRadius: 16,
+
+    padding: 9,
+
+    marginBottom: 8,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+  },
+
+  categoryHeader: {
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    marginBottom: 8,
+  },
+
+  categoryDot: {
+    width: 9,
+
+    height: 9,
+
+    borderRadius: 5,
+
+    marginRight: 6,
   },
 
   categoryTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: COLORS.dark,
+    flex: 1,
+
+    color: COLORS.navy,
+
+    fontSize: 9,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
+
+  categoryCount: {
+    backgroundColor: COLORS.white,
+
+    borderRadius: 10,
+
+    paddingHorizontal: 7,
+
+    paddingVertical: 3,
+  },
+
+  categoryCountText: {
+    color: COLORS.gray,
+
+    fontSize: 8,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * GRID DE SELOS
+   * ==========================================================
+   */
 
   stickerGrid: {
     flexDirection: "row",
+
     flexWrap: "wrap",
+
+    justifyContent: "center",
+
     gap: 8,
   },
 
-  stickerCard: {
-    width: 90,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 10,
+  stickerItem: {
+    width: 72,
+
     alignItems: "center",
-    backgroundColor: COLORS.background,
+  },
+
+  stickerCircle: {
+    width: 58,
+
+    height: 58,
+
+    borderRadius: 29,
+
+    backgroundColor: COLORS.white,
+
+    borderWidth: 3,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginBottom: 4,
   },
 
   stickerEmoji: {
-    fontSize: 30,
+    fontSize: 28,
   },
 
   stickerName: {
-    fontSize: 11,
+    width: "100%",
+
+    color: COLORS.navy,
+
+    fontSize: 7.5,
+
+    lineHeight: 10,
+
+    fontWeight: "800",
+
     textAlign: "center",
-    marginTop: 4,
+
+    includeFontPadding: false,
   },
 
+  /*
+   * ==========================================================
+   * VAZIO
+   * ==========================================================
+   */
+
   emptyBox: {
-    padding: 12,
-    borderRadius: 10,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: COLORS.white,
+
+    borderRadius: 12,
+
+    padding: 8,
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+  },
+
+  lockCircle: {
+    width: 34,
+
+    height: 34,
+
+    borderRadius: 17,
+
+    backgroundColor: COLORS.lightGray,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginRight: 8,
+  },
+
+  lockEmoji: {
+    fontSize: 15,
+  },
+
+  emptyTitle: {
+    color: COLORS.navy,
+
+    fontSize: 8,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
 
   emptyText: {
-    textAlign: "center",
-    color: "#666",
+    color: COLORS.gray,
+
+    fontSize: 7.5,
+
+    fontWeight: "600",
+
+    marginTop: 2,
+
+    includeFontPadding: false,
   },
 
+  /*
+   * ==========================================================
+   * COLEÇÃO COMPLETA
+   * ==========================================================
+   */
+
   masterBox: {
-    marginTop: 20,
-    padding: 20,
-    borderRadius: 16,
+    backgroundColor: COLORS.yellow,
+
+    borderRadius: 18,
+
+    borderWidth: 2,
+
+    borderColor: COLORS.navy,
+
+    padding: 14,
+
     alignItems: "center",
-    backgroundColor: "#FFF7C2",
+
+    marginTop: 2,
+  },
+
+  masterCircle: {
+    width: 58,
+
+    height: 58,
+
+    borderRadius: 29,
+
+    backgroundColor: COLORS.white,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    marginBottom: 7,
   },
 
   masterEmoji: {
-    fontSize: 60,
+    fontSize: 31,
   },
 
   masterTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginTop: 10,
-    color: COLORS.dark,
+    color: COLORS.navy,
+
+    fontSize: 14,
+
+    fontWeight: "900",
+
+    textAlign: "center",
+
+    includeFontPadding: false,
   },
 
   masterText: {
-    marginTop: 6,
-    color: COLORS.darkAccent,
+    color: COLORS.navy,
+
+    fontSize: 9,
+
+    fontWeight: "700",
+
+    marginTop: 3,
+
+    textAlign: "center",
+
+    includeFontPadding: false,
   },
+
+  masterSubtext: {
+    color: COLORS.navy,
+
+    fontSize: 8,
+
+    fontWeight: "600",
+
+    marginTop: 2,
+
+    textAlign: "center",
+
+    includeFontPadding: false,
+  },
+
 });

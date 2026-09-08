@@ -1,7 +1,4 @@
-
 import { StyleSheet, Text, View } from "react-native";
-
-import { COLORS } from "@/constants/colors";
 
 interface ExpenseTrackerProps {
   currentMonth: number;
@@ -15,236 +12,741 @@ interface ExpenseTrackerProps {
   }[];
 }
 
+const COLORS = {
+  turquoise: "#08AEA4",
+  navy: "#003F4A",
+  yellow: "#D7E900",
+  green: "#7FC241",
+  white: "#FFFFFF",
+
+  blue: "#55B6FF",
+  pink: "#FF6BA6",
+  orange: "#FFA233",
+
+  gray: "#68787B",
+  lightGray: "#EEF2F2",
+  border: "#DDE6E6",
+
+  red: "#E53935",
+};
+
 export default function ExpenseTracker({
   currentMonth,
   monthlyExpenses,
 }: ExpenseTrackerProps) {
+  /*
+   * ============================================================
+   * NÃO MOSTRAR NO PRIMEIRO MÊS
+   * ============================================================
+   */
+
   if (currentMonth <= 1) {
     return null;
   }
 
-  const currentExpenses = monthlyExpenses[currentMonth - 2];
+  /*
+   * ============================================================
+   * GASTOS DO MÊS ATUAL E ANTERIOR
+   * ============================================================
+   */
 
-  const previousExpenses = monthlyExpenses[currentMonth - 3];
+  const currentExpenses =
+    monthlyExpenses[currentMonth - 2];
+
+  const previousExpenses =
+    monthlyExpenses[currentMonth - 3];
 
   if (!currentExpenses && !previousExpenses) {
     return null;
   }
+
+  /*
+   * ============================================================
+   * CATEGORIAS
+   * ============================================================
+   */
+
   const categories = [
     {
       key: "pet",
-      label: "Cuidados Pet",
-      color: COLORS.secondary,
+      label: "PET",
+      emoji: "🐾",
+      color: COLORS.pink,
     },
 
     {
       key: "personal",
-      label: "Pessoais",
-      color: COLORS.primary,
+      label: "PESSOAIS",
+      emoji: "🛍️",
+      color: COLORS.blue,
     },
 
     {
       key: "friends",
-      label: "Social",
-      color: COLORS.background,
+      label: "SOCIAL",
+      emoji: "👫",
+      color: COLORS.orange,
     },
 
     {
       key: "investments",
-      label: "Investimentos",
-      color: COLORS.dark,
+      label: "GUARDADO",
+      emoji: "🌱",
+      color: COLORS.green,
     },
 
     {
       key: "emergencies",
-      label: "Emergências",
-      color: COLORS.darkAccent,
+      label: "EMERGÊNCIAS",
+      emoji: "🚨",
+      color: COLORS.red,
     },
   ];
 
+  /*
+   * ============================================================
+   * MAIOR VALOR
+   * ============================================================
+   */
+
   const getMaxValue = () => {
-    const allValues = monthlyExpenses.flatMap((month) => Object.values(month));
+    const allValues = monthlyExpenses.flatMap((month) =>
+      Object.values(month),
+    );
 
     return Math.max(...allValues, 50);
   };
 
   const maxValue = getMaxValue();
+
+  /*
+   * ============================================================
+   * TOTAL DO MÊS
+   * ============================================================
+   */
+
+  const totalCurrent =
+    currentExpenses
+      ? Object.values(currentExpenses).reduce(
+          (sum, value) => sum + value,
+          0,
+        )
+      : 0;
+
+  /*
+   * ============================================================
+   * RENDER
+   * ============================================================
+   */
+
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>📊 Histórico de Gastos</Text>
 
-      {categories.map((category) => {
-        const currentValue =
-          currentExpenses?.[category.key as keyof typeof currentExpenses] || 0;
+      {/* ======================================================
+          CABEÇALHO
+          ====================================================== */}
 
-        const previousValue =
-          previousExpenses?.[category.key as keyof typeof previousExpenses] ||
-          0;
+      <View style={styles.header}>
 
-        const currentPercent = (currentValue / maxValue) * 100;
+        <View style={styles.headerIcon}>
+          <Text style={styles.headerEmoji}>
+            📊
+          </Text>
+        </View>
 
-        const previousPercent = (previousValue / maxValue) * 100;
+        <View style={styles.headerTextArea}>
 
-        const change = currentValue - previousValue;
+          <Text style={styles.title}>
+            HISTÓRICO DE GASTOS
+          </Text>
 
-        return (
-          <View key={category.key} style={styles.categoryContainer}>
-            <View style={styles.categoryHeader}>
-              <Text style={styles.categoryName}>{category.label}</Text>
+          <Text style={styles.subtitle}>
+            Veja para onde seu dinheiro foi
+          </Text>
 
-              <View>
-                <Text style={styles.currentValue}>
-                  R$ {currentValue.toFixed(0)}
-                </Text>
+        </View>
 
-                {change !== 0 && previousExpenses && (
-                  <Text
+      </View>
+
+      {/* ======================================================
+          MÊS
+          ====================================================== */}
+
+      <View style={styles.monthBadge}>
+
+        <Text style={styles.monthText}>
+          MÊS {currentMonth - 1}
+        </Text>
+
+      </View>
+
+      {/* ======================================================
+          CATEGORIAS
+          ====================================================== */}
+
+      <View style={styles.categories}>
+
+        {categories.map((category) => {
+
+          const currentValue =
+            currentExpenses?.[
+              category.key as keyof typeof currentExpenses
+            ] || 0;
+
+          const previousValue =
+            previousExpenses?.[
+              category.key as keyof typeof previousExpenses
+            ] || 0;
+
+          const currentPercent =
+            (currentValue / maxValue) * 100;
+
+          const previousPercent =
+            (previousValue / maxValue) * 100;
+
+          const change =
+            currentValue - previousValue;
+
+          return (
+            <View
+              key={category.key}
+              style={styles.categoryCard}
+            >
+
+              {/* ==================================================
+                  CABEÇALHO DA CATEGORIA
+                  ================================================== */}
+
+              <View style={styles.categoryHeader}>
+
+                <View style={styles.categoryNameArea}>
+
+                  <View
                     style={[
-                      styles.changeText,
+                      styles.categoryIcon,
                       {
-                        color: change > 0 ? "#DC2626" : COLORS.secondary,
+                        backgroundColor:
+                          category.color,
                       },
                     ]}
                   >
-                    ({change > 0 ? "+" : ""}
-                    R$ {change.toFixed(0)})
+                    <Text style={styles.categoryEmoji}>
+                      {category.emoji}
+                    </Text>
+                  </View>
+
+                  <Text style={styles.categoryName}>
+                    {category.label}
                   </Text>
-                )}
+
+                </View>
+
+                <View style={styles.valueArea}>
+
+                  <Text style={styles.currentValue}>
+                    R$ {currentValue.toFixed(0)}
+                  </Text>
+
+                  {change !== 0 &&
+                    previousExpenses && (
+                      <Text
+                        style={[
+                          styles.changeText,
+                          {
+                            color:
+                              change > 0
+                                ? COLORS.red
+                                : COLORS.green,
+                          },
+                        ]}
+                      >
+                        {change > 0 ? "+" : ""}
+                        {change.toFixed(0)}
+                      </Text>
+                    )}
+
+                </View>
+
               </View>
-            </View>
 
-            <View style={styles.barContainer}>
-              {previousValue > 0 && (
-                <View
-                  style={[
-                    styles.previousBar,
-                    {
-                      width: `${previousPercent}%`,
-                    },
-                  ]}
-                />
-              )}
+              {/* ==================================================
+                  BARRA
+                  ================================================== */}
 
-              <View
-                style={[
-                  styles.currentBar,
-                  {
-                    width: `${currentPercent}%`,
-                    backgroundColor: category.color,
-                  },
-                ]}
-              >
+              <View style={styles.barContainer}>
+
+                {/* MÊS ANTERIOR */}
+
+                {previousValue > 0 && (
+                  <View
+                    style={[
+                      styles.previousBar,
+                      {
+                        width: `${Math.min(
+                          previousPercent,
+                          100,
+                        )}%`,
+                      },
+                    ]}
+                  />
+                )}
+
+                {/* MÊS ATUAL */}
+
                 {currentValue > 0 && (
-                  <Text style={styles.barText}>{currentValue.toFixed(0)}</Text>
+                  <View
+                    style={[
+                      styles.currentBar,
+                      {
+                        width: `${Math.min(
+                          currentPercent,
+                          100,
+                        )}%`,
+                        backgroundColor:
+                          category.color,
+                      },
+                    ]}
+                  />
                 )}
+
               </View>
+
             </View>
+          );
+        })}
+
+      </View>
+
+      {/* ======================================================
+          LEGENDA
+          ====================================================== */}
+
+      {previousExpenses && (
+        <View style={styles.legend}>
+
+          <View style={styles.legendItem}>
+
+            <View style={styles.legendCurrent} />
+
+            <Text style={styles.legendText}>
+              Este mês
+            </Text>
+
           </View>
-        );
-      })}
+
+          <View style={styles.legendItem}>
+
+            <View style={styles.legendPrevious} />
+
+            <Text style={styles.legendText}>
+              Mês anterior
+            </Text>
+
+          </View>
+
+        </View>
+      )}
+
+      {/* ======================================================
+          TOTAL
+          ====================================================== */}
+
       <View style={styles.totalBox}>
-        <Text style={styles.totalLabel}>Total do Mês</Text>
+
+        <View style={styles.totalLeft}>
+
+          <Text style={styles.totalEmoji}>
+            💰
+          </Text>
+
+          <Text style={styles.totalLabel}>
+            TOTAL DO MÊS
+          </Text>
+
+        </View>
 
         <Text style={styles.totalValue}>
-          R$
-          {currentExpenses
-            ? Object.values(currentExpenses)
-                .reduce((sum, value) => sum + value, 0)
-                .toFixed(0)
-            : "0"}
+          R$ {totalCurrent.toFixed(0)}
         </Text>
+
       </View>
+
     </View>
   );
 }
+
+/*
+ * ============================================================
+ * ESTILOS
+ * ============================================================
+ */
+
 const styles = StyleSheet.create({
+
+  /*
+   * ==========================================================
+   * CARD PRINCIPAL
+   * ==========================================================
+   */
+
   card: {
+    width: "100%",
+
     backgroundColor: COLORS.white,
-    borderRadius: 16,
-    padding: 16,
+
+    borderRadius: 22,
+
     borderWidth: 2,
-    borderColor: COLORS.border,
+
+    borderColor: COLORS.yellow,
+
+    padding: 12,
+
+    overflow: "hidden",
+  },
+
+  /*
+   * ==========================================================
+   * CABEÇALHO
+   * ==========================================================
+   */
+
+  header: {
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    marginBottom: 8,
+  },
+
+  headerIcon: {
+    width: 42,
+    height: 42,
+
+    borderRadius: 21,
+
+    backgroundColor: COLORS.navy,
+
+    alignItems: "center",
+    justifyContent: "center",
+
+    marginRight: 9,
+  },
+
+  headerEmoji: {
+    fontSize: 21,
+  },
+
+  headerTextArea: {
+    flex: 1,
   },
 
   title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: COLORS.dark,
-    marginBottom: 20,
+    color: COLORS.navy,
+
+    fontSize: 17,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
 
-  categoryContainer: {
-    marginBottom: 16,
+  subtitle: {
+    color: COLORS.gray,
+
+    fontSize: 9,
+
+    fontWeight: "600",
+
+    marginTop: 2,
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * MÊS
+   * ==========================================================
+   */
+
+  monthBadge: {
+    alignSelf: "flex-start",
+
+    backgroundColor: COLORS.yellow,
+
+    borderRadius: 12,
+
+    paddingHorizontal: 10,
+
+    paddingVertical: 4,
+
+    marginBottom: 9,
+  },
+
+  monthText: {
+    color: COLORS.navy,
+
+    fontSize: 9,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * CATEGORIAS
+   * ==========================================================
+   */
+
+  categories: {
+    width: "100%",
+  },
+
+  categoryCard: {
+    backgroundColor: "#F8FAFA",
+
+    borderRadius: 13,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+
+    padding: 8,
+
+    marginBottom: 7,
   },
 
   categoryHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
+
     alignItems: "center",
+
+    justifyContent: "space-between",
+
     marginBottom: 6,
   },
 
+  categoryNameArea: {
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    flex: 1,
+  },
+
+  categoryIcon: {
+    width: 29,
+    height: 29,
+
+    borderRadius: 15,
+
+    alignItems: "center",
+    justifyContent: "center",
+
+    marginRight: 7,
+  },
+
+  categoryEmoji: {
+    fontSize: 14,
+  },
+
   categoryName: {
-    fontWeight: "bold",
-    color: COLORS.dark,
+    color: COLORS.navy,
+
+    fontSize: 10,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
+  },
+
+  valueArea: {
+    alignItems: "flex-end",
   },
 
   currentValue: {
-    textAlign: "right",
-    fontWeight: "bold",
-    color: COLORS.dark,
+    color: COLORS.navy,
+
+    fontSize: 12,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
 
   changeText: {
-    fontSize: 12,
-    textAlign: "right",
+    fontSize: 8,
+
+    fontWeight: "800",
+
+    marginTop: 1,
+
+    includeFontPadding: false,
   },
 
+  /*
+   * ==========================================================
+   * BARRAS
+   * ==========================================================
+   */
+
   barContainer: {
-    height: 26,
-    justifyContent: "center",
+    width: "100%",
+
+    height: 10,
+
+    backgroundColor: "#E4EAEA",
+
+    borderRadius: 5,
+
+    overflow: "hidden",
+
+    position: "relative",
   },
 
   previousBar: {
     position: "absolute",
-    height: 26,
-    backgroundColor: "#D1D5DB",
-    borderRadius: 8,
-    opacity: 0.6,
+
+    left: 0,
+    top: 0,
+
+    height: 10,
+
+    backgroundColor: "#9EADAD",
+
+    borderRadius: 5,
+
+    opacity: 0.35,
   },
 
   currentBar: {
-    height: 26,
-    borderRadius: 8,
+    position: "absolute",
+
+    left: 0,
+    top: 0,
+
+    height: 10,
+
+    borderRadius: 5,
+
+    minWidth: 3,
+  },
+
+  /*
+   * ==========================================================
+   * LEGENDA
+   * ==========================================================
+   */
+
+  legend: {
+    flexDirection: "row",
+
     justifyContent: "center",
-    paddingHorizontal: 8,
+
+    alignItems: "center",
+
+    gap: 14,
+
+    marginTop: 2,
+
+    marginBottom: 8,
   },
 
-  barText: {
-    color: COLORS.white,
-    fontWeight: "bold",
-    fontSize: 12,
-  },
+  legendItem: {
+    flexDirection: "row",
 
-  totalBox: {
-    marginTop: 20,
-    borderTopWidth: 2,
-    borderTopColor: COLORS.border,
-    paddingTop: 16,
     alignItems: "center",
   },
 
-  totalLabel: {
+  legendCurrent: {
+    width: 8,
+    height: 8,
+
+    borderRadius: 4,
+
+    backgroundColor: COLORS.turquoise,
+
+    marginRight: 4,
+  },
+
+  legendPrevious: {
+    width: 8,
+    height: 8,
+
+    borderRadius: 4,
+
+    backgroundColor: "#9EADAD",
+
+    opacity: 0.5,
+
+    marginRight: 4,
+  },
+
+  legendText: {
+    color: COLORS.gray,
+
+    fontSize: 8,
+
+    fontWeight: "600",
+
+    includeFontPadding: false,
+  },
+
+  /*
+   * ==========================================================
+   * TOTAL
+   * ==========================================================
+   */
+
+  totalBox: {
+    width: "100%",
+
+    backgroundColor: COLORS.yellow,
+
+    borderRadius: 15,
+
+    paddingVertical: 9,
+
+    paddingHorizontal: 11,
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    justifyContent: "space-between",
+  },
+
+  totalLeft: {
+    flexDirection: "row",
+
+    alignItems: "center",
+  },
+
+  totalEmoji: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: COLORS.dark,
+
+    marginRight: 6,
+  },
+
+  totalLabel: {
+    color: COLORS.navy,
+
+    fontSize: 10,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
 
   totalValue: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: COLORS.dark,
-    marginTop: 6,
+    color: COLORS.navy,
+
+    fontSize: 19,
+
+    fontWeight: "900",
+
+    includeFontPadding: false,
   },
+
 });
