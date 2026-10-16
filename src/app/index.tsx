@@ -13,12 +13,6 @@ import {
 
 import { useGame } from "@/context/GameContext";
 
-/*
- * ============================================================
- * CORES DA IDENTIDADE VISUAL
- * ============================================================
- */
-
 const COLORS = {
   turquoise: "#08B3A7",
   navy: "#003B49",
@@ -33,28 +27,28 @@ export default function WelcomeScreen() {
   const [age, setAge] = useState("");
 
   const { updateGameState, resetGame } = useGame();
-
   const { width, height } = useWindowDimensions();
 
-  /*
-   * ============================================================
-   * LÓGICA ORIGINAL — NÃO ALTERADA
-   * ============================================================
-   */
-
+  // Lógica original do jogo preservada.
   const handleStart = () => {
-    if (!name || !age || parseInt(age) < 6 || parseInt(age) > 17) {
+    const playerAge = parseInt(age, 10);
+
+    if (
+      !name.trim() ||
+      !age ||
+      playerAge < 6 ||
+      playerAge > 17
+    ) {
       return;
     }
 
     resetGame();
 
-    const playerAge = parseInt(age);
     const isChild = playerAge < 14;
     const monthlyIncome = isChild ? 50 : 300;
 
     updateGameState({
-      playerName: name,
+      playerName: name.trim(),
       playerAge,
       isChild,
       balance: monthlyIncome,
@@ -68,88 +62,65 @@ export default function WelcomeScreen() {
   const isValid =
     name.trim() !== "" &&
     age !== "" &&
-    parseInt(age) >= 6 &&
-    parseInt(age) <= 17;
+    parseInt(age, 10) >= 6 &&
+    parseInt(age, 10) <= 17;
+
+  // Dimensões proporcionais à tela.
+  const panelWidth = Math.min(width * 0.95, 500);
+  const panelTop = height * 0.18;
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* ======================================================
-          SOL
-          ====================================================== */}
-
+      {/* Sol */}
       <Image
         source={require("@/assets/images/sun.png")}
         style={[
           styles.sun,
           {
-            width: width * 0.31,
-            height: width * 0.31,
-
-            /*
-             * Sol um pouco mais para baixo
-             */
-            left: -width * 0.025,
-            top: height * 0.035,
+            width: width * 0.34,
+            height: width * 0.34,
+            left: -width * 0.015,
+            top: height * 0.025,
           },
         ]}
         resizeMode="contain"
       />
 
-      {/* ======================================================
-          PAINEL PRINCIPAL
-          ====================================================== */}
-
+      {/* Painel principal */}
       <View
         style={[
           styles.mainPanel,
           {
-            width: width * 0.95,
-
-            /*
-             * Painel um pouco mais alto para comportar
-             * melhor o espaço entre formulário e Sicoob.
-             */
-            height: height * 0.58,
-
-            top: height * 0.215,
+            width: panelWidth,
+            left: (width - panelWidth) / 2,
+            top: panelTop,
           },
         ]}
       >
-        {/* ==================================================
-            LOGO COOPERAÇÃO
-            ================================================== */}
-
+        {/* Logo Cooperação */}
         <Image
           source={require("@/assets/images/game-logo.png")}
           style={[
             styles.gameLogo,
             {
-              width: width * 0.82,
-              height: width * 0.27,
+              width: panelWidth * 0.91,
+              height: width * 0.29,
             },
           ]}
           resizeMode="contain"
         />
 
-        {/* ==================================================
-            SUBTÍTULO
-            ================================================== */}
-
+        {/* Subtítulo */}
         <Text style={styles.subtitle}>
           APRENDA A CUIDAR DO DINHEIRO DE FORMA DIVERTIDA
         </Text>
 
-        {/* ==================================================
-            FORMULÁRIO
-            ================================================== */}
-
+        {/* Formulário */}
         <View style={styles.formCard}>
-          {/* ==================================================
-              APELIDO
-              ================================================== */}
-
           <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Qual é o seu apelido?</Text>
+            <Text style={styles.label}>
+              Qual é o seu apelido?
+            </Text>
 
             <TextInput
               value={name}
@@ -158,30 +129,29 @@ export default function WelcomeScreen() {
               placeholderTextColor={COLORS.placeholder}
               style={styles.input}
               autoCapitalize="words"
+              maxLength={30}
+              returnKeyType="next"
             />
           </View>
 
-          {/* ==================================================
-              IDADE
-              ================================================== */}
-
           <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Qual é a sua idade?</Text>
+            <Text style={styles.label}>
+              Qual é a sua idade?
+            </Text>
 
             <TextInput
               value={age}
-              onChangeText={setAge}
+              onChangeText={(value) =>
+                setAge(value.replace(/[^0-9]/g, ""))
+              }
               keyboardType="numeric"
               placeholder="Digite sua idade"
               placeholderTextColor={COLORS.placeholder}
               style={styles.input}
               maxLength={2}
+              returnKeyType="done"
             />
           </View>
-
-          {/* ==================================================
-              BOTÃO
-              ================================================== */}
 
           <TouchableOpacity
             onPress={handleStart}
@@ -198,10 +168,7 @@ export default function WelcomeScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* ==================================================
-            LOGO SICOOB
-            ================================================== */}
-
+        {/* Logo Sicoob */}
         <View style={styles.footer}>
           <Image
             source={require("@/assets/images/sicoob-logo.png")}
@@ -211,24 +178,16 @@ export default function WelcomeScreen() {
         </View>
       </View>
 
-      {/* ======================================================
-          PORQUINHO
-          ====================================================== */}
-
+      {/* Porquinho */}
       <Image
         source={require("@/assets/images/pig.png")}
         style={[
           styles.pig,
           {
-            /*
-             * Porquinho um pouco maior
-             */
-            width: width * 0.38,
-            height: width * 0.38,
-
-            right: -width * 0.005,
-
-            bottom: height * 0.01,
+            width: width * 0.36,
+            height: width * 0.36,
+            right: width * 0.025,
+            bottom: height * 0.025,
           },
         ]}
         resizeMode="contain"
@@ -237,189 +196,90 @@ export default function WelcomeScreen() {
   );
 }
 
-/*
- * ============================================================
- * ESTILOS
- * ============================================================
- */
-
 const styles = StyleSheet.create({
-  /*
-   * ------------------------------------------------------------
-   * TELA
-   * ------------------------------------------------------------
-   */
-
   container: {
     flex: 1,
-
     backgroundColor: COLORS.turquoise,
-
     alignItems: "center",
-
     overflow: "hidden",
-
     position: "relative",
   },
 
-  /*
-   * ------------------------------------------------------------
-   * SOL
-   * ------------------------------------------------------------
-   */
-
   sun: {
     position: "absolute",
-
     zIndex: 1,
   },
 
-  /*
-   * ------------------------------------------------------------
-   * PAINEL PRINCIPAL
-   * ------------------------------------------------------------
-   */
-
   mainPanel: {
     position: "absolute",
-
-    left: "2.5%",
-
     backgroundColor: COLORS.navy,
-
-    borderRadius: 14,
-
+    borderRadius: 20,
     alignItems: "center",
-
-    paddingTop: 5,
-
-    paddingBottom: 9,
-
+    paddingTop: 10,
+    paddingBottom: 14,
     overflow: "hidden",
-
     zIndex: 2,
   },
 
-  /*
-   * ------------------------------------------------------------
-   * LOGO COOPERAÇÃO
-   * ------------------------------------------------------------
-   */
-
   gameLogo: {
     marginTop: 0,
-
     marginBottom: 0,
   },
 
-  /*
-   * ------------------------------------------------------------
-   * SUBTÍTULO
-   * ------------------------------------------------------------
-   */
-
   subtitle: {
     color: COLORS.white,
-
-    fontSize: 7,
-
-    lineHeight: 9,
-
+    fontSize: 9,
+    lineHeight: 13,
     fontWeight: "800",
-
     textAlign: "center",
-
-    marginTop: -1,
-
-    marginBottom: 7,
-
+    marginTop: 0,
+    marginBottom: 12,
     letterSpacing: 0.1,
+    width: "92%",
   },
-
-  /*
-   * ------------------------------------------------------------
-   * CARD BRANCO
-   * ------------------------------------------------------------
-   */
 
   formCard: {
     width: "94%",
-
     backgroundColor: COLORS.white,
-
-    borderRadius: 12,
-
-    paddingHorizontal: 14,
-
-    paddingTop: 11,
-
-    paddingBottom: 11,
+    borderRadius: 18,
+    paddingHorizontal: 18,
+    paddingTop: 20,
+    paddingBottom: 18,
   },
 
-  /*
-   * ------------------------------------------------------------
-   * CAMPOS
-   * ------------------------------------------------------------
-   */
-
   fieldContainer: {
-    marginBottom: 7,
+    marginBottom: 14,
   },
 
   label: {
     color: COLORS.navy,
-
-    fontSize: 11,
-
-    lineHeight: 14,
-
+    fontSize: 14,
+    lineHeight: 18,
     fontWeight: "800",
-
-    marginBottom: 3,
+    marginBottom: 5,
   },
 
   input: {
     width: "100%",
-
-    height: 20,
-
+    height: 34,
     backgroundColor: COLORS.white,
-
-    borderWidth: 1.5,
-
+    borderWidth: 2,
     borderColor: COLORS.inputBorder,
-
-    borderRadius: 6,
-
-    paddingHorizontal: 8,
-
+    borderRadius: 9,
+    paddingHorizontal: 10,
     paddingVertical: 0,
-
     color: COLORS.navy,
-
-    fontSize: 8,
+    fontSize: 11,
   },
-
-  /*
-   * ------------------------------------------------------------
-   * BOTÃO
-   * ------------------------------------------------------------
-   */
 
   button: {
     width: "100%",
-
-    height: 22,
-
+    height: 34,
     backgroundColor: COLORS.turquoise,
-
-    borderRadius: 5,
-
+    borderRadius: 6,
     alignItems: "center",
-
     justifyContent: "center",
-
-    marginTop: 2,
+    marginTop: 5,
   },
 
   buttonDisabled: {
@@ -428,52 +288,25 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: COLORS.navy,
-
-    fontSize: 9,
-
+    fontSize: 12,
     fontWeight: "900",
-
     letterSpacing: 0.2,
   },
 
-  /*
-   * ------------------------------------------------------------
-   * RODAPÉ SICOOB
-   * ------------------------------------------------------------
-   */
-
   footer: {
     alignItems: "center",
-
     justifyContent: "center",
-
-    /*
-     * Aumenta o espaço entre o card branco
-     * e a marca Sicoob.
-     */
     marginTop: 12,
-
     width: "100%",
   },
 
   sicoobLogo: {
-    /*
-     * Logo maior
-     */
-    width: 125,
-
-    height: 34,
+    width: 155,
+    height: 42,
   },
-
-  /*
-   * ------------------------------------------------------------
-   * PORQUINHO
-   * ------------------------------------------------------------
-   */
 
   pig: {
     position: "absolute",
-
     zIndex: 3,
   },
 });
