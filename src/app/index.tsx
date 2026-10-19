@@ -2,7 +2,9 @@ import { router } from "expo-router";
 import { useState } from "react";
 import {
   Image,
+  Keyboard,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -29,19 +31,25 @@ export default function WelcomeScreen() {
   const { updateGameState, resetGame } = useGame();
   const { width, height } = useWindowDimensions();
 
-  // Lógica original do jogo preservada.
+  const isMobile = width < 600;
+  const isShortScreen = height < 650;
+
+  const panelWidth = Math.min(width - (isMobile ? 28 : 48), 500);
+
   const handleStart = () => {
-    const playerAge = parseInt(age, 10);
+    const playerAge = Number.parseInt(age, 10);
 
     if (
       !name.trim() ||
       !age ||
+      !Number.isInteger(playerAge) ||
       playerAge < 6 ||
       playerAge > 17
     ) {
       return;
     }
 
+    Keyboard.dismiss();
     resetGame();
 
     const isChild = playerAge < 14;
@@ -60,226 +68,299 @@ export default function WelcomeScreen() {
   };
 
   const isValid =
-    name.trim() !== "" &&
-    age !== "" &&
-    parseInt(age, 10) >= 6 &&
-    parseInt(age, 10) <= 17;
+    name.trim().length > 0 &&
+    age.length > 0 &&
+    Number.parseInt(age, 10) >= 6 &&
+    Number.parseInt(age, 10) <= 17;
 
-  // Dimensões proporcionais à tela.
-  const panelWidth = Math.min(width * 0.95, 500);
-  const panelTop = height * 0.18;
+  const logoHeight = Math.min(
+    panelWidth * 0.29,
+    isMobile ? 118 : 140
+  );
+
+  const decorationSize = Math.min(
+    Math.max(width * 0.24, 100),
+    180
+  );
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Sol */}
-      <Image
-        source={require("@/assets/images/sun.png")}
-        style={[
-          styles.sun,
-          {
-            width: width * 0.34,
-            height: width * 0.34,
-            left: -width * 0.015,
-            top: height * 0.025,
-          },
-        ]}
-        resizeMode="contain"
-      />
-
-      {/* Painel principal */}
+    <SafeAreaView style={styles.safeArea}>
+      {/* Decoração do fundo: não interfere no formulário */}
       <View
-        style={[
-          styles.mainPanel,
-          {
-            width: panelWidth,
-            left: (width - panelWidth) / 2,
-            top: panelTop,
-          },
-        ]}
+        pointerEvents="none"
+        style={styles.backgroundDecorations}
       >
-        {/* Logo Cooperação */}
         <Image
-          source={require("@/assets/images/game-logo.png")}
+          source={require("@/assets/images/sun.png")}
           style={[
-            styles.gameLogo,
+            styles.sun,
             {
-              width: panelWidth * 0.91,
-              height: width * 0.29,
+              width: decorationSize,
+              height: decorationSize,
+              left: -decorationSize * 0.25,
+              top: 8,
             },
           ]}
           resizeMode="contain"
         />
 
-        {/* Subtítulo */}
-        <Text style={styles.subtitle}>
-          APRENDA A CUIDAR DO DINHEIRO DE FORMA DIVERTIDA
-        </Text>
-
-        {/* Formulário */}
-        <View style={styles.formCard}>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>
-              Qual é o seu apelido?
-            </Text>
-
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder="Digite seu apelido"
-              placeholderTextColor={COLORS.placeholder}
-              style={styles.input}
-              autoCapitalize="words"
-              maxLength={30}
-              returnKeyType="next"
-            />
-          </View>
-
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>
-              Qual é a sua idade?
-            </Text>
-
-            <TextInput
-              value={age}
-              onChangeText={(value) =>
-                setAge(value.replace(/[^0-9]/g, ""))
-              }
-              keyboardType="numeric"
-              placeholder="Digite sua idade"
-              placeholderTextColor={COLORS.placeholder}
-              style={styles.input}
-              maxLength={2}
-              returnKeyType="done"
-            />
-          </View>
-
-          <TouchableOpacity
-            onPress={handleStart}
-            disabled={!isValid}
-            activeOpacity={0.8}
-            style={[
-              styles.button,
-              !isValid && styles.buttonDisabled,
-            ]}
-          >
-            <Text style={styles.buttonText}>
-              COMEÇAR AVENTURA!
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Logo Sicoob */}
-        <View style={styles.footer}>
-          <Image
-            source={require("@/assets/images/sicoob-logo.png")}
-            style={styles.sicoobLogo}
-            resizeMode="contain"
-          />
-        </View>
+        <Image
+          source={require("@/assets/images/pig.png")}
+          style={[
+            styles.pig,
+            {
+              width: decorationSize,
+              height: decorationSize,
+              right: isMobile ? 4 : 24,
+              bottom: 8,
+            },
+          ]}
+          resizeMode="contain"
+        />
       </View>
 
-      {/* Porquinho */}
-      <Image
-        source={require("@/assets/images/pig.png")}
-        style={[
-          styles.pig,
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={[
+          styles.scrollContent,
           {
-            width: width * 0.36,
-            height: width * 0.36,
-            right: width * 0.025,
-            bottom: height * 0.025,
+            minHeight: height,
+            paddingTop: isShortScreen
+              ? 12
+              : isMobile
+                ? 24
+                : 32,
+            paddingBottom: isShortScreen ? 16 : 28,
           },
         ]}
-        resizeMode="contain"
-      />
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior="automatic"
+      >
+        <View
+          style={[
+            styles.mainPanel,
+            {
+              width: panelWidth,
+              paddingTop: isShortScreen ? 8 : 14,
+              paddingBottom: isShortScreen ? 12 : 18,
+              paddingHorizontal: isMobile ? 12 : 18,
+            },
+          ]}
+        >
+          {/* Logo principal */}
+          <Image
+            source={require("@/assets/images/game-logo.png")}
+            style={[
+              styles.gameLogo,
+              {
+                width: "100%",
+                height: logoHeight,
+              },
+            ]}
+            resizeMode="contain"
+          />
+
+          {/* Subtítulo */}
+          <Text
+            style={[
+              styles.subtitle,
+              {
+                fontSize: isMobile ? 9 : 11,
+                marginBottom: isShortScreen ? 10 : 14,
+              },
+            ]}
+          >
+            APRENDA A CUIDAR DO DINHEIRO DE FORMA DIVERTIDA
+          </Text>
+
+          {/* Formulário */}
+          <View
+            style={[
+              styles.formCard,
+              {
+                paddingHorizontal: isMobile ? 14 : 22,
+                paddingTop: isShortScreen ? 14 : 20,
+                paddingBottom: isShortScreen ? 14 : 20,
+              },
+            ]}
+          >
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>
+                Qual é o seu apelido?
+              </Text>
+
+              <TextInput
+                value={name}
+                onChangeText={setName}
+                placeholder="Digite seu apelido"
+                placeholderTextColor={COLORS.placeholder}
+                style={styles.input}
+                autoCapitalize="words"
+                autoCorrect={false}
+                maxLength={30}
+                returnKeyType="next"
+                accessibilityLabel="Apelido do jogador"
+              />
+            </View>
+
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>
+                Qual é a sua idade?
+              </Text>
+
+              <TextInput
+                value={age}
+                onChangeText={(value) =>
+                  setAge(value.replace(/[^0-9]/g, "").slice(0, 2))
+                }
+                keyboardType="number-pad"
+                placeholder="Digite sua idade"
+                placeholderTextColor={COLORS.placeholder}
+                style={styles.input}
+                maxLength={2}
+                returnKeyType="done"
+                accessibilityLabel="Idade do jogador"
+                onSubmitEditing={() => {
+                  if (isValid) {
+                    handleStart();
+                  }
+                }}
+              />
+            </View>
+
+            <TouchableOpacity
+              onPress={handleStart}
+              disabled={!isValid}
+              activeOpacity={0.8}
+              accessibilityRole="button"
+              accessibilityLabel="Começar aventura"
+              style={[
+                styles.button,
+                !isValid && styles.buttonDisabled,
+              ]}
+            >
+              <Text style={styles.buttonText}>
+                COMEÇAR AVENTURA!
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Logo Sicoob */}
+          <View style={styles.footer}>
+            <Image
+              source={require("@/assets/images/sicoob-logo.png")}
+              style={styles.sicoobLogo}
+              resizeMode="contain"
+              accessibilityLabel="Sicoob"
+            />
+          </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: COLORS.turquoise,
-    alignItems: "center",
-    overflow: "hidden",
     position: "relative",
+  },
+
+  backgroundDecorations: {
+    ...StyleSheet.absoluteFillObject,
+    overflow: "hidden",
   },
 
   sun: {
     position: "absolute",
-    zIndex: 1,
+  },
+
+  pig: {
+    position: "absolute",
+  },
+
+  scroll: {
+    flex: 1,
+    width: "100%",
+  },
+
+  scrollContent: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 14,
+    flexGrow: 1,
   },
 
   mainPanel: {
-    position: "absolute",
-    backgroundColor: COLORS.navy,
-    borderRadius: 20,
+    maxWidth: 500,
+    alignSelf: "center",
     alignItems: "center",
-    paddingTop: 10,
-    paddingBottom: 14,
+    backgroundColor: COLORS.navy,
+    borderRadius: 22,
     overflow: "hidden",
     zIndex: 2,
   },
 
   gameLogo: {
-    marginTop: 0,
-    marginBottom: 0,
+    maxWidth: "100%",
+    alignSelf: "center",
   },
 
   subtitle: {
+    width: "100%",
     color: COLORS.white,
-    fontSize: 9,
-    lineHeight: 13,
     fontWeight: "800",
     textAlign: "center",
-    marginTop: 0,
-    marginBottom: 12,
+    lineHeight: 15,
     letterSpacing: 0.1,
-    width: "92%",
+    flexShrink: 1,
   },
 
   formCard: {
-    width: "94%",
+    width: "100%",
     backgroundColor: COLORS.white,
-    borderRadius: 18,
-    paddingHorizontal: 18,
-    paddingTop: 20,
-    paddingBottom: 18,
+    borderRadius: 20,
   },
 
   fieldContainer: {
-    marginBottom: 14,
+    marginBottom: 16,
   },
 
   label: {
     color: COLORS.navy,
     fontSize: 14,
-    lineHeight: 18,
+    lineHeight: 20,
     fontWeight: "800",
-    marginBottom: 5,
+    marginBottom: 7,
   },
 
   input: {
     width: "100%",
-    height: 34,
+    height: 48,
     backgroundColor: COLORS.white,
     borderWidth: 2,
     borderColor: COLORS.inputBorder,
-    borderRadius: 9,
-    paddingHorizontal: 10,
+    borderRadius: 10,
+    paddingHorizontal: 13,
     paddingVertical: 0,
     color: COLORS.navy,
-    fontSize: 11,
-  },
+    fontSize: 15,
+    outlineStyle: "none",
+  } as any,
 
   button: {
     width: "100%",
-    height: 34,
+    minHeight: 48,
     backgroundColor: COLORS.turquoise,
-    borderRadius: 6,
+    borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 5,
+    marginTop: 2,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
 
   buttonDisabled: {
@@ -288,25 +369,21 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: COLORS.navy,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "900",
     letterSpacing: 0.2,
+    textAlign: "center",
   },
 
   footer: {
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 12,
-    width: "100%",
+    marginTop: 14,
   },
 
   sicoobLogo: {
     width: 155,
     height: 42,
-  },
-
-  pig: {
-    position: "absolute",
-    zIndex: 3,
   },
 });
