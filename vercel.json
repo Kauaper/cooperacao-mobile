@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://cooperacaokids.lovable.app",
+      "permanent": false
+    }
+  ]
+}
